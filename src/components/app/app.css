@@ -1,21 +1,3 @@
-body {
-  width: 100%;
-  margin: 0 auto;
-  font-family: 'Noto Sans', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
-  -ms-text-size-adjust: 100%;
-  -moz-text-size-adjust: 100%;
-  text-rendering: optimizeLegibility;
-  padding: 0;
-  background-color: #131316;
-}
-
-* {
-  box-shadow: 0 0 1px red;
-}
-
 @font-face {
   font-family: 'JetBrains Mono';
   font-style: normal;
