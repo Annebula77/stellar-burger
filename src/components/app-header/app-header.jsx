@@ -7,21 +7,21 @@ function AppHeader() {
     <header className={styles.header}>
       <nav className={styles.container}>
         <div className={styles.left_wrapper}>
-        <a className={styles.header_cell} href='#'>
-        <BurgerIcon type='primary' />
-        <p className='text text_type_main-default'>Конструктор</p>
-        </a>
-        <a className={styles.header_cell} href='#'>
-        <ListIcon type='primary' />
-        <p className='text text_type_main-default text_color_inactive'>Лента заказов</p>
-        </a>
+          <a className={styles.header_cell} href='#'>
+            <BurgerIcon type='primary' />
+            <p className='text text_type_main-default'>Конструктор</p>
+          </a>
+          <a className={styles.header_cell} href='#'>
+            <ListIcon type='primary' />
+            <p className='text text_type_main-default text_color_inactive'>Лента заказов</p>
+          </a>
         </div>
         <div className={styles.logo}>
-        <Logo  />
+          <Logo />
         </div>
         <a className={styles.header_cell} href='#'>
-        <ProfileIcon type='primary' />
-        <p className='text text_type_main-default text_color_inactive'>Личный кабинет</p>
+          <ProfileIcon type='primary' />
+          <p className='text text_type_main-default text_color_inactive'>Личный кабинет</p>
         </a>
       </nav>
 
@@ -29,7 +29,7 @@ function AppHeader() {
     </header>
   )
 
-  }
+}
 
 
 export default AppHeader;
