@@ -12,7 +12,7 @@ function AppHeader() {
             <p className='text text_type_main-default'>Конструктор</p>
           </a>
           <a className={styles.header_cell} href='#'>
-            <ListIcon type='primary' />
+            <ListIcon type='secondary' />
             <p className='text text_type_main-default text_color_inactive'>Лента заказов</p>
           </a>
         </div>
@@ -20,7 +20,7 @@ function AppHeader() {
           <Logo />
         </div>
         <a className={styles.header_cell} href='#'>
-          <ProfileIcon type='primary' />
+          <ProfileIcon type='secondary' />
           <p className='text text_type_main-default text_color_inactive'>Личный кабинет</p>
         </a>
       </nav>
