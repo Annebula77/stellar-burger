@@ -1,6 +1,6 @@
 .section {
   box-sizing: border-box;
-  width: 600px;
+  max-width: 600px;
   margin: 40px 0 0;
 }
 
@@ -21,6 +21,7 @@
 
 .container::-webkit-scrollbar {
   width: 8px;
+  box-sizing: border-box;
 }
 
 .container::-webkit-scrollbar-track {
@@ -32,6 +33,7 @@
 }
 
 .ingredient_box {
+  box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
