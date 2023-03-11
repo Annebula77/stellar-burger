@@ -1,8 +1,12 @@
 .body {
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100vw;
-  height: 100vh;
-  padding: 40px 40px 40px 40px;
+  max-width: 1920px;
+  padding: 40px 0 0;
+  margin: 0 auto;
   font-family: 'Noto Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -13,9 +17,7 @@
   background-color: #131316;
 }
 
-* {
-  box-shadow: 0 0 1px red;
-}
+
 
 @font-face {
   font-family: 'JetBrains Mono';
