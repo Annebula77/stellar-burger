@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-const cardProp = PropTypes.shape({
+const ingredientType = PropTypes.shape({
     _id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
@@ -15,4 +15,4 @@ const cardProp = PropTypes.shape({
     __v: PropTypes.number.isRequired,
 }).isRequired;
 
-export { cardProp }
+export { ingredientType }
