@@ -1,30 +1,14 @@
 import React, { useMemo } from 'react';
 import styles from './burger-ingredients.module.css';
 import Tabs from '../tabs/tabs';
-import Ingredient from '../ingredient/ingredient';
+import IngredientsCategory from '../ingredients-category/ingredients-category';
 import { ingredientsData } from '../../utils/ingredients-data';
-import { ingredientType } from '../../utils/prop-types';
-import PropTypes from 'prop-types';
 
-
-
-function IngredientsCategory({ title, ingredients }) {
-  return (
-    <>
-      <h2 className='text_type_main-medium mt-10'>{title}</h2>
-      <ul className={styles.ingredient_box}>
-        {ingredients.map(ingredient => (
-          <Ingredient key={ingredient._id} {...ingredient} />
-        ))}
-      </ul>
-    </>
-  );
-}
 
 function BurgerIngredients() {
-  const buns = useMemo(() => ingredientsData.filter((ingredient) => ingredient.type === 'bun'), [ingredientsData]); // eslint-disable-line 
-  const mains = useMemo(() => ingredientsData.filter((ingredient) => ingredient.type === 'main'), [ingredientsData]); // eslint-disable-line 
-  const sauces = useMemo(() => ingredientsData.filter((ingredient) => ingredient.type === 'sauce'), [ingredientsData]); // eslint-disable-line 
+  const buns = useMemo(() => ingredientsData.filter((ingredient) => ingredient.type === 'bun'), [ingredientsData]);
+  const mains = useMemo(() => ingredientsData.filter((ingredient) => ingredient.type === 'main'), [ingredientsData]);
+  const sauces = useMemo(() => ingredientsData.filter((ingredient) => ingredient.type === 'sauce'), [ingredientsData]);
 
   return (
     <section className={styles.section}>
@@ -39,10 +23,7 @@ function BurgerIngredients() {
   );
 }
 
-IngredientsCategory.propTypes = {
-  title: PropTypes.string.isRequired,
-  ingredients: PropTypes.arrayOf(ingredientType).isRequired
-};
+
 
 
 export default BurgerIngredients;

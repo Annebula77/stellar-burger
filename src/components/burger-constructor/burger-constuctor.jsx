@@ -9,19 +9,9 @@ function BurgerConstructor() {
     return {
       bun: ingredientsData.find(ingredient => ingredient.type === 'bun'),
       ingredients: ingredientsData.filter(ingredient => ingredient.type !== 'bun'),
-    };
-  }, [ingredientsData]); // eslint-disable-line
+    }
+  }, [ingredientsData]);
 
-  const ingredientsList = useMemo(() => {
-    return ingredients.map((ingredient) => {
-      return (
-        <li key={ingredient._id} className={styles.ingredient}>
-          <DragIcon type="primary" />
-          <ConstructorElement text={ingredient.name} price={ingredient.price} thumbnail={ingredient.image} />
-        </li>
-      );
-    });
-  }, [ingredients]);
 
   return (
     <section className={styles.section}>
@@ -36,7 +26,15 @@ function BurgerConstructor() {
           />
         </li>
         <ul className={styles.ingredients}>
-          {ingredientsList}
+          {ingredients.map((ingredient) => {
+            return (
+              <li key={ingredient._id} className={styles.ingredient}>
+                <DragIcon type="primary" />
+                <ConstructorElement text={ingredient.name} price={ingredient.price} thumbnail={ingredient.image} />
+              </li>
+            )
+          })
+          }
         </ul>
         <li className='styles.ingredient'>
           <ConstructorElement
