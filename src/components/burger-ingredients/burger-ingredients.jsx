@@ -1,14 +1,16 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import styles from './burger-ingredients.module.css';
 import Tabs from '../tabs/tabs';
 import IngredientsCategory from '../ingredients-category/ingredients-category';
-import { ingredientsData } from '../../utils/ingredients-data';
 
+function filterIngredientsByType(ingredients, type) {
+  return ingredients.filter((ingredient) => ingredient.type === type);
+}
 
-function BurgerIngredients() {
-  const buns = useMemo(() => ingredientsData.filter((ingredient) => ingredient.type === 'bun'), [ingredientsData]);
-  const mains = useMemo(() => ingredientsData.filter((ingredient) => ingredient.type === 'main'), [ingredientsData]);
-  const sauces = useMemo(() => ingredientsData.filter((ingredient) => ingredient.type === 'sauce'), [ingredientsData]);
+function BurgerIngredients({ ingredientsData }) {
+  const buns = filterIngredientsByType(ingredientsData, 'bun');
+  const mains = filterIngredientsByType(ingredientsData, 'main');
+  const sauces = filterIngredientsByType(ingredientsData, 'sauce');
 
   return (
     <section className={styles.section}>
@@ -22,8 +24,5 @@ function BurgerIngredients() {
     </section>
   );
 }
-
-
-
 
 export default BurgerIngredients;

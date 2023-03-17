@@ -1,17 +1,14 @@
 import { ConstructorElement, DragIcon, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import React, { useMemo } from 'react';
+import React from 'react';
 import styles from './burger-constructor.module.css';
-import { ingredientsData } from '../../utils/ingredients-data';
 
-function BurgerConstructor() {
 
-  const { bun, ingredients } = useMemo(() => {
-    return {
-      bun: ingredientsData.find(ingredient => ingredient.type === 'bun'),
-      ingredients: ingredientsData.filter(ingredient => ingredient.type !== 'bun'),
-    }
-  }, [ingredientsData]);
-
+function BurgerConstructor({ ingredientsData }) {
+  let bun, ingredients;
+  if (ingredientsData) {
+    bun = ingredientsData.find(ingredient => ingredient.type === 'bun');
+    ingredients = ingredientsData.filter(ingredient => ingredient.type !== 'bun');
+  }
 
   return (
     <section className={styles.section}>
@@ -20,7 +17,7 @@ function BurgerConstructor() {
           <ConstructorElement
             type="top"
             isLocked={true}
-            text={`${bun.name} (верх)`}
+            text={`top-${bun.name} (верх)`}
             price={bun.price}
             thumbnail={bun.image}
           />
@@ -40,7 +37,7 @@ function BurgerConstructor() {
           <ConstructorElement
             type="bottom"
             isLocked={true}
-            text={`${bun.name} (низ)`}
+            text={`bottom-${bun.name} (низ)`}
             price={bun.price}
             thumbnail={bun.image}
           />
