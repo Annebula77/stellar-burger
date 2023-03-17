@@ -19,7 +19,7 @@ function App() {
       try {
         const res = await fetch(serverUrl);
         const data = await res.json();
-        setIngredientsData(data);
+        setIngredientsData(data.data);
       } catch (e) {
         setHasError(true);
       } finally {
