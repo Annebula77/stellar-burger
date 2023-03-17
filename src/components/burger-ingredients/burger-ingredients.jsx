@@ -2,13 +2,15 @@ import React, { useMemo } from 'react';
 import styles from './burger-ingredients.module.css';
 import Tabs from '../tabs/tabs';
 import IngredientsCategory from '../ingredients-category/ingredients-category';
-import { ingredientsData } from '../../utils/ingredients-data';
 
 
-function BurgerIngredients() {
+
+function BurgerIngredients({ ingredientsData }) {
+
   const buns = useMemo(() => ingredientsData.filter((ingredient) => ingredient.type === 'bun'), [ingredientsData]);
   const mains = useMemo(() => ingredientsData.filter((ingredient) => ingredient.type === 'main'), [ingredientsData]);
   const sauces = useMemo(() => ingredientsData.filter((ingredient) => ingredient.type === 'sauce'), [ingredientsData]);
+
 
   return (
     <section className={styles.section}>

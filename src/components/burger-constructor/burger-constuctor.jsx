@@ -1,10 +1,9 @@
 import { ConstructorElement, DragIcon, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import React, { useMemo } from 'react';
 import styles from './burger-constructor.module.css';
-import { ingredientsData } from '../../utils/ingredients-data';
 
-function BurgerConstructor() {
 
+function BurgerConstructor({ ingredientsData }) {
   const { bun, ingredients } = useMemo(() => {
     return {
       bun: ingredientsData.find(ingredient => ingredient.type === 'bun'),
