@@ -20,7 +20,7 @@
   padding: 0;
 }
 
-.left_wrapper {
+.container__left {
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
@@ -29,9 +29,11 @@
   padding: 0;
 }
 
-.header_cell {
+.header__cell {
   box-sizing: border-box;
-  text-decoration: none;
+  background-color: transparent;
+  cursor: pointer;
+  border: none;
   color: unset;
   display: flex;
   flex-direction: row;
