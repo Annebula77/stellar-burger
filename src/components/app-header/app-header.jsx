@@ -6,26 +6,24 @@ function AppHeader() {
   return (
     <header className={styles.header}>
       <nav className={styles.container}>
-        <div className={styles.left_wrapper}>
-          <a className={styles.header_cell} href='#'>
+        <div className={styles.container__left}>
+          <button type='button' className={styles.header__cell} >
             <BurgerIcon type='primary' />
             <p className='text text_type_main-default'>Конструктор</p>
-          </a>
-          <a className={styles.header_cell} href='#'>
+          </button>
+          <button type='button' className={styles.header__cell} >
             <ListIcon type='secondary' />
             <p className='text text_type_main-default text_color_inactive'>Лента заказов</p>
-          </a>
+          </button>
         </div>
         <div className={styles.logo}>
           <Logo />
         </div>
-        <a className={styles.header_cell} href='#'>
+        <button type='button' className={styles.header__cell} >
           <ProfileIcon type='secondary' />
           <p className='text text_type_main-default text_color_inactive'>Личный кабинет</p>
-        </a>
+        </button>
       </nav>
-
-
     </header>
   )
 

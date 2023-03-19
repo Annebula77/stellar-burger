@@ -1,9 +1,10 @@
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
+import { useState } from 'react';
+import { ingredientType } from '../../utils/prop-types';
 import styles from './ingredient.module.css';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
-import { useState } from 'react';
-import { ingredientType } from '../../utils/prop-types';
+
 
 
 

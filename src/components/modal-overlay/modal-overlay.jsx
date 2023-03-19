@@ -2,7 +2,7 @@ import styles from './modal-overlay.module.css'
 import PropTypes from 'prop-types';
 
 function ModalOverlay({ children, onClick }) {
-  return <div className={styles.modalOverlay} onClick={onClick}>
+  return <div className={styles.overlay} onClick={onClick}>
     {children}
   </div>;
 }

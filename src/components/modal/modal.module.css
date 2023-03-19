@@ -5,19 +5,21 @@
   border-radius: 40px;
   padding: 40px;
   position: absolute;
-  max-width: 720px;
+  width: 720px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: rgba(28, 28, 33, 1);
+  box-shadow: rgba(76, 76, 255, 1) 1px 0 10px;
   z-index: 1;
-  padding: 120px 100px 120px;
+  padding: 0;
   margin: 0;
 }
 
-.closeIcon {
+.icon__x {
 
   position: absolute;
+  border: none;
   top: 60px;
   right: 40px;
   cursor: pointer;

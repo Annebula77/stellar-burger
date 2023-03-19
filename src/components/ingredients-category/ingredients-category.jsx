@@ -8,7 +8,7 @@ function IngredientsCategory({ title, ingredients }) {
   return (
     <>
       <h2 className='text_type_main-medium mt-10'>{title}</h2>
-      <ul className={styles.ingredient_box}>
+      <ul className={styles.ingredient__box}>
         {ingredients.map(ingredient => (
           <Ingredient key={ingredient._id} ingredient={ingredient} />
         ))}
