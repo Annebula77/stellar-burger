@@ -3,7 +3,9 @@ import Main from "../main/main";
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constuctor';
 import styles from './app.module.css';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+
+
 
 const serverUrl = 'https://norma.nomoreparties.space/api/ingredients';
 
@@ -45,7 +47,10 @@ function App() {
         </section>
       )}
     </>
+
   );
+
+
 }
 
 

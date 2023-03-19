@@ -1,9 +1,18 @@
 import { ConstructorElement, DragIcon, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import React from 'react';
+import { useState } from 'react';
 import styles from './burger-constructor.module.css';
+import Modal from '../modal/modal';
+import OrderDetails from '../order-details/order-details';
+
 
 
 function BurgerConstructor({ ingredientsData }) {
+
+  const [showModal, setShowModal] = useState(false);
+  const openModal = () => setShowModal(true);
+  const closeModal = () => setShowModal(false);
+
+
   let bun, ingredients;
   if (ingredientsData) {
     bun = ingredientsData.find(ingredient => ingredient.type === 'bun');
@@ -49,10 +58,15 @@ function BurgerConstructor({ ingredientsData }) {
           <p className="text text_type_digits-medium">610</p>
           <CurrencyIcon type="primary" />
         </div>
-        <Button htmlType="button" type="primary" size="large">
+        <Button htmlType="button" type="primary" size="large" onClick={openModal}>
           Оформить заказ
         </Button>
       </div>
+      {showModal && (
+        <Modal onClose={closeModal}>
+          <OrderDetails />
+        </Modal>
+      )}
     </section>
   );
 }

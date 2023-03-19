@@ -1,0 +1,24 @@
+.container {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.v {
+  display: flex;
+  width: 120px;
+  height: 120px;
+  background-image: url(../../images/graphics.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  margin: 0;
+  padding: 0;
+}
+
+.neon {
+  text-shadow: rgba(76, 76, 255, 1) 1px 0 10px;
+}
