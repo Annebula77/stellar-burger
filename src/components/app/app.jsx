@@ -1,5 +1,4 @@
 import AppHeader from "../app-header/app-header";
-import Main from "../main/main";
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constuctor';
 import styles from './app.module.css';
@@ -7,7 +6,11 @@ import { useEffect, useState } from 'react';
 
 
 
-const serverUrl = 'https://norma.nomoreparties.space/api/ingredients';
+const SERVER_URL = 'https://norma.nomoreparties.space/api/ingredients';
+
+const checkResponse = res => {
+  return res.ok ? res.json() : res.json().then(err => Promise.reject(err));
+};
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
@@ -19,8 +22,8 @@ function App() {
       setHasError(false);
       setIsLoading(true);
       try {
-        const res = await fetch(serverUrl);
-        const data = await res.json();
+        const res = await fetch(SERVER_URL);
+        const data = await checkResponse(res);
         setIngredientsData(data.data);
       } catch (e) {
         setHasError(true);
@@ -40,10 +43,10 @@ function App() {
       {!isLoading && !hasError && ingredientsData.length && (
         <section className={styles.app}>
           <AppHeader />
-          <Main>
+          <section className={styles.main}>
             <BurgerIngredients ingredientsData={ingredientsData} />
             <BurgerConstructor ingredientsData={ingredientsData} />
-          </Main>
+          </section>
         </section>
       )}
     </>

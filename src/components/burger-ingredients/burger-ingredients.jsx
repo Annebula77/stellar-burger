@@ -1,6 +1,8 @@
 import styles from './burger-ingredients.module.css';
 import Tabs from '../tabs/tabs';
 import IngredientsCategory from '../ingredients-category/ingredients-category';
+import { ingredientType } from '../../utils/prop-types';
+import PropTypes from 'prop-types';
 
 function filterIngredientsByType(ingredients, type) {
   return ingredients.filter((ingredient) => ingredient.type === type);
@@ -24,5 +26,9 @@ function BurgerIngredients({ ingredientsData }) {
     </section>
   );
 }
+
+BurgerIngredients.propTypes = {
+  ingredientsData: PropTypes.arrayOf(ingredientType).isRequired,
+};
 
 export default BurgerIngredients;

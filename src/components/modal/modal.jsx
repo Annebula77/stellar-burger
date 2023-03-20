@@ -6,7 +6,7 @@ import ModalOverlay from "../modal-overlay/modal-overlay";
 import PropTypes from 'prop-types';
 const modals = document.querySelector('#modals');
 
-function Modal({ showModal, onClose, children }) {
+function Modal({ onClose, children }) {
 
   const handleModalClick = (event) => {
     event.stopPropagation();
@@ -30,7 +30,7 @@ function Modal({ showModal, onClose, children }) {
 
   return createPortal(
     <ModalOverlay onClick={closeModal}>
-      <div className={`${styles.modal} ${showModal ? 'fade-in' : 'fade-out'}`} onClick={handleModalClick}>
+      <div className={styles.modal} onClick={handleModalClick}>
         <button className={styles.icon__x} onClick={closeModal}>
           <CloseIcon type="primary" />
         </button>
@@ -42,7 +42,8 @@ function Modal({ showModal, onClose, children }) {
 }
 
 Modal.propTypes = {
-  onClose: PropTypes.func.isRequired
+  onClose: PropTypes.func.isRequired,
+  children: PropTypes.node.isRequired
 };
 
 export default Modal;
