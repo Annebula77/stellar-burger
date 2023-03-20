@@ -15,11 +15,10 @@ function BurgerConstructor({ ingredientsData }) {
   const closeModal = () => setShowModal(false);
 
 
-  let bun, ingredients;
-  if (ingredientsData) {
-    bun = ingredientsData.find(ingredient => ingredient.type === 'bun');
-    ingredients = ingredientsData.filter(ingredient => ingredient.type !== 'bun');
-  }
+  if (!ingredientsData) return <>Загрузка...</>;
+
+  const bun = ingredientsData.find(ingredient => ingredient.type === 'bun');
+  const ingredients = ingredientsData.filter(ingredient => ingredient.type !== 'bun');
 
   return (
     <section className={styles.section}>
