@@ -1,0 +1,33 @@
+.section {
+  box-sizing: border-box;
+  max-width: 600px;
+  margin: 40px 0 0;
+}
+
+.container {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 40px 0 0;
+  height: 755px;
+  overflow-y: scroll;
+}
+
+.title {
+  margin-bottom: 10px;
+}
+
+
+.container::-webkit-scrollbar {
+  width: 8px;
+  box-sizing: border-box;
+}
+
+.container::-webkit-scrollbar-track {
+  background: #2F2F37;
+}
+
+.container::-webkit-scrollbar-thumb {
+  background-color: #8585AD;
+}
