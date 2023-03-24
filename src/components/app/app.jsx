@@ -4,6 +4,7 @@ import BurgerConstructor from '../burger-constructor/burger-constuctor';
 import styles from './app.module.css';
 import { useEffect, useState } from 'react';
 import { getIngredientsData } from '../../utils/api';
+import ingredientStorage from "../../utils/ingredient-storage";
 
 
 function App() {
@@ -34,13 +35,15 @@ function App() {
       {isLoading && 'Загрузка...'}
       {hasError && 'Произошла ошибка'}
       {!isLoading && !hasError && ingredientsData.length && (
-        <section className={styles.app}>
-          <AppHeader />
-          <section className={styles.main}>
-            <BurgerIngredients ingredientsData={ingredientsData} />
-            <BurgerConstructor ingredientsData={ingredientsData} />
+        <ingredientStorage.Provider value={ingredientsData}>
+          <section className={styles.app}>
+            <AppHeader />
+            <section className={styles.main}>
+              <BurgerIngredients />
+              <BurgerConstructor />
+            </section>
           </section>
-        </section>
+        </ingredientStorage.Provider>
       )}
     </>
 
