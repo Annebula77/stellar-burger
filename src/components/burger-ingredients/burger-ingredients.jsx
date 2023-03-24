@@ -1,16 +1,18 @@
 import styles from './burger-ingredients.module.css';
 import Tabs from '../tabs/tabs';
 import IngredientsCategory from '../ingredients-category/ingredients-category';
-import { ingredientType } from '../../utils/prop-types';
-import PropTypes from 'prop-types';
+import { useContext } from "react";
+import ingredientStorage from '../../utils/ingredient-storage';
 
 function filterIngredientsByType(ingredients, type) {
   return ingredients.filter((ingredient) => ingredient.type === type);
 }
-function BurgerIngredients({ ingredientsData }) {
-  const buns = filterIngredientsByType(ingredientsData, 'bun');
-  const mains = filterIngredientsByType(ingredientsData, 'main');
-  const sauces = filterIngredientsByType(ingredientsData, 'sauce');
+function BurgerIngredients() {
+  const ingredientStorageData = useContext(ingredientStorage);
+
+  const buns = filterIngredientsByType(ingredientStorageData, 'bun');
+  const mains = filterIngredientsByType(ingredientStorageData, 'main');
+  const sauces = filterIngredientsByType(ingredientStorageData, 'sauce');
 
 
   return (
@@ -27,8 +29,5 @@ function BurgerIngredients({ ingredientsData }) {
   );
 }
 
-BurgerIngredients.propTypes = {
-  ingredientsData: PropTypes.arrayOf(ingredientType).isRequired,
-};
 
 export default BurgerIngredients;

@@ -1,24 +1,62 @@
 import { ConstructorElement, DragIcon, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useState } from 'react';
-import { ingredientType } from '../../utils/prop-types';
-import PropTypes from 'prop-types';
+import { useState, useContext, useEffect, useMemo } from 'react';
+import { postData } from '../../utils/api';
 import styles from './burger-constructor.module.css';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
+import ingredientStorage from '../../utils/ingredient-storage';
 
 
-
-function BurgerConstructor({ ingredientsData }) {
+function BurgerConstructor() {
+  const burgerIngredientsData = useContext(ingredientStorage);
 
   const [showModal, setShowModal] = useState(false);
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
+  const [orderNumber, setOrderNumber] = useState(null);
+  const [hasError, setHasError] = useState(false);
+
+  const bun = burgerIngredientsData.find(ingredient => ingredient.type === 'bun');
+  const bunId = bun._id;
+
+  const ingredients = burgerIngredientsData.filter(ingredient => ingredient.type !== 'bun');
+
+  const ingredientsDataId = useMemo(() => {
+    const idArray = [bunId];
+    ingredients.forEach((ingredient) => {
+      idArray.push(ingredient._id);
+    });
+    idArray.push(bunId);
+    return idArray;
+  }, [bunId, ingredients]);
+
+  const [totalPrice, setTotalPrice] = useState(bun.price * 2);
+
+  useEffect(() => {
+    let ingredientPrice = 0;
+    burgerIngredientsData.forEach((ingredient) => {
+      ingredientPrice += ingredient.price;
+    });
+    setTotalPrice(ingredientPrice);
+  }, [burgerIngredientsData]);
+
+  useEffect(() => {
+    const postIngredientsData = async () => {
+      try {
+        const data = await postData(ingredientsDataId);
+        setOrderNumber(data.order.number);
+        console.log(data)
+        setHasError(false);
+      } catch (e) {
+        setHasError(true);
+      }
+    }
+
+    postIngredientsData();
+  }, []);
 
 
-  if (!ingredientsData) return <>Загрузка...</>;
-
-  const bun = ingredientsData.find(ingredient => ingredient.type === 'bun');
-  const ingredients = ingredientsData.filter(ingredient => ingredient.type !== 'bun');
+  if (!burgerIngredientsData) return <>Загрузка...</>;
 
   return (
     <section className={styles.section}>
@@ -43,7 +81,7 @@ function BurgerConstructor({ ingredientsData }) {
           })
           }
         </ul>
-        <li className='styles.ingredient'>
+        <li className={styles.ingredient}>
           <ConstructorElement
             type="bottom"
             isLocked={true}
@@ -56,7 +94,7 @@ function BurgerConstructor({ ingredientsData }) {
 
       <div className={styles.order}>
         <div className={styles.price}>
-          <p className="text text_type_digits-medium">610</p>
+          <p className="text text_type_digits-medium">{totalPrice}</p>
           <CurrencyIcon type="primary" />
         </div>
         <Button htmlType="button" type="primary" size="large" onClick={openModal}>
@@ -65,14 +103,11 @@ function BurgerConstructor({ ingredientsData }) {
       </div>
       {showModal && (
         <Modal onClose={closeModal}>
-          <OrderDetails />
+          <OrderDetails orderNumber={orderNumber} />
         </Modal>
       )}
     </section>
   );
 }
 
-BurgerConstructor.propTypes = {
-  ingredientsData: PropTypes.arrayOf(ingredientType).isRequired,
-};
-export default BurgerConstructor
+export default BurgerConstructor;
