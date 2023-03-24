@@ -3,14 +3,8 @@ import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constuctor';
 import styles from './app.module.css';
 import { useEffect, useState } from 'react';
+import { getIngredientsData } from '../../utils/api';
 
-
-
-const SERVER_URL = 'https://norma.nomoreparties.space/api/ingredients';
-
-const checkResponse = res => {
-  return res.ok ? res.json() : res.json().then(err => Promise.reject(err));
-};
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
@@ -18,13 +12,12 @@ function App() {
   const [ingredientsData, setIngredientsData] = useState([]);
 
   useEffect(() => {
-    const getIngredientsData = async () => {
-      setHasError(false);
+    const fetchIngredientsData = async () => {
       setIsLoading(true);
       try {
-        const res = await fetch(SERVER_URL);
-        const data = await checkResponse(res);
-        setIngredientsData(data.data);
+        const data = await getIngredientsData();
+        setIngredientsData(data);
+        setHasError(false);
       } catch (e) {
         setHasError(true);
       } finally {
@@ -32,7 +25,7 @@ function App() {
       }
     };
 
-    getIngredientsData();
+    fetchIngredientsData();
   }, []);
 
 
