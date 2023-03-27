@@ -2,9 +2,10 @@ import AppHeader from "../app-header/app-header";
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constuctor';
 import styles from './app.module.css';
+import Main from "../main/main";
 import { useEffect, useState } from 'react';
 import { getIngredientsData } from '../../utils/api';
-import ingredientStorage from "../../utils/ingredient-storage";
+import IngredientStorage from "../../utils/ingredient-storage";
 
 
 function App() {
@@ -35,15 +36,15 @@ function App() {
       {isLoading && 'Загрузка...'}
       {hasError && 'Произошла ошибка'}
       {!isLoading && !hasError && ingredientsData.length && (
-        <ingredientStorage.Provider value={ingredientsData}>
-          <section className={styles.app}>
+        <IngredientStorage.Provider value={ingredientsData}>
+          <section className={styles.app} >
             <AppHeader />
-            <section className={styles.main}>
+            <Main>
               <BurgerIngredients />
               <BurgerConstructor />
-            </section>
+            </Main>
           </section>
-        </ingredientStorage.Provider>
+        </IngredientStorage.Provider>
       )}
     </>
 

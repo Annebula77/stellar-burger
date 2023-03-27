@@ -4,11 +4,11 @@ import { postData } from '../../utils/api';
 import styles from './burger-constructor.module.css';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
-import ingredientStorage from '../../utils/ingredient-storage';
+import IngredientStorage from '../../utils/ingredient-storage';
 
 
 function BurgerConstructor() {
-  const burgerIngredientsData = useContext(ingredientStorage);
+  const burgerIngredientsData = useContext(IngredientStorage);
 
   const [showModal, setShowModal] = useState(false);
   const openModal = () => setShowModal(true);
