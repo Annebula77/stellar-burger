@@ -37,7 +37,7 @@ function App() {
       {hasError && 'Произошла ошибка'}
       {!isLoading && !hasError && ingredientsData.length && (
         <IngredientStorage.Provider value={ingredientsData}>
-          <section className={styles.app} >
+          <section className={styles.app} т>
             <AppHeader />
             <Main>
               <BurgerIngredients />
