@@ -1,8 +1,8 @@
 import styles from './burger-ingredients.module.css';
 import Tabs from '../tabs/tabs';
 import IngredientsCategory from '../ingredients-category/ingredients-category';
-import { useContext, useState, useRef, forwardRef } from "react";
-import IngredientStorage from '../../utils/ingredient-storage';
+import { useState, useRef, forwardRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 
@@ -13,11 +13,12 @@ function filterIngredientsByType(ingredients, type) {
 
 
 const BurgerIngredients = forwardRef((props, ref) => {
-  const ingredientStorageData = useContext(IngredientStorage);
+  const ingredients = useSelector((state) => state.ingredients.ingredients);
+  const dispatch = useDispatch();
 
-  const buns = filterIngredientsByType(ingredientStorageData, 'bun');
-  const mains = filterIngredientsByType(ingredientStorageData, 'main');
-  const sauces = filterIngredientsByType(ingredientStorageData, 'sauce');
+  const buns = filterIngredientsByType(ingredients, 'bun');
+  const mains = filterIngredientsByType(ingredients, 'main');
+  const sauces = filterIngredientsByType(ingredients, 'sauce');
 
   const [selectedIngredient, setSelectedIngredient] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -27,7 +28,7 @@ const BurgerIngredients = forwardRef((props, ref) => {
 
   const openModal = (ingredient) => {
     setSelectedIngredient(ingredient);
-    setShowModal(true);
+    dispatch(openModal());
   };
   const closeModal = () => setShowModal(false);
 

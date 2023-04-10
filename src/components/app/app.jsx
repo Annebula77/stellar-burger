@@ -3,55 +3,40 @@ import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constuctor';
 import styles from './app.module.css';
 import Main from "../main/main";
-import { useEffect, useState } from 'react';
-import { getIngredientsData } from '../../utils/api';
-import IngredientStorage from "../../utils/ingredient-storage";
-
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchIngredients } from "../../services/actions/ingredients-actions";
 
 function App() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [hasError, setHasError] = useState(false);
-  const [ingredientsData, setIngredientsData] = useState([]);
+  const dispatch = useDispatch();
+  const { ingredients, loadingIngredients, errorIngredients } = useSelector(state => state.ingredients);
 
   useEffect(() => {
-    const fetchIngredientsData = async () => {
-      setIsLoading(true);
-      try {
-        const data = await getIngredientsData();
-        setIngredientsData(data);
-        setHasError(false);
-      } catch (e) {
-        setHasError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    dispatch(fetchIngredients());
 
-    fetchIngredientsData();
-  }, []);
+  }, [dispatch]);
 
+
+
+  if (loadingIngredients) {
+    return <p>Загрузка...</p>;
+  }
+
+  if (errorIngredients) {
+    return <p>Произошла ошибка</p>;
+  }
 
   return (
     <>
-      {isLoading && 'Загрузка...'}
-      {hasError && 'Произошла ошибка'}
-      {!isLoading && !hasError && ingredientsData.length && (
-        <IngredientStorage.Provider value={ingredientsData}>
-          <section className={styles.app} т>
-            <AppHeader />
-            <Main>
-              <BurgerIngredients />
-              <BurgerConstructor />
-            </Main>
-          </section>
-        </IngredientStorage.Provider>
-      )}
+      <section className={styles.app}>
+        <AppHeader />
+        <Main>
+          <BurgerIngredients ingredients={ingredients} />
+          <BurgerConstructor />
+        </Main>
+      </section>
     </>
-
-  );
-
-
+  )
 }
-
 
 export default App;
