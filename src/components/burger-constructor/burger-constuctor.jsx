@@ -1,20 +1,22 @@
 import { ConstructorElement, DragIcon, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useState, useContext, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { postData } from '../../utils/api';
 import styles from './burger-constructor.module.css';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
-import IngredientStorage from '../../utils/ingredient-storage';
+import { useSelector, useDispatch } from 'react-redux';
+import { sendOrder } from '../../services/actions/order-actions';
 
 
 function BurgerConstructor() {
-  const burgerIngredientsData = useContext(IngredientStorage);
+  const burgerIngredientsData = useSelector((state) => state.ingredients.ingredients);
+  const orderNumber = useSelector((state) => state.order.data);
+  const dispatch = useDispatch();
 
   const [showModal, setShowModal] = useState(false);
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
-  const [orderNumber, setOrderNumber] = useState(null);
-  const [hasError, setHasError] = useState(false);
+
 
   const bun = burgerIngredientsData.find(ingredient => ingredient.type === 'bun');
   const bunId = bun._id;
@@ -41,19 +43,8 @@ function BurgerConstructor() {
   }, [burgerIngredientsData]);
 
   useEffect(() => {
-    const postIngredientsData = async () => {
-      try {
-        const data = await postData(ingredientsDataId);
-        setOrderNumber(data.order.number);
-        console.log(data)
-        setHasError(false);
-      } catch (e) {
-        setHasError(true);
-      }
-    }
-
-    postIngredientsData();
-  }, []);
+    dispatch(sendOrder(ingredientsDataId));
+  }, [dispatch]);
 
 
   if (!burgerIngredientsData) return <>Загрузка...</>;
@@ -103,7 +94,7 @@ function BurgerConstructor() {
       </div>
       {showModal && (
         <Modal onClose={closeModal}>
-          <OrderDetails orderNumber={orderNumber} />
+          <OrderDetails orderNumber={orderNumber.order.number} />
         </Modal>
       )}
     </section>
