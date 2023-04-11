@@ -1,11 +1,11 @@
-export const FETCH_INGREDIENTS_REQUEST = 'FETCH_INGREDIENTS_REQUEST';
-export const FETCH_INGREDIENTS_SUCCESS = 'FETCH_INGREDIENTS_SUCCESS';
-export const FETCH_INGREDIENTS_FAILED = 'FETCH_INGREDIENTS_FAILED';
+export const FETCH_INGREDIENTS_REQUEST = "FETCH_INGREDIENTS_REQUEST";
+export const FETCH_INGREDIENTS_SUCCESS = "FETCH_INGREDIENTS_SUCCESS";
+export const FETCH_INGREDIENTS_FAILED = "FETCH_INGREDIENTS_FAILED";
 
-const BASE_URL = 'https://norma.nomoreparties.space/api';
+const BASE_URL = "https://norma.nomoreparties.space/api";
 
-const checkResponse = res => {
-  return res.ok ? res.json() : res.json().then(err => Promise.reject(err));
+const checkResponse = (res) => {
+  return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
 };
 
 export const fetchIngredientsRequest = () => ({
@@ -21,18 +21,17 @@ export const fetchIngredientsFailed = () => ({
   type: FETCH_INGREDIENTS_FAILED,
 });
 
-export function fetchIngredients() {
-  return function (dispatch) {
+
+export const fetchIngredients = () => {
+  return async (dispatch) => {
     dispatch(fetchIngredientsRequest());
-    fetch(`${BASE_URL}/ingredients`)
-      .then(checkResponse)
-      .then(data => {
-        dispatch(fetchIngredientsSuccess(data));
-        console.log('Данные ингредиентов получены:', data);
-      })
-      .catch(error => {
-        console.log(error);
-        dispatch(fetchIngredientsFailed());
-      });
+    try {
+      const res = await fetch(`${BASE_URL}/ingredients`);
+      const data = await checkResponse(res);
+      dispatch(fetchIngredientsSuccess(data.data));
+    } catch (error) {
+      dispatch(fetchIngredientsFailed());
+    }
   };
-}
+};
+

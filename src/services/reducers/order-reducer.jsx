@@ -2,29 +2,14 @@ import {
   POST_ORDER_REQUEST,
   POST_ORDER_SUCCESS,
   POST_ORDER_FAILED,
-  postOrderRequest,
-  postOrderSuccess,
-  postOrderFailed
 } from '../actions/order-actions';
-import { postData } from '../../utils/api';
 
 const initialState = {
   loadingOrder: false,
-  errorOrder: false
+  errorOrder: null,
+  data: null,
 };
 
-export const postOrder = (data) => {
-  return async (dispatch) => {
-    dispatch(postOrderRequest());
-
-    try {
-      await postData(data);
-      dispatch(postOrderSuccess());
-    } catch (error) {
-      dispatch(postOrderFailed());
-    }
-  };
-};
 
 export const orderReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -32,19 +17,21 @@ export const orderReducer = (state = initialState, action) => {
       return {
         ...state,
         loadingOrder: true,
-        errorOrder: false,
+        errorOrder: false
+
       };
     case POST_ORDER_SUCCESS:
       return {
         ...state,
         loadingOrder: false,
         errorOrder: false,
+        data: action.payload
       };
     case POST_ORDER_FAILED:
       return {
         ...state,
         loadingOrder: false,
-        errorOrder: true,
+        errorOrder: action.payload,
       };
     default:
       return state;
