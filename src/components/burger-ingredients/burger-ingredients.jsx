@@ -14,9 +14,23 @@ const BurgerIngredients = forwardRef((props, ref) => {
   const dispatch = useDispatch();
 
   const [showModal, setShowModal] = useState(false);
+  const containerRef = useRef(null);
   const bunRef = useRef(null);
   const sauceRef = useRef(null);
   const mainRef = useRef(null);
+  const [current, setCurrent] = useState('bun');
+  const handleScroll = () => {
+    if (containerRef.current.getBoundingClientRect().top > bunRef.current.getBoundingClientRect().top) {
+      setCurrent('bun');
+    }
+    if (containerRef.current.getBoundingClientRect().top > sauceRef.current.getBoundingClientRect().top) {
+      setCurrent('sauce');
+    }
+    if (containerRef.current.getBoundingClientRect().top > mainRef.current.getBoundingClientRect().top) {
+      setCurrent('main');
+    }
+  };
+
 
   const openModal = (ingredient) => {
     dispatch(setIngredientDetails(ingredient));
@@ -30,8 +44,8 @@ const BurgerIngredients = forwardRef((props, ref) => {
   return (
     <section className={styles.section}>
       <h1 className={`text text_type_main-large ${styles.title}`}>Собери бургер</h1>
-      <Tabs bunRef={bunRef} sauceRef={sauceRef} mainRef={mainRef} />
-      <section className={styles.container}>
+      <Tabs bunRef={bunRef} sauceRef={sauceRef} mainRef={mainRef} current={current} />
+      <section className={styles.container} ref={containerRef} onScroll={handleScroll} >
         <IngredientsCategory title='Булки' type="bun" openModal={openModal} ref={bunRef} />
         <IngredientsCategory title='Соусы' type="sauce" openModal={openModal} ref={sauceRef} />
         <IngredientsCategory title='Начинки' type="main" openModal={openModal} ref={mainRef} />
