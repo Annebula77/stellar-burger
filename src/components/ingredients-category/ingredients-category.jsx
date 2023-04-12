@@ -2,7 +2,7 @@ import styles from './ingredients-category.module.css';
 import Ingredient from '../ingredient/ingredient';
 //import { ingredientType } from '../../utils/prop-types';
 //import PropTypes from 'prop-types';
-import { forwardRef, useState } from 'react';
+import { forwardRef } from 'react';
 import { useSelector } from 'react-redux';
 
 
