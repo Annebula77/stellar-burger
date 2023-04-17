@@ -19,7 +19,7 @@ const Tabs = forwardRef((props, ref) => {
   };
 
   return (
-    <div ref={ref} className={styles.tabs} onScroll={props.handleScroll}>
+    <div ref={ref} className={styles.tabs}>
       <Tab
         value="bun"
         active={props.current === 'bun'}

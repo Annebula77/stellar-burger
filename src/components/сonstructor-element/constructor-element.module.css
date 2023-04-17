@@ -1,0 +1,8 @@
+.filling {
+  display: flex;
+  align-items: center;
+}
+
+.dragButton {
+  cursor: grab;
+}
