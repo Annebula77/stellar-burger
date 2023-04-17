@@ -1,0 +1,10 @@
+.filling {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  transition: scale .5s ease-in-out;
+}
+
+.dragButton {
+  cursor: grab;
+}
