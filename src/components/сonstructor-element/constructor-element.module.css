@@ -1,8 +1,9 @@
 .filling {
   display: flex;
-  flex-direction: row;
+  justify-content: center;
   align-items: center;
-  transition: scale .5s ease-in-out;
+  cursor: pointer;
+  width: 100%;
 }
 
 .dragButton {

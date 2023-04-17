@@ -3,7 +3,7 @@ import {
   BURGER_INGREDIENT_ITEM_ADD_BUN,
   BURGER_INGREDIENT_ITEM_MOVE,
   BURGER_INGREDIENT_ITEM_DELETE,
-  BURGER_INGREDIENT_ITEM_RESET
+  BURGER_INGREDIENT_ITEM_RESET,
 } from '../actions/burger-constructor-action'
 
 
@@ -48,11 +48,7 @@ export const burgerConstructorReducer = (state = initialState, action) => {
       };
 
     case BURGER_INGREDIENT_ITEM_RESET:
-      return {
-        ...state,
-        bun: null,
-        ingredients: [],
-      };
+      return initialState;
 
     default:
       return state;

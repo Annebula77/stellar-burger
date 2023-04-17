@@ -1,4 +1,4 @@
-import { BASE_URL, checkResponse } from '../../utils/api-consts';
+import { BASE_URL, checkResponse } from '../../utils/consts';
 
 
 export const POST_ORDER_REQUEST = 'POST_ORDER_REQUEST';

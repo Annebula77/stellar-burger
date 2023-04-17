@@ -4,7 +4,7 @@ import {
 } from '../actions/ingredient-action';
 
 const initialState = {
-  сurrentIngredient: {},
+  сurrentIngredient: null,
 }
 export const ingredientReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -17,7 +17,7 @@ export const ingredientReducer = (state = initialState, action) => {
     case CLEAR_INGREDIENT_MODAL: {
       return {
         ...state,
-        сurrentIngredient: {},
+        сurrentIngredient: null,
       };
     }
     default: {

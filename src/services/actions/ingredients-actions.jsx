@@ -1,4 +1,4 @@
-import { BASE_URL, checkResponse } from '../../utils/api-consts';
+import { BASE_URL, checkResponse } from '../../utils/consts';
 
 export const FETCH_INGREDIENTS_REQUEST = "FETCH_INGREDIENTS_REQUEST";
 export const FETCH_INGREDIENTS_SUCCESS = "FETCH_INGREDIENTS_SUCCESS";
