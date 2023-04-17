@@ -13,7 +13,7 @@ const ConstructorEl = ({ index, item }) => {
   const ref = useRef(null);
 
   const handleDelete = (index, item) => {
-    dispatch(deleteIngredientFromConstructor(item, index - 1));
+    dispatch(deleteIngredientFromConstructor(item, index));
   }
   const [, drop] = useDrop({
     accept: 'item',
@@ -26,6 +26,8 @@ const ConstructorEl = ({ index, item }) => {
       dispatch(moveIngredientInContainer(dragElIndex, hoverElIndex));
       item.index = hoverElIndex;
     },
+
+
   });
 
   const [{ opacity }, drag] = useDrag({
@@ -42,7 +44,7 @@ const ConstructorEl = ({ index, item }) => {
 
   return (
     <div
-      className={`${styles.filling} mb-4 mr-4 ml-4`}
+      className={`${styles.filling}`}
       style={{ opacity }}
       ref={ref}
     >

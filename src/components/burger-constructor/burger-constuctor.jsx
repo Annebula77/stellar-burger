@@ -4,8 +4,8 @@ import styles from './burger-constructor.module.css';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import { useSelector, useDispatch } from 'react-redux';
-import { sendOrder } from '../../services/actions/order-actions';
-import { addIngridientItem, addBunItem } from '../../services/actions/burger-constructor-action';
+import { postOrderClear, sendOrder } from '../../services/actions/order-actions';
+import { addIngridientItem, addBunItem, clearContainer } from '../../services/actions/burger-constructor-action';
 import { useDrop } from "react-dnd";
 import ConstructorEl from '../сonstructor-element/constructor-element';
 
@@ -16,10 +16,8 @@ function BurgerConstructor() {
   const dispatch = useDispatch();
 
   const [showModal, setShowModal] = useState(false);
-  const openModal = () => setShowModal(true);
-  const closeModal = () => setShowModal(false);
+
   const [totalPrice, setTotalPrice] = useState(null);
-  const [idArray, setIdArray] = useState([]);
 
 
   const fillings = useMemo(
@@ -36,13 +34,11 @@ function BurgerConstructor() {
         dispatch(addBunItem(item.ingredient));
       } else {
         dispatch(addIngridientItem(item.ingredient));
-        setIdArray(prevArray => [...prevArray, item.ingredient._id]);
       }
-
     },
   });
 
-  console.log('idList >>', idArray);
+
 
 
 
@@ -54,14 +50,21 @@ function BurgerConstructor() {
     setTotalPrice(sum);
   }, [bun, fillings]);
 
-  useEffect(() => {
-    if (!bun) {
-      return
-    };
-    dispatch(sendOrder(idArray));
-  }, [dispatch]);
 
+  const openModal = () => {
+    const ingredientIds = fillings.map((item) => item._id); // получаем ID всех ингредиентов
+    const bunId = bun ? [bun._id] : []; // если есть булка, добавляем её ID в массив
+    const orderItems = [...bunId, ...ingredientIds]; // объединяем массивы
 
+    dispatch(sendOrder(orderItems)); // передаем массив в функцию sendOrder
+    setShowModal(true)
+  };
+
+  const closeModal = () => {
+    dispatch(postOrderClear());
+    dispatch(clearContainer());
+    setShowModal(false)
+  };
   return (
     <section className={styles.section} ref={dropTarget}>
       {bun || ingredients.length > 0 ? (
@@ -84,7 +87,12 @@ function BurgerConstructor() {
                   <ConstructorEl item={item} index={index} />
                 </li>
               ))
-            ) : null}
+            ) : (
+              <div
+                className={`${styles.empty_ingredients} text text_type_main-medium text_color_inactive`}
+              >
+                Молодец! А теперь добавь сюда начинки, и будет тебе вкуснее 😋
+              </div>)}
           </ul>
           {bun && (
             <li className={styles.ingredient}>
@@ -98,20 +106,27 @@ function BurgerConstructor() {
             </li>
           )}
         </ul>
-      ) : null}
+      ) : (
+        <div
+          className={`${styles.empty_container} text text_type_main-large `}
+        >
+          Не дадим умереть тебе с голоду!😎 &nbsp;
+          Скорей тащи сюда ⬇⬇⬇ булочки и начинки! 🍔
+        </div>
+      )}
       <div className={styles.order}>
         <div className={styles.price}>
           <p className="text text_type_digits-medium">{totalPrice}</p>
           <CurrencyIcon type="primary" />
         </div>
-        <Button htmlType="button" type="primary" size="large" onClick={openModal}>
+        <Button htmlType="button" type="primary" size="large" onClick={() => { openModal() }}>
           Оформить заказ
         </Button>
       </div>
       {
         showModal && (
           <Modal onClose={closeModal}>
-            <OrderDetails orderNumber={orderNumber.order.number} />
+            <OrderDetails orderNumber={orderNumber && orderNumber.order && orderNumber.order.number} />
           </Modal>
         )
       }
