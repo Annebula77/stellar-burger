@@ -4,6 +4,7 @@ import styles from './ingredient.module.css';
 import { useDrag } from 'react-dnd';
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
+import PropTypes from 'prop-types';
 
 
 
@@ -20,21 +21,16 @@ function Ingredient({ ingredient, onClick }) {
     }),
   });
 
-  const counter = useMemo(
-    () =>
-      (count = 0) => {
-        for (let { _id } of ingredients) if (_id === ingredient._id) count++;
-
-        if (bun && bun._id === ingredient._id) return 2;
-        return count;
-      },
-    [bun, ingredients, ingredient._id]
-  );
-
+  const counter = useMemo(() => {
+    let count = 0;
+    for (let { _id } of ingredients) if (_id === ingredient._id) count++;
+    if (bun && bun._id === ingredient._id) count += 2;
+    return count;
+  }, [bun, ingredient._id, ingredients]);
 
   return (
     <li className={styles.element} onClick={onClick} style={{ opacity }} ref={dragRef}>
-      {counter() > 0 && <Counter count={counter()} size="default" extraClass="m-1" />}
+      {counter > 0 && <Counter count={counter} size="default" extraClass="m-1" />}
       <img className={styles.image} src={image} alt={name} />
       <div className={styles.price}>
         <p className='text text_type_digits-default mt-1 mb-1'>{price}</p>
@@ -46,6 +42,8 @@ function Ingredient({ ingredient, onClick }) {
 }
 
 Ingredient.propTypes = {
-  ingredient: ingredientType
+  ingredient: ingredientType,
+  onClick: PropTypes.func,
 };
+
 export default Ingredient;

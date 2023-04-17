@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import styles from './main.module.css'
 
 function Main(props) {
@@ -8,4 +9,7 @@ function Main(props) {
   )
 }
 
+Main.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 export default Main;

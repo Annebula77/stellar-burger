@@ -14,17 +14,8 @@ function BurgerConstructor() {
   const { bun, ingredients } = useSelector((state) => state.burgerOrderList);
   const orderNumber = useSelector((state) => state.order.data);
   const dispatch = useDispatch();
-
   const [showModal, setShowModal] = useState(false);
-
   const [totalPrice, setTotalPrice] = useState(null);
-
-
-  const fillings = useMemo(
-    () => ingredients.filter((item) => item.type !== "bun"),
-    [ingredients]
-  );
-
 
 
   const [, dropTarget] = useDrop({
@@ -39,24 +30,21 @@ function BurgerConstructor() {
   });
 
 
-
-
-
   useEffect(() => {
-    const sum = fillings.reduce(
+    const sum = ingredients.reduce(
       (current, total) => current + total.price,
       bun === null || bun.price === undefined ? 0 : bun.price * 2
     );
     setTotalPrice(sum);
-  }, [bun, fillings]);
+  }, [bun, ingredients]);
 
 
   const openModal = () => {
-    const ingredientIds = fillings.map((item) => item._id); // получаем ID всех ингредиентов
-    const bunId = bun ? [bun._id] : []; // если есть булка, добавляем её ID в массив
-    const orderItems = [...bunId, ...ingredientIds]; // объединяем массивы
+    const ingredientIds = ingredients.map((item) => item._id);
+    const bunId = bun._id;
+    const orderItems = [bunId, ...ingredientIds, bunId];
 
-    dispatch(sendOrder(orderItems)); // передаем массив в функцию sendOrder
+    dispatch(sendOrder(orderItems));
     setShowModal(true)
   };
 
@@ -74,7 +62,7 @@ function BurgerConstructor() {
               <ConstructorElement
                 type="top"
                 isLocked={true}
-                text={`top-${bun.name} (верх)`}
+                text={`${bun.name} (верх)`}
                 price={`${bun.price}`}
                 thumbnail={`${bun.image}`}
               />
@@ -99,7 +87,7 @@ function BurgerConstructor() {
               <ConstructorElement
                 type="bottom"
                 isLocked={true}
-                text={`bottom-${bun.name} (низ)`}
+                text={`${bun.name} (низ)`}
                 price={`${bun.price}`}
                 thumbnail={`${bun.image}`}
               />

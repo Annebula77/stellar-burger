@@ -1,6 +1,7 @@
 import styles from './tabs.module.css';
 import { forwardRef } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
+import { TabItems } from '../../utils/consts'
 
 
 const Tabs = forwardRef((props, ref) => {
@@ -21,7 +22,7 @@ const Tabs = forwardRef((props, ref) => {
   return (
     <div ref={ref} className={styles.tabs}>
       <Tab
-        value="bun"
+        value={TabItems.BUN}
         active={props.current === 'bun'}
         onClick={() => {
           if (props.bunRef.current) {
@@ -32,7 +33,7 @@ const Tabs = forwardRef((props, ref) => {
         Булки
       </Tab>
       <Tab
-        value="sauce"
+        value={TabItems.SAUCE}
         active={props.current === 'sauce'}
         onClick={() => {
           if (props.sauceRef.current) {
@@ -43,7 +44,7 @@ const Tabs = forwardRef((props, ref) => {
         Соусы
       </Tab>
       <Tab
-        value="main"
+        value={TabItems.MAIN}
         active={props.current === 'main'}
         onClick={() => {
           if (props.mainRef.current) {

@@ -12,19 +12,17 @@ export const addIngridientItem = (ingridient) => {
     type: BURGER_INGREDIENT_ITEM_ADD,
     ingridient: {
       ...ingridient,
-      key
+      key,
     },
   };
 }
 
 export const addBunItem = (bunItem) => {
-  const key = uniqid();
   return {
     type: BURGER_INGREDIENT_ITEM_ADD_BUN,
     bun: {
       ...bunItem,
-      type: 'bun',
-      key
+      type: 'bun'
     },
   };
 }
@@ -49,3 +47,4 @@ export const clearContainer = () => {
     type: BURGER_INGREDIENT_ITEM_RESET,
   }
 }
+
