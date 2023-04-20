@@ -1,40 +1,49 @@
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useState } from 'react';
 import { ingredientType } from '../../utils/prop-types';
 import styles from './ingredient.module.css';
-import Modal from '../modal/modal';
-import IngredientDetails from '../ingredient-details/ingredient-details';
+import { useDrag } from 'react-dnd';
+import { useMemo } from "react";
+import { useSelector } from "react-redux";
+import PropTypes from 'prop-types';
 
 
 
 
-function Ingredient({ ingredient }) {
-
-  const [showModal, setShowModal] = useState(false);
-  const openModal = () => setShowModal(true);
-  const closeModal = () => setShowModal(false);
-
+function Ingredient({ ingredient, onClick }) {
   const { _id, image, price, name } = ingredient;
+  const { bun, ingredients } = useSelector((state) => state.burgerOrderList);
+
+  const [{ opacity }, dragRef] = useDrag({
+    type: 'ingredients',
+    item: { ingredient },
+    collect: (monitor) => ({
+      opacity: monitor.isDragging() ? 0.2 : 1,
+    }),
+  });
+
+  const counter = useMemo(() => {
+    let count = 0;
+    for (let { _id } of ingredients) if (_id === ingredient._id) count++;
+    if (bun && bun._id === ingredient._id) count += 2;
+    return count;
+  }, [bun, ingredient._id, ingredients]);
 
   return (
-    <li className={styles.element} key={_id} onClick={showModal ? undefined : openModal}>
-      <Counter count={1} size="default" extraClass="m-1" />
+    <li className={styles.element} onClick={onClick} style={{ opacity }} ref={dragRef}>
+      {counter > 0 && <Counter count={counter} size="default" extraClass="m-1" />}
       <img className={styles.image} src={image} alt={name} />
       <div className={styles.price}>
         <p className='text text_type_digits-default mt-1 mb-1'>{price}</p>
         <CurrencyIcon type="primary" />
       </div>
       <p className={`text text_type_main-default pb-8 ${styles.title}`}>{name}</p>
-      {showModal && (
-        <Modal onClose={closeModal}>
-          <IngredientDetails ingredient={ingredient} />
-        </Modal>
-      )}
     </li>
   )
 }
 
 Ingredient.propTypes = {
-  ingredient: ingredientType
+  ingredient: ingredientType,
+  onClick: PropTypes.func,
 };
+
 export default Ingredient;
