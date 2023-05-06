@@ -1,13 +1,13 @@
 import AppHeader from "../app-header/app-header";
-import BurgerIngredients from "../burger-ingredients/burger-ingredients";
-import BurgerConstructor from "../burger-constructor/burger-constuctor";
 import styles from "./app.module.css";
-import Main from "../main/main";
+import { HomePage } from "../../pages/homePage/homePage";
+import { LoginPage } from "../../pages/loginPage/login-page";
+import { RegisterPage } from "../../pages/registerPage/register-page";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchIngredients } from "../../services/actions/ingredients-actions";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { DndProvider } from "react-dnd";
+import { Routes, Route } from 'react-router-dom';
+
 
 function App() {
   const dispatch = useDispatch();
@@ -17,25 +17,23 @@ function App() {
   useEffect(() => {
     dispatch(fetchIngredients());
   }, [dispatch]);
-
-
   return (
     <>
       <section className={styles.app}>
         <AppHeader />
-        <Main>
-          {loadingIngredients && <p>Загрузка...</p>}
-          {errorIngredients && <p>Произошла ошибка</p>}
-          {dataRequest && (
-            <DndProvider backend={HTML5Backend}>
-              <BurgerIngredients />
-              <BurgerConstructor />
-            </DndProvider>
-          )}
-        </Main>
+        {loadingIngredients && <p>Загрузка...</p>}
+        {errorIngredients && <p>Произошла ошибка</p>}
+        {dataRequest && (
+          <Routes>
+            <Route path='/' element={<HomePage />} />
+            <Route path='/login' element={<LoginPage />} />
+            <Route path='/register' element={<RegisterPage />} />
+          </Routes>
+        )}
       </section>
     </>
-  );
+  )
+
 }
 
 export default App;
