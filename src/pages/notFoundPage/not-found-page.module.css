@@ -1,0 +1,30 @@
+.container {
+  width: 100vh;
+  height: 100vw;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 0 0;
+
+}
+
+.title {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  font-size: 150px;
+}
+
+.image {
+  box-sizing: border-box;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  background-image: url(../../images/burger.png);
+  background-repeat: no-repeat;
+  background-position: cover;
+  background-size: 100%;
+  padding: 0;
+  margin: 0;
+}

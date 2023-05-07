@@ -5,6 +5,7 @@ import { LoginPage } from "../../pages/loginPage/login-page";
 import { RegisterPage } from "../../pages/registerPage/register-page";
 import { ForgotPasswordPage } from "../../pages/forgotPasswordPage/forgot-password-page";
 import { ResetPasswordPage } from "../../pages/resetPasswordPage/reset-password-page";
+import { NotFoundPage } from "../../pages/notFoundPage/not-found-page";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchIngredients } from "../../services/actions/ingredients-actions";
@@ -32,6 +33,7 @@ function App() {
             <Route path='/register' element={<RegisterPage />} />
             <Route path='/forgot-password' element={<ForgotPasswordPage />} />
             <Route path='/reset-password' element={<ResetPasswordPage />} />
+            <Route path='*' element={<NotFoundPage />} />
           </Routes>
         )}
       </section>
