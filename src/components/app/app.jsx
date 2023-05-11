@@ -6,6 +6,7 @@ import { RegisterPage } from "../../pages/registerPage/register-page";
 import { ForgotPasswordPage } from "../../pages/forgotPasswordPage/forgot-password-page";
 import { ResetPasswordPage } from "../../pages/resetPasswordPage/reset-password-page";
 import { NotFoundPage } from "../../pages/notFoundPage/not-found-page";
+import { IngredientPage } from "../../pages/ingredientPage/ingredient-page";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchIngredients } from "../../services/actions/ingredients-actions";
@@ -28,7 +29,9 @@ function App() {
         {errorIngredients && <p>Произошла ошибка</p>}
         {dataRequest && (
           <Routes>
-            <Route path='/' element={<HomePage />} />
+            <Route path='/' element={<HomePage />}>
+              < Route path='/ingredients/:id' element={<IngredientPage />} />
+            </Route>
             <Route path='/login' element={<LoginPage />} />
             <Route path='/register' element={<RegisterPage />} />
             <Route path='/forgot-password' element={<ForgotPasswordPage />} />
