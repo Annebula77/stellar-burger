@@ -98,8 +98,7 @@ function BurgerConstructor() {
         <div
           className={`${styles.empty_container} text text_type_main-large `}
         >
-          Не дадим умереть тебе с голоду!😎 &nbsp;
-          Скорей тащи сюда ⬇⬇⬇ булочки и начинки! 🍔
+          Cоберем похожий?
         </div>
       )}
       <div className={styles.order}>

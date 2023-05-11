@@ -6,7 +6,8 @@ import { useSelector, useDispatch } from "react-redux";
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import { setIngredientDetails, clearIngredientDetails } from '../../services/actions/ingredient-action';
-import { TabItems } from '../../utils/consts'
+import { TabItems } from '../../utils/consts';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 
 
@@ -14,12 +15,16 @@ const BurgerIngredients = forwardRef((props, ref) => {
   const ingredientList = useSelector((state) => state.ingredients);
   const dispatch = useDispatch();
 
-  const [showModal, setShowModal] = useState(false);
   const containerRef = useRef(null);
   const bunRef = useRef(null);
   const sauceRef = useRef(null);
   const mainRef = useRef(null);
   const [current, setCurrent] = useState(TabItems.BUN);
+  const navigate = useNavigate();
+  const params = useParams();
+  const location = useLocation();
+  const modal = params.id && location.state && location.state.modal;
+  const [showModal, setShowModal] = useState(modal || false);
 
   const buns = useMemo(
     () =>
@@ -65,6 +70,7 @@ const BurgerIngredients = forwardRef((props, ref) => {
   const closeModal = () => {
     dispatch(clearIngredientDetails());
     setShowModal(false);
+    navigate(`/`);
   }
 
   return (

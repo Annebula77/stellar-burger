@@ -1,8 +1,17 @@
 import styles from './ingredient-details.module.css'
 import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+
 
 function IngredientDetails() {
-  const ingredient = useSelector((state) => state.ingredientDetails.сurrentIngredient);
+
+  const allIngredients = useSelector((state) => state.ingredients.ingredients);
+  const { id } = useParams();
+
+
+  const ingredient = allIngredients.find((ingredient) => ingredient._id === id);
+
+
   return (
     <div className={styles.container}>
       <h2 className='text text_type_main-large ml-10 mr-25'>Детали ингредиента</h2>
