@@ -1,6 +1,7 @@
 import { Button, EmailInput, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './login-page.module.css';
 import { useState } from 'react';
+import { Link } from "react-router-dom";
 
 const LoginPage = () => {
   const [emailValue, setEmailValue] = useState('')
@@ -13,7 +14,7 @@ const LoginPage = () => {
     setPasswordValue(e.target.value)
   }
   return (
-    <section className={styles.container}>
+    <form className={styles.container}>
       <h1 className={`${styles.title} text text_type_main-medium`}>Вход</h1>
       <div className={styles.input}>
         <EmailInput
@@ -37,9 +38,9 @@ const LoginPage = () => {
           Войти
         </Button>
       </div>
-      <p className="text text_type_main-default text_color_inactive mb-4">Вы - новый пользователь? <span className={styles.links}>Зарегистрироваться</span></p>
-      <p className="text text_type_main-default text_color_inactive mb-4">Забыли пароль? <span className={styles.links}>Восстановить пароль</span></p>
-    </section>
+      <p className="text text_type_main-default text_color_inactive mb-4">Вы - новый пользователь? <span><Link to='/register' className={styles.links}>Зарегистрироваться</Link></span> </p>
+      <p className="text text_type_main-default text_color_inactive mb-4">Забыли пароль? <span ><Link to='/forgot-password' className={styles.links}>Восстановить пароль</Link></span></p>
+    </form>
   )
 }
 

@@ -23,8 +23,8 @@ const BurgerIngredients = forwardRef((props, ref) => {
   const navigate = useNavigate();
   const params = useParams();
   const location = useLocation();
-  const modal = params.id && location.state && location.state.modal;
-  const [showModal, setShowModal] = useState(modal || false);
+  const background = params.id && location.state && location.state.background;
+  const [showModal, setShowModal] = useState(background || false);
 
   const buns = useMemo(
     () =>

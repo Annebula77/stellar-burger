@@ -4,13 +4,14 @@ import styles from './ingredient.module.css';
 import { useDrag } from 'react-dnd';
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate, useMatch } from 'react-router-dom';
+import { useNavigate, useMatch, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 
 function Ingredient({ ingredient, onClick }) {
-  const navigation = useNavigate();
+  const navigate = useNavigate();
   const match = useMatch('/ingredients/:id');
+  const location = useLocation();
   const { id } = match?.params || {};
   const { _id, image, price, name } = ingredient;
   const { bun, ingredients } = useSelector((state) => state.burgerOrderList);
@@ -33,7 +34,7 @@ function Ingredient({ ingredient, onClick }) {
   return (
     <li className={styles.element} onClick={() => {
       if (id !== ingredient._id) {
-        navigation(`/ingredients/${ingredient._id}`);
+        navigate(`/ingredients/${ingredient._id}`, { state: { background: true } });
         onClick();
       }
     }} style={{ opacity }} ref={dragRef}>
