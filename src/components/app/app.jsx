@@ -10,11 +10,13 @@ import { IngredientPage } from "../../pages/ingredientPage/ingredient-page";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchIngredients } from "../../services/actions/ingredients-actions";
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 
 
 function App() {
   const dispatch = useDispatch();
+  let location = useLocation();
+  let background = location.state && location.state.background;
   const { ingredients, loadingIngredients, errorIngredients, dataRequest } =
     useSelector((state) => state.ingredients);
 
@@ -29,7 +31,7 @@ function App() {
         {errorIngredients && <p>Произошла ошибка</p>}
         {dataRequest && (
           <Routes>
-            <Route path='/' element={<HomePage />}>
+            <Route path='/' element={<HomePage />} location={background || location}>
               < Route path='/ingredients/:id' element={<IngredientPage />} />
             </Route>
             <Route path='/login' element={<LoginPage />} />
@@ -37,7 +39,9 @@ function App() {
             <Route path='/forgot-password' element={<ForgotPasswordPage />} />
             <Route path='/reset-password' element={<ResetPasswordPage />} />
             <Route path='*' element={<NotFoundPage />} />
+            < Route path='/ingredients/:id' element={<IngredientPage />} />
           </Routes>
+
         )}
       </section>
     </>

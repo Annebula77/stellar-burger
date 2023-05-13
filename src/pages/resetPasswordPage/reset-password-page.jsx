@@ -1,26 +1,49 @@
 import { Button, PasswordInput, Input } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './reset-password-page.module.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, Link, useLocation, Navigate } from 'react-router-dom';
+import { resetPasswordApi } from "../../services/actions/reset-password-actions";
 
 const ResetPasswordPage = () => {
 
-  const [passwordValue, setPasswordValue] = useState('')
-  const onPasswordChange = e => {
-    setPasswordValue(e.target.value)
-  }
-  const [inputValue, setInputValue] = useState('')
-  const onInputChange = e => {
-    setInputValue(e.target.value)
-  }
 
-  return (
-    <section className={styles.container}>
+  const dispatch = useDispatch();
+  const resetPassword = useSelector((state) => state.resetPassword);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isAuthorized = location.state && location.state.reset;
+  const defaultData = {
+    password: '',
+    token: '',
+  };
+
+
+  const [value, setValue] = useState(defaultData);
+
+
+  useEffect(() => {
+    if (resetPassword.status) {
+      navigate('/login');
+      setValue(defaultData);
+    }
+  }, [resetPassword, navigate, defaultData])
+
+  return isAuthorized ? (
+    <form className={styles.container} onSubmit={(e) => {
+      e.preventDefault();
+      dispatch(resetPasswordApi(value));
+    }}>
       <h1 className={`${styles.title} text text_type_main-medium`}>Восстановление пароля</h1>
       <div className={styles.input}>
         <PasswordInput
           placeholder={"Введите новый пароль"}
-          onChange={onPasswordChange}
-          value={passwordValue}
+          onChange={e => setValue({
+            ...value,
+            password: e.target.value
+          }
+          )}
+          value={value.password}
           name={'password'}
           extraClass="mb-2"
         />
@@ -28,8 +51,12 @@ const ResetPasswordPage = () => {
       <div className={styles.input}>
         <Input
           type={"text"}
-          value={inputValue}
-          onChange={onInputChange}
+          value={value.token}
+          onChange={e => setValue({
+            ...value,
+            token: e.target.value
+          }
+          )}
           placeholder={"Введите код из письма"}
           name={"name"}
           error={false}
@@ -39,13 +66,13 @@ const ResetPasswordPage = () => {
         />
       </div>
       <div className={styles.input}>
-        <Button htmlType="button" type="primary" size="large" extraClass="mb-20">
+        <Button htmlType="submit" type="primary" size="large" extraClass="mb-20">
           Сохранить
         </Button>
       </div>
-      <p className="text text_type_main-default text_color_inactive mb-4">Вспомнили пароль? <span className={styles.links}>Войти</span></p>
-    </section>
-  )
+      <p className="text text_type_main-default text_color_inactive mb-4">Вспомнили пароль? <span><Link to='/login' className={styles.links}>Войти</Link></span></p>
+    </form>
+  ) : (<Navigate to='/forgot-password' replace />)
 }
 
 
