@@ -7,6 +7,7 @@ import { ForgotPasswordPage } from "../../pages/forgotPasswordPage/forgot-passwo
 import { ResetPasswordPage } from "../../pages/resetPasswordPage/reset-password-page";
 import { NotFoundPage } from "../../pages/notFoundPage/not-found-page";
 import { IngredientPage } from "../../pages/ingredientPage/ingredient-page";
+import { ProfilePage } from "../../pages/profilePage/profile-page";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchIngredients } from "../../services/actions/ingredients-actions";
@@ -40,6 +41,8 @@ function App() {
             <Route path='/reset-password' element={<ResetPasswordPage />} />
             <Route path='*' element={<NotFoundPage />} />
             < Route path='/ingredients/:id' element={<IngredientPage />} />
+            <Route path='/profile' element={<ProfilePage />} />
+            <Route path='/profile/orders' element={<ProfilePage />} />
           </Routes>
 
         )}

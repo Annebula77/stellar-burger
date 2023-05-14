@@ -5,6 +5,7 @@ import {
 } from "../actions/forgot-password-actions";
 
 const initialState = {
+
   status: false,
 };
 
