@@ -11,6 +11,10 @@ function IngredientDetails() {
 
   const ingredient = allIngredients.find((ingredient) => ingredient._id === id);
 
+  if (!ingredient) {
+    return null;  // или можете вернуть компонент загрузки или сообщение об ошибке
+  }
+
 
   return (
     <div className={styles.container}>

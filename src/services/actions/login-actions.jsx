@@ -1,4 +1,6 @@
 import { BASE_URL, checkResponse } from '../../utils/consts';
+import { setCookie } from '../../utils/cookies';
+import { ISAUTH_CHECKED } from './user-actions';
 
 export const LOGIN_REQUEST = "LOGIN_REQUEST";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
@@ -8,32 +10,31 @@ export const loginRequest = () => ({
   type: LOGIN_REQUEST,
 });
 
-export const loginSuccess = (data) => ({
-  type: LOGIN_SUCCESS,
-  payload: data,
-});
-
+export const loginSuccess = (accessToken, refreshToken) => {
+  return {
+    type: LOGIN_SUCCESS,
+    payload: {
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+    },
+  };
+};
 export const loginFailed = (err) => ({
   type: LOGIN_FAILED,
   payload: err,
 });
 
-export function loginApi(email, password) {
 
+export function loginApi(email, password) {
   return async (dispatch) => {
     dispatch(loginRequest());
 
     try {
       const response = await fetch(`${BASE_URL}/auth/login`, {
-        method: 'POST',
-        mode: 'cors',
-        cache: 'no-cache',
-        credentials: 'same-origin',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        redirect: 'follow',
-        referrerPolicy: 'no-referrer',
         body: JSON.stringify({
           email: email,
           password: password,
@@ -41,9 +42,12 @@ export function loginApi(email, password) {
       });
 
       const data = await checkResponse(response);
-
       if (data.success) {
-        dispatch(loginSuccess(data.token, data.refreshToken));
+        const { accessToken, refreshToken } = data;
+        setCookie("accessToken", accessToken, 1200); // Установка времени жизни accessToken на 1200 мс
+        setCookie("refreshToken", refreshToken);
+        dispatch(loginSuccess(accessToken, refreshToken));
+        dispatch({ type: 'ISAUTH_CHECKED', payload: true }); // Обновляем статус isAuthChecked после успешного входа
       } else {
         dispatch(loginFailed('No such user found! Please check your details!'));
       }

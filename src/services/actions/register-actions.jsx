@@ -1,5 +1,5 @@
-import { BASE_URL, checkResponse } from '../../utils/consts';
-import { setCookie, getCookie } from '../../utils/cookies';
+import { BASE_URL } from '../../utils/consts';
+import { setCookie } from '../../utils/cookies';
 export const REGISTER_USER_REQUEST = "REGISTER_USER_REQUEST";
 export const REGISTER_USER_SUCCESS = "REGISTER_USER_SUCCESS"; // Исправлено
 export const REGISTER_USER_FAILED = "REGISTER_USER_FAILED";
@@ -8,9 +8,9 @@ export const registerUserRequest = () => ({
   type: REGISTER_USER_REQUEST,
 });
 
-export const registerUserSuccess = (data) => ({
+export const registerUserSuccess = (user) => ({
   type: REGISTER_USER_SUCCESS,
-  payload: data,
+  payload: user,
 });
 
 export const registerUserFailed = (err) => ({
@@ -27,7 +27,6 @@ export function registerUser(name, email, password) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + getCookie("accessToken"),
         },
         body: JSON.stringify({
           name: name,
@@ -37,13 +36,17 @@ export function registerUser(name, email, password) {
       };
 
       const response = await fetch(`${BASE_URL}/auth/register`, requestOptions);
-      const data = await checkResponse(response);
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(`Ошибка ${response.status}: ${data.message}`);
+      }
 
       if (data.success) {
-        const { accessToken, refreshToken } = await response.json();
-        setCookie("token", accessToken);
+        const { token, refreshToken, user } = data; // Извлекаем объект user из данных
+        setCookie("token", token);
         setCookie("refreshToken", refreshToken);
-        dispatch(registerUserSuccess(data.user));
+        dispatch(registerUserSuccess(user)); // Передаем объект user в функцию registerUserSuccess
       } else {
         dispatch(registerUserFailed('Something went wrong! Try again...'));
       }

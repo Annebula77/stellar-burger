@@ -34,7 +34,7 @@ function Ingredient({ ingredient, onClick }) {
   return (
     <li className={styles.element} onClick={() => {
       if (id !== ingredient._id) {
-        navigate(`/ingredients/${ingredient._id}`, { state: { background: true } });
+        navigate(`/ingredients/${ingredient._id}`, { state: { modal: true } });
         onClick();
       }
     }} style={{ opacity }} ref={dragRef}>

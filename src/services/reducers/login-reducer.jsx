@@ -12,17 +12,19 @@ const initialState = {
 };
 
 export const loginReducer = (state = initialState, action) => {
+  console.log(action)
   switch (action.type) {
     case LOGIN_REQUEST:
       return {
         ...state,
       };
     case LOGIN_SUCCESS:
+      console.log('====>>  User logged in');
       return {
         ...state,
         status: true,
-        accessToken: action.accessToken,
-        refreshToken: action.refreshToken,
+        accessToken: action.payload.accessToken,
+        refreshToken: action.payload.refreshToken,
       };
     case LOGIN_FAILED:
       return {

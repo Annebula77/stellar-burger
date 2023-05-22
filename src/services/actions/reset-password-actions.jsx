@@ -20,8 +20,7 @@ export const resetPasswordFailed = (err) => ({
   payload: err,
 });
 
-export function resetPasswordApi(requiredData) {
-
+export const resetPasswordApi = (password, token) => {
   return async (dispatch) => {
     dispatch(resetPasswordRequest());
 
@@ -31,7 +30,7 @@ export function resetPasswordApi(requiredData) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ requiredData }),
+        body: JSON.stringify({ password, token }),
       });
 
       const data = await checkResponse(response);
@@ -39,10 +38,10 @@ export function resetPasswordApi(requiredData) {
       if (data.success) {
         dispatch(resetPasswordSuccess(data));
       } else {
-        dispatch(resetPasswordFailed('Something went wrong... try again, or contact us'));
+        dispatch(resetPasswordFailed(data.message));
       }
     } catch (err) {
-      dispatch(resetPasswordFailed(err));
+      dispatch(resetPasswordFailed('Something went wrong... try again, or contact us'));
     }
   };
-}
+};

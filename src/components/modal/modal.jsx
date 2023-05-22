@@ -6,7 +6,7 @@ import ModalOverlay from "../modal-overlay/modal-overlay";
 import PropTypes from 'prop-types';
 const modals = document.querySelector('#modals');
 
-function Modal({ onClose, children }) {
+function Modal({ onClose, children, location }) {
 
   const handleModalClick = (event) => {
     event.stopPropagation();

@@ -8,6 +8,7 @@ import { postOrderClear, sendOrder } from '../../services/actions/order-actions'
 import { addIngridientItem, addBunItem, clearContainer } from '../../services/actions/burger-constructor-action';
 import { useDrop } from "react-dnd";
 import ConstructorEl from '../сonstructor-element/constructor-element';
+import { useLocation, useNavigate } from "react-router-dom";
 
 
 function BurgerConstructor() {
@@ -16,6 +17,10 @@ function BurgerConstructor() {
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const [totalPrice, setTotalPrice] = useState(null);
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isAuthenticated = useSelector((state) => state.user.isAuthChecked);
 
 
   const [, dropTarget] = useDrop({
@@ -40,12 +45,19 @@ function BurgerConstructor() {
 
 
   const openModal = () => {
-    const ingredientIds = ingredients.map((item) => item._id);
-    const bunId = bun._id;
-    const orderItems = [bunId, ...ingredientIds, bunId];
+    if (isAuthenticated) {
+      const ingredientIds = ingredients.map((item) => item._id);
+      const bunId = bun._id;
+      const orderItems = [bunId, ...ingredientIds, bunId];
 
-    dispatch(sendOrder(orderItems));
-    setShowModal(true)
+      dispatch(sendOrder(orderItems));
+      setShowModal(true);
+    } else {
+      navigate('/login', {
+        replace: true,
+        state: { from: location.pathname }
+      });
+    }
   };
 
   const closeModal = () => {
