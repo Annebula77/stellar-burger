@@ -96,11 +96,10 @@ export const logoutFailed = (err) => ({
   payload: err,
 });
 
-
 async function authRequestToServer(dispatch, method, url, actionCreators, body = null) {
   const { request, success, failure } = actionCreators;
 
-  dispatch(startLoading()); // Начать загрузку
+  dispatch(startLoading());
   dispatch(request());
   const accessToken = getCookie('accessToken');
   if (!accessToken) {
@@ -108,28 +107,26 @@ async function authRequestToServer(dispatch, method, url, actionCreators, body =
   }
 
   try {
-    const response = await fetch(url, {
+    const options = {
       method,
       headers: {
         'Content-Type': 'application/json',
         Authorization: `${accessToken}`,
       },
       body: body ? JSON.stringify(body) : undefined,
-    });
+    };
 
-    const data = await checkResponse(response);
+    const data = await fetchWithRefresh(url, options);
 
     dispatch(success(data.user));
     dispatch(endLoading());
   } catch (err) {
-    if (err.message === 'jwt expired' || err.message === 'jwt malformed') {
-      dispatch(refreshTokenDelayed(getCookie('refreshToken')));
-    }
     console.log(err);
-    dispatch(failure(err.message)); // передаем текст сообщения об ошибке
+    dispatch(failure(err.message));
     dispatch(endLoading());
   }
 }
+
 export function getUserDetails() {
   return (dispatch) => {
     return authRequestToServer(dispatch, 'GET', `${BASE_URL}/auth/user`, {
@@ -157,8 +154,6 @@ export function updateUserDetails(name, email, password) {
           password,
         }
       );
-
-      dispatch(getUserDetails());
     } catch (err) {
       console.log(err.message)
     }
@@ -192,12 +187,12 @@ export const logoutApi = () => {
         clearCookie('refreshToken');
 
         dispatch(refreshTokenSuccess({
-          refreshToken: null,
-          accessToken: null,
+          refreshToken: '',
+          accessToken: '',
         }));
 
-        setCookie('refreshToken', null);
-        setCookie('accessToken', null);
+        setCookie('refreshToken', '');
+        setCookie('accessToken', '');
       } else {
         throw new Error('Failed to logout');
       }
@@ -206,41 +201,57 @@ export const logoutApi = () => {
     }
   };
 };
-export function refreshTokenDelayed() {
-  return async (dispatch) => {
-    const refreshToken = getCookie('refreshToken');
-    if (!refreshToken) {
-      // Если refreshToken отсутствует или недействителен, вы можете обработать это здесь
-      return Promise.reject(new Error('Refresh token is invalid'));
-    }
-    try {
-      dispatch(refreshTokenRequest());
 
-      const requestOptions = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + getCookie('refreshToken'),
-        },
-      };
 
-      const response = await fetch(`${BASE_URL}/auth/token`, requestOptions);
-      const data = await checkResponse(response);
-      console.log(data)
+async function refreshToken() {
+  const refreshToken = getCookie('refreshToken');
+  if (!refreshToken) {
+    throw new Error('Refresh token is invalid');
+  }
 
-      if (data.success) {
-        const { accessToken, refreshToken } = data;
-        setCookie('accessToken', accessToken);
-        setCookie('refreshToken', refreshToken);
-        dispatch(refreshTokenSuccess());
-      } else {
-        dispatch(refreshTokenFailed('Failed to refresh token.'));
-      }
-    } catch (err) {
-      dispatch(refreshTokenFailed(err.message));
-    }
+  const requestOptions = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + refreshToken,
+    },
   };
+
+  const response = await fetch(`${BASE_URL}/auth/token`, requestOptions);
+  if (!response.ok) {
+    throw new Error('Failed to refresh token.');
+  }
+
+  const data = await response.json();
+  if (!data.success) {
+    throw new Error('Failed to refresh token.');
+  }
+
+  const { accessToken, refreshToken: newRefreshToken } = data;
+  setCookie('accessToken', accessToken);
+  setCookie('refreshToken', newRefreshToken);
+  return { accessToken, refreshToken: newRefreshToken };
 }
+
+export const fetchWithRefresh = async (url, options) => {
+  try {
+    const res = await fetch(url, options);
+    return await checkResponse(res);
+  } catch (err) {
+    if (err.message === "jwt expired") {
+      console.log("Token expired, trying to refresh...");
+      const refreshData = await refreshToken();
+      localStorage.setItem("refreshToken", refreshData.refreshToken);
+      localStorage.setItem("accessToken", refreshData.accessToken);
+      options.headers.authorization = 'Bearer ' + refreshData.accessToken;
+      console.log("Token refreshed, retrying request...");
+      const res = await fetch(url, options);
+      return await checkResponse(res);
+    } else {
+      return Promise.reject(err);
+    }
+  }
+};
 
 export const checkUserAuth = () => {
   return function (dispatch) {

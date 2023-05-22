@@ -75,14 +75,7 @@ function App() {
             <Route path="/forgot-password" element={<PublicRouteElement element={<ForgotPasswordPage />} />} />
 
             <Route path="reset-password" element={<PublicRouteElement element={<ResetPasswordPage />} />} />
-            <Route
-              path="/profile"
-              element={<ProtectedRouteElement element={<ProfilePage />} />}
-            />
-            <Route
-              path="/profile/orders"
-              element={<ProtectedRouteElement element={<NotFoundPage />} />}
-            />
+            <Route path="/profile/*" element={<ProtectedRouteElement element={<ProfilePage />} />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         )}

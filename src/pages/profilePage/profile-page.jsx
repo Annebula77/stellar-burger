@@ -9,6 +9,7 @@ import { isAuthChecked, logoutApi } from '../../services/actions/user-actions';
 import Loader from '../../components/loader/loader';
 import { updateUserDetails } from '../../services/actions/user-actions';
 import { getUserDetails } from '../../services/actions/user-actions';
+import { useParams } from 'react-router-dom';
 
 
 
@@ -43,7 +44,7 @@ const ProfilePage = () => {
     dispatch(updateUserDetails(formValues.name, formValues.email, formValues.password));
   };
 
-
+  let { '*': subpath } = useParams();
 
   const onLogout = () => {
     dispatch(logoutApi());
@@ -91,59 +92,61 @@ const ProfilePage = () => {
           В этом разделе вы можете изменить свои персональные данные
         </p>
       </nav>
-      <form className={styles.profile} onSubmit={onSubmit}>
-        <div className={styles.input}>
-          <Input
-            type={'text'}
-            value={formValues.name || ''}
-            onChange={(e) => {
-              const { value } = e.target;
-              setFormValues((prevValues) => ({
-                ...prevValues,
-                name: value,
-              }));
-            }}
-            placeholder={'Имя'}
-            name={'name'}
-            size={'default'}
-          />
-        </div>
-        <div className={styles.input}>
-          <EmailInput
-            onChange={(e) => {
-              const { value } = e.target;
-              setFormValues((prevValues) => ({
-                ...prevValues,
-                email: value.trim() !== '' ? value : '',
-              }));
-            }}
-            value={formValues.email || ''}
-            name={'email'}
-            isIcon={false}
-          />
-        </div>
-        <div className={styles.input}>
-          <PasswordInput
-            onChange={(e) => {
-              const { value } = e.target;
-              setFormValues((prevValues) => ({
-                ...prevValues,
-                password: value,
-              }));
-            }}
-            value={formValues.password}
-            name={'password'}
-            extraClass='mb-2'
-          />
-        </div>
+      {subpath === 'orders'
+        ? <NotFoundPage />
+        : (
+          <form className={styles.profile} onSubmit={onSubmit}>
+            <div className={styles.input}>
+              <Input
+                type={'text'}
+                value={formValues.name || ''}
+                onChange={(e) => {
+                  const { value } = e.target;
+                  setFormValues((prevValues) => ({
+                    ...prevValues,
+                    name: value,
+                  }));
+                }}
+                placeholder={'Имя'}
+                name={'name'}
+                size={'default'}
+              />
+            </div>
+            <div className={styles.input}>
+              <EmailInput
+                onChange={(e) => {
+                  const { value } = e.target;
+                  setFormValues((prevValues) => ({
+                    ...prevValues,
+                    email: value.trim() !== '' ? value : '',
+                  }));
+                }}
+                value={formValues.email || ''}
+                name={'email'}
+                isIcon={false}
+              />
+            </div>
+            <div className={styles.input}>
+              <PasswordInput
+                onChange={(e) => {
+                  const { value } = e.target;
+                  setFormValues((prevValues) => ({
+                    ...prevValues,
+                    password: value,
+                  }));
+                }}
+                value={formValues.password}
+                name={'password'}
+                extraClass='mb-2'
+              />
+            </div>
 
-        <Button htmlType='submit' type='primary' size='large' extraClass='mt-3'>
-          Сохранить
-        </Button>
-      </form>
-      {location.pathname === '/profile/orders' && (
-        <NotFoundPage />
-      )}
+            <Button htmlType='submit' type='primary' size='large' extraClass='mt-3'>
+              Сохранить
+            </Button>
+          </form>
+        )
+      }
     </section >
   );
 };

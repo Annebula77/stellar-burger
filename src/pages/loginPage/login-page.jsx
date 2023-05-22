@@ -1,14 +1,13 @@
 import { Button, EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './login-page.module.css';
 import { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, Navigate } from 'react-router-dom';
 import { loginApi } from '../../services/actions/login-actions'
 import { useDispatch, useSelector } from 'react-redux';
 import { setCookie } from '../../utils/cookies';
 
 const LoginPage = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const location = useLocation();
   const loginDetails = useSelector((store) => store.login);
   const isLoggedIn = useSelector((store) => store.user.isAuthChecked);
@@ -45,16 +44,11 @@ const LoginPage = () => {
         password: '',
       });
 
-
       if (isLoggedIn) {
-        if (location.state && location.state.from) {
-          navigate(location.state.from);
-        } else {
-          navigate('/');
-        }
+        return <Navigate to={location?.state?.from || '/'} />;
       }
     }
-  }, [loginDetails, navigate, location.state]);
+  }, [loginDetails, isLoggedIn, location.state]);
 
   return (
     <form className={styles.container} onSubmit={onSubmitFrom}>

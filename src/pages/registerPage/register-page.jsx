@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { registerUser } from '../../services/actions/register-actions';
+import { loginApi } from '../../services/actions/login-actions';
 
 const RegisterPage = () => {
   const dispatch = useDispatch();
@@ -21,16 +22,17 @@ const RegisterPage = () => {
     setFormValues((prevValues) => ({ ...prevValues, [name]: value }));
   };
 
-  const onFormSubmit = (e) => {
+  const onFormSubmit = async (e) => {
     e.preventDefault();
-    dispatch(registerUser(formValues.name, formValues.email, formValues.password));
-    navigate('/login'); // Перенаправление на /login
-  };
-
+    const result = await dispatch(registerUser(formValues.name, formValues.email, formValues.password));
+    if (result) {
+      dispatch(loginApi(formValues.email, formValues.password));
+    }
+  }
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/login');
+      navigate('/');
     }
   }, [isAuthenticated, navigate]);
 
