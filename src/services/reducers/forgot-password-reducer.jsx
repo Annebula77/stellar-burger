@@ -2,7 +2,7 @@ import {
   FORGOT_PASSWORD_REQUEST,
   FORGOT_PASSWORD_SUCCESS,
   FORGOT_PASSWORD_FAILED,
-} from "../actions/forgot-password-actions";
+} from '../actions/forgot-password-actions';
 
 const initialState = {
 

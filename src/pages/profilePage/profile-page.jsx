@@ -1,24 +1,23 @@
-import { Input, EmailInput, PasswordInput, Button } from "@ya.praktikum/react-developer-burger-ui-components";
+import { Input, EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './profile-page.module.css';
-import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { NotFoundPage } from "../notFoundPage/not-found-page";
-import { CustomNavLink } from "../../utils/hoc";
-import { isAuthChecked, getUserDetails, logoutApi } from "../../services/actions/user-actions";
-import Loader from "../../components/loader/loader";
+import { NotFoundPage } from '../notFoundPage/not-found-page';
+import { CustomNavLink } from '../../utils/hoc';
+import { isAuthChecked, logoutApi } from '../../services/actions/user-actions';
+import Loader from '../../components/loader/loader';
 import { updateUserDetails } from '../../services/actions/user-actions';
+import { getUserDetails } from '../../services/actions/user-actions';
 
 
 
 
 const ProfilePage = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isLoading, user } = useSelector((state) => state.user);
-  const isAuthenticated = useSelector((store) => store.user.isAuthChecked);
-  console.log("isAuthenticated: ", isAuthenticated);
+
   const [formValues, setFormValues] = useState({
     name: '',
     email: '',
@@ -26,31 +25,28 @@ const ProfilePage = () => {
 
   });
   useEffect(() => {
-    if (isAuthenticated) {
-      dispatch(getUserDetails());
-    }
-  }, [dispatch, isAuthenticated]);
+    dispatch(getUserDetails());
+  }, [dispatch]);
 
   useEffect(() => {
-    if (user && !isLoading) {
+    if (user) {
       setFormValues({
-        name: user.user.name,
-        email: user.user.email,
+        name: user.name || '',
+        email: user.email || '',
+        password: '',
       });
     }
-  }, [user, isLoading]);
-  console.log(user)
+  }, [user]);
 
   const onSubmit = (e) => {
     e.preventDefault();
     dispatch(updateUserDetails(formValues.name, formValues.email, formValues.password));
-  }
+  };
 
 
 
   const onLogout = () => {
     dispatch(logoutApi());
-    console.log('Logout action dispatched');
     dispatch(isAuthChecked(false));
   };
 
@@ -58,7 +54,6 @@ const ProfilePage = () => {
     return <Loader />;
   }
 
-  console.log(formValues)
 
   return (
     <section className={styles.container}>
@@ -66,7 +61,7 @@ const ProfilePage = () => {
         <ul className={styles.menu__box}>
           <li className={styles.menu__item}>
             <CustomNavLink
-              to="/profile"
+              to='/profile'
               activeClass={styles.active}
             >
               Профиль
@@ -74,7 +69,7 @@ const ProfilePage = () => {
           </li>
           <li className={styles.menu__item}>
             <CustomNavLink
-              to="/profile/orders"
+              to='/profile/orders'
               activeClass={styles.active}
             >
               История заказов
@@ -82,15 +77,9 @@ const ProfilePage = () => {
           </li>
           <li className={styles.menu__item}>
             <CustomNavLink
-              to="/login"
+              to='/login'
               activeClass={styles.active}
-              onClick={() => {
-                if (isAuthenticated) {
-                  onLogout();
-                } else {
-                  navigate("/login", { replace: true });
-                }
-              }}
+              onClick={onLogout}
             >
               Выход
             </CustomNavLink>
@@ -105,8 +94,8 @@ const ProfilePage = () => {
       <form className={styles.profile} onSubmit={onSubmit}>
         <div className={styles.input}>
           <Input
-            type={"text"}
-            value={formValues.name}
+            type={'text'}
+            value={formValues.name || ''}
             onChange={(e) => {
               const { value } = e.target;
               setFormValues((prevValues) => ({
@@ -114,9 +103,9 @@ const ProfilePage = () => {
                 name: value,
               }));
             }}
-            placeholder={"Имя"}
-            name={"name"}
-            size={"default"}
+            placeholder={'Имя'}
+            name={'name'}
+            size={'default'}
           />
         </div>
         <div className={styles.input}>
@@ -125,7 +114,7 @@ const ProfilePage = () => {
               const { value } = e.target;
               setFormValues((prevValues) => ({
                 ...prevValues,
-                email: value.trim() !== "" ? value : ''
+                email: value.trim() !== '' ? value : '',
               }));
             }}
             value={formValues.email || ''}
@@ -144,15 +133,15 @@ const ProfilePage = () => {
             }}
             value={formValues.password}
             name={'password'}
-            extraClass="mb-2"
+            extraClass='mb-2'
           />
         </div>
 
-        <Button htmlType="submit" type="primary" size="large" extraClass="mt-3">
+        <Button htmlType='submit' type='primary' size='large' extraClass='mt-3'>
           Сохранить
         </Button>
       </form>
-      {location.pathname === "/profile/orders" && (
+      {location.pathname === '/profile/orders' && (
         <NotFoundPage />
       )}
     </section >

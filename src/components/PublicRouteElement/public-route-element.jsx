@@ -5,7 +5,11 @@ import { useSelector } from 'react-redux';
 const PublicRouteElement = ({ element }) => {
   const isLoggedIn = useSelector((store) => store.user.isAuthChecked);
 
-  return isLoggedIn ? <Navigate to='/' replace={true} /> : element;
+  if (isLoggedIn) {
+    return <Navigate to="/" replace={true} />
+  }
+
+  return element;
 }
 
 PublicRouteElement.propTypes = {

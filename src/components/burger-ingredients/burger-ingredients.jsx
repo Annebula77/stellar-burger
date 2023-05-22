@@ -1,8 +1,8 @@
 import styles from './burger-ingredients.module.css';
 import Tabs from '../tabs/tabs';
 import IngredientsCategory from '../ingredients-category/ingredients-category';
-import { useState, useRef, forwardRef, useMemo } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useState, useRef, forwardRef, useMemo } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { setIngredientDetails } from '../../services/actions/ingredient-action';
 import { TabItems } from '../../utils/consts';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -26,7 +26,7 @@ const BurgerIngredients = ({ closeModal }) => {
   const buns = useMemo(
     () =>
       ingredientList.ingredients.filter((item) => {
-        return item.type === "bun"
+        return item.type === 'bun'
       }),
     [ingredientList]
   );
@@ -34,7 +34,7 @@ const BurgerIngredients = ({ closeModal }) => {
   const sauce = useMemo(
     () =>
       ingredientList.ingredients.filter((item) => {
-        return item.type === "sauce"
+        return item.type === 'sauce'
       }),
     [ingredientList]
   );
@@ -42,7 +42,7 @@ const BurgerIngredients = ({ closeModal }) => {
   const main = useMemo(
     () =>
       ingredientList.ingredients.filter((item) => {
-        return item.type === "main"
+        return item.type === 'main'
       }),
     [ingredientList]
   );
@@ -67,7 +67,6 @@ const BurgerIngredients = ({ closeModal }) => {
       state: { modal: true, background: currentLocation }
     });
 
-    // Обновление URL без перезагрузки страницы
     window.history.replaceState(null, '', modalLocation);
     window.addEventListener('popstate', closeModal);
 

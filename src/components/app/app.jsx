@@ -4,7 +4,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchIngredients } from '../../services/actions/ingredients-actions';
 import AppHeader from '../app-header/app-header';
 import styles from './app.module.css';
-import BurgerIngredients from '../burger-ingredients/burger-ingredients';
+import { loginSuccess } from '../../services/actions/login-actions';
+import { getCookie } from '../../utils/cookies';
 import { HomePage } from '../../pages/homePage/homePage';
 import { LoginPage } from '../../pages/loginPage/login-page';
 import { RegisterPage } from '../../pages/registerPage/register-page';
@@ -30,12 +31,19 @@ function App() {
 
   useEffect(() => {
     dispatch(fetchIngredients());
+    const accessToken = getCookie('accessToken');
+    const refreshToken = getCookie('refreshToken');
+
+    if (accessToken && refreshToken) {
+      dispatch(loginSuccess(accessToken, refreshToken));
+      dispatch({ type: 'ISAUTH_CHECKED', payload: true });
+    }
   }, [dispatch]);
+
 
   const closeModal = () => {
     dispatch(clearIngredientDetails());
 
-    // Удаление слушателя события popstate
     window.removeEventListener('popstate', closeModal);
 
     const background = location.state && location.state.background;
@@ -56,13 +64,25 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/ingredients/:id" element={!background ? <IngredientPage /> : null} />
-            <Route path="/login" element={<PublicRouteElement element={<LoginPage />} />} />
-            <Route path="/register" element={<PublicRouteElement element={<RegisterPage />} />} />
-            <Route path="/forgot-password" element={<PublicRouteElement element={<ForgotPasswordPage />} />}>
-              <Route path="reset-password" element={<ResetPasswordPage />} />
-            </Route>
-            <Route path="/profile" element={<ProtectedRouteElement element={<ProfilePage />} />} />
-            <Route path="/profile/orders" element={<ProtectedRouteElement element={<ProfilePage />} />} />
+            <Route
+              path="/login"
+              element={<PublicRouteElement element={<LoginPage />} />}
+            />
+            <Route
+              path="/register"
+              element={<PublicRouteElement element={<RegisterPage />} />}
+            />
+            <Route path="/forgot-password" element={<PublicRouteElement element={<ForgotPasswordPage />} />} />
+
+            <Route path="reset-password" element={<PublicRouteElement element={<ResetPasswordPage />} />} />
+            <Route
+              path="/profile"
+              element={<ProtectedRouteElement element={<ProfilePage />} />}
+            />
+            <Route
+              path="/profile/orders"
+              element={<ProtectedRouteElement element={<NotFoundPage />} />}
+            />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         )}

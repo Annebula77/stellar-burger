@@ -13,7 +13,7 @@ import {
   LOGOUT_SUCCESS,
   START_LOADING,
   END_LOADING,
-} from "../actions/user-actions";
+} from '../actions/user-actions';
 
 
 
@@ -40,13 +40,12 @@ export const userReducer = (state = initialState, action) => {
       return {
         ...state,
         success: true,
-        user: action.payload.user,
+        user: action.payload,
 
       };
     case GET_USER_FAILED:
     case UPDATE_USER_FAILED:
       if (action.payload && action.payload.message) {
-        console.log("Payload:", action.payload.message);
         return {
           ...state,
           success: false,
@@ -54,7 +53,6 @@ export const userReducer = (state = initialState, action) => {
           email: '',
         };
       } else {
-        console.log("Payload:", action.payload);
         return {
           ...state,
           success: false,
@@ -84,7 +82,6 @@ export const userReducer = (state = initialState, action) => {
         isAuthChecked: false,
       };
     case LOGOUT_SUCCESS:
-      console.log(' ====> User logged out');
       console.log(userReducer.action)
       return {
         ...state,
@@ -96,12 +93,12 @@ export const userReducer = (state = initialState, action) => {
     case START_LOADING:
       return {
         ...state,
-        isLoading: true, // начать загрузку
+        isLoading: true,
       };
     case END_LOADING:
       return {
         ...state,
-        isLoading: false, // завершить загрузку
+        isLoading: false,
       };
     default:
       return state;

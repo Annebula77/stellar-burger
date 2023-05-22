@@ -1,10 +1,10 @@
-import { Button, EmailInput, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
+import { Button, EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './login-page.module.css';
 import { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { loginApi } from '../../services/actions/login-actions'
-import { useDispatch, useSelector } from "react-redux";
-import { setCookie } from "../../utils/cookies";
+import { useDispatch, useSelector } from 'react-redux';
+import { setCookie } from '../../utils/cookies';
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -19,7 +19,7 @@ const LoginPage = () => {
     password: '',
   });
 
-  const [fromPath, setFromPath] = useState("/");
+  const [fromPath, setFromPath] = useState('/');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,14 +45,12 @@ const LoginPage = () => {
         password: '',
       });
 
-      // Дополнительная проверка статуса входа
-
 
       if (isLoggedIn) {
         if (location.state && location.state.from) {
           navigate(location.state.from);
         } else {
-          navigate("/");
+          navigate('/');
         }
       }
     }
@@ -74,17 +72,17 @@ const LoginPage = () => {
           onChange={handleChange}
           value={formValues.password}
           name={'password'}
-          extraClass="mb-2"
+          extraClass='mb-2'
         />
       </div>
 
       <div className={styles.input}>
-        <Button htmlType="submit" type="primary" size="large" extraClass="mb-20">
+        <Button htmlType='submit' type='primary' size='large' extraClass='mb-20'>
           Войти
         </Button>
       </div>
-      <p className="text text_type_main-default text_color_inactive mb-4">Вы - новый пользователь? <span><Link to='/register' className={styles.links}>Зарегистрироваться</Link></span> </p>
-      <p className="text text_type_main-default text_color_inactive mb-4">Забыли пароль? <span ><Link to='/forgot-password' className={styles.links}>Восстановить пароль</Link></span></p>
+      <p className='text text_type_main-default text_color_inactive mb-4'>Вы - новый пользователь? <span><Link to='/register' className={styles.links}>Зарегистрироваться</Link></span> </p>
+      <p className='text text_type_main-default text_color_inactive mb-4'>Забыли пароль? <span ><Link to='/forgot-password' className={styles.links}>Восстановить пароль</Link></span></p>
     </form>
   )
 }

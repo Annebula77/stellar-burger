@@ -12,14 +12,12 @@ const initialState = {
 };
 
 export const loginReducer = (state = initialState, action) => {
-  console.log(action)
   switch (action.type) {
     case LOGIN_REQUEST:
       return {
         ...state,
       };
     case LOGIN_SUCCESS:
-      console.log('====>>  User logged in');
       return {
         ...state,
         status: true,

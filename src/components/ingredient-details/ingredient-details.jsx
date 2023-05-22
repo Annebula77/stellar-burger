@@ -12,7 +12,7 @@ function IngredientDetails() {
   const ingredient = allIngredients.find((ingredient) => ingredient._id === id);
 
   if (!ingredient) {
-    return null;  // или можете вернуть компонент загрузки или сообщение об ошибке
+    return null;
   }
 
 
@@ -24,20 +24,20 @@ function IngredientDetails() {
         <p className='text text_type_main-medium mt-4 mb-8'>{ingredient.name}</p>
         <div className={styles.components}>
           <div className={styles.nutrition}>
-            <p className="text text_type_main-small text_color_inactive">Калории, ккал</p>
-            <p className="text text_type_digits-default text_color_inactive">{ingredient.calories}</p>
+            <p className='text text_type_main-small text_color_inactive'>Калории, ккал</p>
+            <p className='text text_type_digits-default text_color_inactive'>{ingredient.calories}</p>
           </div>
           <div className={styles.nutrition}>
-            <p className="text text_type_main-small text_color_inactive">Белки, г</p>
-            <p className="text text_type_digits-default text_color_inactive">{ingredient.proteins}</p>
+            <p className='text text_type_main-small text_color_inactive'>Белки, г</p>
+            <p className='text text_type_digits-default text_color_inactive'>{ingredient.proteins}</p>
           </div>
           <div className={styles.nutrition}>
-            <p className="text text_type_main-small text_color_inactive">Жиры, г</p>
-            <p className="text text_type_digits-default text_color_inactive">{ingredient.fat}</p>
+            <p className='text text_type_main-small text_color_inactive'>Жиры, г</p>
+            <p className='text text_type_digits-default text_color_inactive'>{ingredient.fat}</p>
           </div>
           <div className={styles.nutrition}>
-            <p className="text text_type_main-small text_color_inactive">Углеводы, г</p>
-            <p className="text text_type_digits-default text_color_inactive">{ingredient.carbohydrates}</p>
+            <p className='text text_type_main-small text_color_inactive'>Углеводы, г</p>
+            <p className='text text_type_digits-default text_color_inactive'>{ingredient.carbohydrates}</p>
           </div>
         </div>
       </div>

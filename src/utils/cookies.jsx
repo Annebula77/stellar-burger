@@ -21,19 +21,14 @@ export function setCookie(name, value, props) {
   }
   document.cookie = updatedCookie;
 
-  // Вывод отладочной информации в консоль
-  console.log('Cookie set:', name, value);
 }
 
-// Пример функции getCookie с выводом отладочной информации
 export function getCookie(name) {
   const matches = document.cookie.match(
     new RegExp('(?:^|; )' + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)')
   );
   const cookieValue = matches ? decodeURIComponent(matches[1]) : undefined;
 
-  // Вывод отладочной информации в консоль
-  console.log('Cookie get:', name, cookieValue);
 
   return cookieValue;
 }
@@ -41,7 +36,7 @@ export function getCookie(name) {
 
 
 export function clearCookie(name) {
-  setCookie(name, "", {
+  setCookie(name, '', {
     'max-age': -1
   })
 }

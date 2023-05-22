@@ -1,8 +1,8 @@
-import { Button, EmailInput, PasswordInput, Input } from "@ya.praktikum/react-developer-burger-ui-components";
+import { Button, EmailInput, PasswordInput, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './register-page.module.css';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from 'react-router-dom';
 import { registerUser } from '../../services/actions/register-actions';
 
 const RegisterPage = () => {
@@ -24,13 +24,13 @@ const RegisterPage = () => {
   const onFormSubmit = (e) => {
     e.preventDefault();
     dispatch(registerUser(formValues.name, formValues.email, formValues.password));
-    navigate("/login"); // Перенаправление на /login
+    navigate('/login'); // Перенаправление на /login
   };
 
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate("/login");
+      navigate('/login');
     }
   }, [isAuthenticated, navigate]);
 
@@ -43,7 +43,7 @@ const RegisterPage = () => {
           placeholder={'Имя'}
           name={'name'}
           size={'default'}
-          extraClass="ml-1 pt-6"
+          extraClass='ml-1 pt-6'
           value={formValues.name}
           onChange={handleChange}
         />
@@ -62,16 +62,16 @@ const RegisterPage = () => {
           onChange={handleChange}
           value={formValues.password}
           name={'password'}
-          extraClass="mb-2"
+          extraClass='mb-2'
         />
       </div>
 
       <div className={styles.input}>
-        <Button htmlType="submit" type="primary" size="large" extraClass="mb-20">
+        <Button htmlType='submit' type='primary' size='large' extraClass='mb-20'>
           Зарегистрироваться
         </Button>
       </div>
-      <p className="text text_type_main-default text_color_inactive mb-4">Уже зарегистрированы? <span><Link to='/login' className={styles.links}>Войти</Link></span></p>
+      <p className='text text_type_main-default text_color_inactive mb-4'>Уже зарегистрированы? <span><Link to='/login' className={styles.links}>Войти</Link></span></p>
     </form>
   )
 }

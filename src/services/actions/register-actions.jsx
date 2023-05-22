@@ -1,8 +1,8 @@
 import { BASE_URL } from '../../utils/consts';
 import { setCookie } from '../../utils/cookies';
-export const REGISTER_USER_REQUEST = "REGISTER_USER_REQUEST";
-export const REGISTER_USER_SUCCESS = "REGISTER_USER_SUCCESS"; // Исправлено
-export const REGISTER_USER_FAILED = "REGISTER_USER_FAILED";
+export const REGISTER_USER_REQUEST = 'REGISTER_USER_REQUEST';
+export const REGISTER_USER_SUCCESS = 'REGISTER_USER_SUCCESS'; // Исправлено
+export const REGISTER_USER_FAILED = 'REGISTER_USER_FAILED';
 
 export const registerUserRequest = () => ({
   type: REGISTER_USER_REQUEST,
@@ -24,9 +24,9 @@ export function registerUser(name, email, password) {
 
     try {
       const requestOptions = {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           name: name,
@@ -43,10 +43,10 @@ export function registerUser(name, email, password) {
       }
 
       if (data.success) {
-        const { token, refreshToken, user } = data; // Извлекаем объект user из данных
-        setCookie("token", token);
-        setCookie("refreshToken", refreshToken);
-        dispatch(registerUserSuccess(user)); // Передаем объект user в функцию registerUserSuccess
+        const { accessToken, refreshToken, user } = data;
+        setCookie('accessToken', accessToken);
+        setCookie('refreshToken', refreshToken);
+        dispatch(registerUserSuccess(user));
       } else {
         dispatch(registerUserFailed('Something went wrong! Try again...'));
       }
