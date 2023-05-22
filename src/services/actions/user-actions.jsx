@@ -39,10 +39,11 @@ export const getUserSuccess = (user) => ({
   payload: user,
 });
 
-export const getUserFailed = (err) => ({
+export const getUserFailed = (errMessage) => ({
   type: GET_USER_FAILED,
-  payload: err, // Используйте объект с полем 'message'
+  payload: errMessage,
 });
+
 export const isAuthChecked = (isAuthenticated) => ({
   type: ISAUTH_CHECKED,
   payload: isAuthenticated,
@@ -63,9 +64,9 @@ export const updateUserSuccess = (user) => ({
   payload: user,
 });
 
-export const updateUserFailed = (err) => ({
+export const updateUserFailed = (errMessage) => ({
   type: UPDATE_USER_FAILED,
-  payload: err,
+  payload: errMessage,
 });
 
 export const refreshTokenRequest = () => ({
@@ -77,9 +78,9 @@ export const refreshTokenSuccess = (data) => ({
   payload: data,
 });
 
-export const refreshTokenFailed = (err) => ({
+export const refreshTokenFailed = (errMessage) => ({
   type: REFRESH_TOKEN_FAILED,
-  payload: err,
+  payload: errMessage,
 });
 
 export const logoutRequest = () => ({
@@ -125,11 +126,10 @@ async function authRequestToServer(dispatch, method, url, actionCreators, body =
       dispatch(refreshTokenDelayed(getCookie('refreshToken')));
     }
     console.log(err);
-    dispatch(failure(err));
+    dispatch(failure(err.message)); // передаем текст сообщения об ошибке
     dispatch(endLoading());
   }
 }
-
 export function getUserDetails() {
   return (dispatch) => {
     return authRequestToServer(dispatch, 'GET', `${BASE_URL}/auth/user`, {
@@ -208,6 +208,11 @@ export const logoutApi = () => {
 };
 export function refreshTokenDelayed() {
   return async (dispatch) => {
+    const refreshToken = getCookie('refreshToken');
+    if (!refreshToken) {
+      // Если refreshToken отсутствует или недействителен, вы можете обработать это здесь
+      return Promise.reject(new Error('Refresh token is invalid'));
+    }
     try {
       dispatch(refreshTokenRequest());
 
@@ -221,6 +226,7 @@ export function refreshTokenDelayed() {
 
       const response = await fetch(`${BASE_URL}/auth/token`, requestOptions);
       const data = await checkResponse(response);
+      console.log(data)
 
       if (data.success) {
         const { accessToken, refreshToken } = data;

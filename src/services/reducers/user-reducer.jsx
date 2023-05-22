@@ -15,8 +15,6 @@ import {
   END_LOADING,
 } from '../actions/user-actions';
 
-
-
 const initialState = {
   success: false,
   user: null,
@@ -24,6 +22,7 @@ const initialState = {
   accessToken: null,
   refreshToken: null,
   isLoading: false,
+  authError: null, // New field for authentication error
 };
 
 export const userReducer = (state = initialState, action) => {
@@ -36,32 +35,24 @@ export const userReducer = (state = initialState, action) => {
       };
     case GET_USER_SUCCESS:
     case UPDATE_USER_SUCCESS:
-
       return {
         ...state,
         success: true,
         user: action.payload,
-
+        authError: null, // Reset authError on success
       };
     case GET_USER_FAILED:
     case UPDATE_USER_FAILED:
-      if (action.payload && action.payload.message) {
-        return {
-          ...state,
-          success: false,
-          name: '',
-          email: '',
-        };
-      } else {
-        return {
-          ...state,
-          success: false,
-          user: null,
-        };
-      }
+      return {
+        ...state,
+        success: false,
+        user: null,
+        authError: action.payload, // Update authError on failure
+      };
     case REFRESH_TOKEN_SUCCESS:
       return {
         ...state,
+        authError: null, // Reset authError on success
       };
     case REFRESH_TOKEN_FAILED:
       return {
@@ -70,11 +61,13 @@ export const userReducer = (state = initialState, action) => {
         accessToken: null,
         refreshToken: null,
         isAuthChecked: false,
+        authError: action.payload, // Update authError on failure
       };
     case ISAUTH_CHECKED:
       return {
         ...state,
         isAuthChecked: action.payload,
+        authError: null, // Reset authError when auth is checked
       };
     case ISAUTH_CHECKED_FAILD:
       return {
@@ -82,13 +75,13 @@ export const userReducer = (state = initialState, action) => {
         isAuthChecked: false,
       };
     case LOGOUT_SUCCESS:
-      console.log(userReducer.action)
       return {
         ...state,
         isAuthChecked: false,
         user: null,
         accessToken: null,
         refreshToken: null,
+        authError: null, // Reset authError on logout
       };
     case START_LOADING:
       return {
