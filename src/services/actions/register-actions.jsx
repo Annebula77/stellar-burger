@@ -47,11 +47,14 @@ export function registerUser(name, email, password) {
         setCookie('accessToken', accessToken);
         setCookie('refreshToken', refreshToken);
         dispatch(registerUserSuccess(user));
+        return true;
       } else {
         dispatch(registerUserFailed('Something went wrong! Try again...'));
+        return false;
       }
     } catch (err) {
       dispatch(registerUserFailed(err));
+      return false;
     }
   };
 }

@@ -19,8 +19,8 @@ const initialState = {
   success: false,
   user: null,
   isAuthChecked: false,
-  accessToken: null,
-  refreshToken: null,
+  accessToken: '',
+  refreshToken: '',
   isLoading: false,
   authError: null, // New field for authentication error
 };
@@ -58,8 +58,8 @@ export const userReducer = (state = initialState, action) => {
       return {
         ...state,
         user: null,
-        accessToken: null,
-        refreshToken: null,
+        accessToken: '',
+        refreshToken: '',
         isAuthChecked: false,
         authError: action.payload, // Update authError on failure
       };
@@ -79,9 +79,9 @@ export const userReducer = (state = initialState, action) => {
         ...state,
         isAuthChecked: false,
         user: null,
-        accessToken: null,
-        refreshToken: null,
-        authError: null, // Reset authError on logout
+        accessToken: '',
+        refreshToken: '',
+        authError: null,
       };
     case START_LOADING:
       return {
