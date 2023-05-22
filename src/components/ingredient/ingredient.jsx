@@ -2,16 +2,15 @@ import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-c
 import { ingredientType } from '../../utils/prop-types';
 import styles from './ingredient.module.css';
 import { useDrag } from 'react-dnd';
-import { useMemo } from "react";
-import { useSelector } from "react-redux";
-import { useNavigate, useMatch, useLocation } from 'react-router-dom';
+import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate, useMatch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 
 function Ingredient({ ingredient, onClick }) {
   const navigate = useNavigate();
   const match = useMatch('/ingredients/:id');
-  const location = useLocation();
   const { id } = match?.params || {};
   const { _id, image, price, name } = ingredient;
   const { bun, ingredients } = useSelector((state) => state.burgerOrderList);
@@ -34,15 +33,15 @@ function Ingredient({ ingredient, onClick }) {
   return (
     <li className={styles.element} onClick={() => {
       if (id !== ingredient._id) {
-        navigate(`/ingredients/${ingredient._id}`, { state: { background: true } });
+        navigate(`/ingredients/${ingredient._id}`, { state: { modal: true } });
         onClick();
       }
     }} style={{ opacity }} ref={dragRef}>
-      {counter > 0 && <Counter count={counter} size="default" extraClass="m-1" />}
+      {counter > 0 && <Counter count={counter} size='default' extraClass='m-1' />}
       <img className={styles.image} src={image} alt={name} />
       <div className={styles.price}>
         <p className='text text_type_digits-default mt-1 mb-1'>{price}</p>
-        <CurrencyIcon type="primary" />
+        <CurrencyIcon type='primary' />
       </div>
       <p className={`text text_type_main-default pb-8 ${styles.title}`}>{name}</p>
     </li>

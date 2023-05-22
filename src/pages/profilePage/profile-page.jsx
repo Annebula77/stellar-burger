@@ -1,34 +1,67 @@
-import { Input, EmailInput, PasswordInput, Button } from "@ya.praktikum/react-developer-burger-ui-components";
+import { Input, EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './profile-page.module.css';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { useState } from 'react';
-import { NotFoundPage } from "../notFoundPage/not-found-page";
-import { CustomNavLink } from "../../utils/hoc";
+import { useState, useEffect } from 'react';
+import { NotFoundPage } from '../notFoundPage/not-found-page';
+import { CustomNavLink } from '../../utils/hoc';
+import { isAuthChecked, logoutApi } from '../../services/actions/user-actions';
+import Loader from '../../components/loader/loader';
+import { updateUserDetails } from '../../services/actions/user-actions';
+import { getUserDetails } from '../../services/actions/user-actions';
+
+
 
 
 const ProfilePage = () => {
   const location = useLocation();
-  const [emailValue, setEmailValue] = useState('mail@stellar.burgers')
-  const onEmailChange = e => {
-    setEmailValue(e.target.value)
+  const dispatch = useDispatch();
+  const { isLoading, user } = useSelector((state) => state.user);
+
+  const [formValues, setFormValues] = useState({
+    name: '',
+    email: '',
+    password: '',
+
+  });
+  useEffect(() => {
+    dispatch(getUserDetails());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (user) {
+      setFormValues({
+        name: user.name || '',
+        email: user.email || '',
+        password: '',
+      });
+    }
+  }, [user]);
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    dispatch(updateUserDetails(formValues.name, formValues.email, formValues.password));
+  };
+
+
+
+  const onLogout = () => {
+    dispatch(logoutApi());
+    dispatch(isAuthChecked(false));
+  };
+
+  if (isLoading) {
+    return <Loader />;
   }
 
-  const [passwordValue, setPasswordValue] = useState('**********')
-  const onPasswordChange = e => {
-    setPasswordValue(e.target.value)
-  }
 
-  const [value, setValue] = useState('Марк');
-  const onInputChange = e => {
-    setValue(e.target.value)
-  }
   return (
     <section className={styles.container}>
       <nav className={styles.menu}>
         <ul className={styles.menu__box}>
           <li className={styles.menu__item}>
             <CustomNavLink
-              to="/profile"
+              to='/profile'
               activeClass={styles.active}
             >
               Профиль
@@ -36,7 +69,7 @@ const ProfilePage = () => {
           </li>
           <li className={styles.menu__item}>
             <CustomNavLink
-              to="/profile/orders"
+              to='/profile/orders'
               activeClass={styles.active}
             >
               История заказов
@@ -44,8 +77,9 @@ const ProfilePage = () => {
           </li>
           <li className={styles.menu__item}>
             <CustomNavLink
-              to="/login"
+              to='/login'
               activeClass={styles.active}
+              onClick={onLogout}
             >
               Выход
             </CustomNavLink>
@@ -57,47 +91,61 @@ const ProfilePage = () => {
           В этом разделе вы можете изменить свои персональные данные
         </p>
       </nav>
-      {location.pathname === "/profile" && (
-        <form className={styles.profile}>
-          <div className={styles.input}>
-            <Input
-              type={"text"}
-              value={value}
-              onChange={onInputChange}
-              placeholder={"Имя"}
-              name={"name"}
-              error={false}
-              errorText={"Ошибка"}
-              size={"default"}
-            />
-          </div>
-          <div className={styles.input}>
-            <EmailInput
-              onChange={onEmailChange}
-              value={emailValue}
-              name={'email'}
-              isIcon={false}
-            />
-          </div>
-          <div className={styles.input}>
-            <PasswordInput
-              onChange={onPasswordChange}
-              value={passwordValue}
-              name={'password'}
-              extraClass="mb-2"
-            />
-          </div>
+      <form className={styles.profile} onSubmit={onSubmit}>
+        <div className={styles.input}>
+          <Input
+            type={'text'}
+            value={formValues.name || ''}
+            onChange={(e) => {
+              const { value } = e.target;
+              setFormValues((prevValues) => ({
+                ...prevValues,
+                name: value,
+              }));
+            }}
+            placeholder={'Имя'}
+            name={'name'}
+            size={'default'}
+          />
+        </div>
+        <div className={styles.input}>
+          <EmailInput
+            onChange={(e) => {
+              const { value } = e.target;
+              setFormValues((prevValues) => ({
+                ...prevValues,
+                email: value.trim() !== '' ? value : '',
+              }));
+            }}
+            value={formValues.email || ''}
+            name={'email'}
+            isIcon={false}
+          />
+        </div>
+        <div className={styles.input}>
+          <PasswordInput
+            onChange={(e) => {
+              const { value } = e.target;
+              setFormValues((prevValues) => ({
+                ...prevValues,
+                password: value,
+              }));
+            }}
+            value={formValues.password}
+            name={'password'}
+            extraClass='mb-2'
+          />
+        </div>
 
-          <Button htmlType="submit" type="primary" size="large" extraClass="mt-3">
-            Сохранить
-          </Button>
-        </form>
-      )}
-      {location.pathname === "/profile/orders" && (
+        <Button htmlType='submit' type='primary' size='large' extraClass='mt-3'>
+          Сохранить
+        </Button>
+      </form>
+      {location.pathname === '/profile/orders' && (
         <NotFoundPage />
       )}
     </section >
   );
 };
 
-export { ProfilePage };
+export default ProfilePage;

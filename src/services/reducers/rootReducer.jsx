@@ -7,7 +7,6 @@ import { forgotPasswordReducer } from './forgot-password-reducer';
 import { resetPasswordReducer } from './reset-password-reducer';
 import { userReducer } from './user-reducer';
 import { loginReducer } from './login-reducer';
-import { logoutReducer } from './logout-reducer';
 import { registerUserReducer } from './register-reducer';
 
 
@@ -17,7 +16,6 @@ export const rootReducer = combineReducers({
   registerUser: registerUserReducer,
   user: userReducer,
   login: loginReducer,
-  logout: logoutReducer,
   ingredients: ingredientsReducer,
   ingredientDetails: ingredientReducer,
   order: orderReducer,

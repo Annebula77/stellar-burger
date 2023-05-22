@@ -1,60 +1,77 @@
-import { Button, EmailInput, PasswordInput, Input } from "@ya.praktikum/react-developer-burger-ui-components";
+import { Button, EmailInput, PasswordInput, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './register-page.module.css';
-import { useState } from 'react';
-import { Link } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { registerUser } from '../../services/actions/register-actions';
 
 const RegisterPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const isAuthenticated = useSelector((store) => store.registerUser.isAuthenticated);
 
-  const [nameValue, setNameValue] = useState('')
-  const onNameChange = e => {
-    setNameValue(e.target.value)
-  }
-  const [emailValue, setEmailValue] = useState('')
-  const onEmailChange = e => {
-    setEmailValue(e.target.value)
-  }
+  const [formValues, setFormValues] = useState({
+    name: '',
+    email: '',
+    password: '',
+  });
 
-  const [passwordValue, setPasswordValue] = useState('')
-  const onPasswordChange = e => {
-    setPasswordValue(e.target.value)
-  }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues((prevValues) => ({ ...prevValues, [name]: value }));
+  };
+
+  const onFormSubmit = (e) => {
+    e.preventDefault();
+    dispatch(registerUser(formValues.name, formValues.email, formValues.password));
+    navigate('/login'); // Перенаправление на /login
+  };
+
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/login');
+    }
+  }, [isAuthenticated, navigate]);
+
   return (
-    <form className={styles.container}>
+    <form className={styles.container} onSubmit={(e) => onFormSubmit(e)}>
       <h1 className={`${styles.title} text text_type_main-medium`}>Регистрация</h1>
       <div className={styles.input}>
         <Input
           type={'text'}
           placeholder={'Имя'}
+          name={'name'}
           size={'default'}
-          extraClass="ml-1 pt-6"
-          value={nameValue}
-          onChange={onNameChange}
+          extraClass='ml-1 pt-6'
+          value={formValues.name}
+          onChange={handleChange}
         />
 
       </div>
       <div className={styles.input}>
         <EmailInput
-          onChange={onEmailChange}
-          value={emailValue}
+          onChange={handleChange}
+          value={formValues.email}
           name={'email'}
           isIcon={false}
         />
       </div>
       <div className={styles.input}>
         <PasswordInput
-          onChange={onPasswordChange}
-          value={passwordValue}
+          onChange={handleChange}
+          value={formValues.password}
           name={'password'}
-          extraClass="mb-2"
+          extraClass='mb-2'
         />
       </div>
 
       <div className={styles.input}>
-        <Button htmlType="button" type="primary" size="large" extraClass="mb-20">
+        <Button htmlType='submit' type='primary' size='large' extraClass='mb-20'>
           Зарегистрироваться
         </Button>
       </div>
-      <p className="text text_type_main-default text_color_inactive mb-4">Уже зарегистрированы? <span><Link to='/login' className={styles.links}>Войти</Link></span></p>
+      <p className='text text_type_main-default text_color_inactive mb-4'>Уже зарегистрированы? <span><Link to='/login' className={styles.links}>Войти</Link></span></p>
     </form>
   )
 }

@@ -1,12 +1,12 @@
-import { createPortal } from "react-dom";
+import { createPortal } from 'react-dom';
 import { useEffect } from 'react';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './modal.module.css';
-import ModalOverlay from "../modal-overlay/modal-overlay";
+import ModalOverlay from '../modal-overlay/modal-overlay';
 import PropTypes from 'prop-types';
 const modals = document.querySelector('#modals');
 
-function Modal({ onClose, children }) {
+function Modal({ onClose, children, location }) {
 
   const handleModalClick = (event) => {
     event.stopPropagation();
@@ -32,7 +32,7 @@ function Modal({ onClose, children }) {
     <ModalOverlay onClick={closeModal}>
       <div className={styles.modal} onClick={handleModalClick}>
         <button className={styles.icon__x} onClick={closeModal}>
-          <CloseIcon type="primary" />
+          <CloseIcon type='primary' />
         </button>
         {children}
       </div>

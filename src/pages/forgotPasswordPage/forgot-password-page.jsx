@@ -1,9 +1,10 @@
-import { Button, EmailInput } from "@ya.praktikum/react-developer-burger-ui-components";
+import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './forgot-password-page.module.css';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { forgotPasswordApi } from '../../services/actions/forgot-password-actions';
+
 
 const ForgotPasswordPage = () => {
   const dispatch = useDispatch();
@@ -29,7 +30,7 @@ const ForgotPasswordPage = () => {
       <h1 className={`${styles.title} text text_type_main-medium`}>Восстановление пароля</h1>
       <div className={styles.input}>
         <EmailInput
-          placeholder="Укажите E-mail"
+          placeholder='Укажите E-mail'
           onChange={onEmailChange}
           value={emailValue || ''}
           name={'email'}
@@ -37,14 +38,13 @@ const ForgotPasswordPage = () => {
         />
       </div>
       <div className={styles.input}>
-        <Button htmlType="submit" type="primary" size="large" extraClass="mb-20">
+        <Button htmlType='submit' type='primary' size='large' extraClass='mb-20'>
           Восстановить
         </Button>
       </div>
-      <p className="text text_type_main-default text_color_inactive mb-4">Вспомнили пароль? <span><Link to='/login' className={styles.links}>Войти</Link></span></p>
+      <p className='text text_type_main-default text_color_inactive mb-4'>Вспомнили пароль? <span><Link to='/login' className={styles.links}>Войти</Link></span></p>
     </form>
   )
 }
-
 
 export { ForgotPasswordPage };

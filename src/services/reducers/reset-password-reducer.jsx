@@ -2,14 +2,13 @@ import {
   RESET_PASSWORD_REQUEST,
   RESET_PASSWORD_SUCCESS,
   RESET_PASSWORD_FAILED,
-} from "../actions/reset-password-actions";
+} from '../actions/reset-password-actions';
 
 const initialState = {
   status: false,
 };
 
 export const resetPasswordReducer = (state = initialState, action) => {
-  console.log(action)
   switch (action.type) {
     case RESET_PASSWORD_REQUEST:
       return {
@@ -18,7 +17,7 @@ export const resetPasswordReducer = (state = initialState, action) => {
     case RESET_PASSWORD_SUCCESS:
       return {
         ...state,
-        status: true,
+        status: 'success',
       };
     case RESET_PASSWORD_FAILED:
       return {

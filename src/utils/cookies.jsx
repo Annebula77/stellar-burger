@@ -1,3 +1,4 @@
+// Пример функции setCookie с выводом отладочной информации
 export function setCookie(name, value, props) {
   props = props || {};
   let exp = props.expires;
@@ -19,26 +20,25 @@ export function setCookie(name, value, props) {
     }
   }
   document.cookie = updatedCookie;
+
 }
 
 export function getCookie(name) {
   const matches = document.cookie.match(
     new RegExp('(?:^|; )' + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)')
   );
-  return matches ? decodeURIComponent(matches[1]) : undefined;
+  const cookieValue = matches ? decodeURIComponent(matches[1]) : undefined;
+
+
+  return cookieValue;
 }
 
 
 
 export function clearCookie(name) {
-  setCookie(name, "", {
+  setCookie(name, '', {
     'max-age': -1
   })
 }
 
-export function setTokenCookiesAge(token, refreshToken) {
-  setCookie('token', token, {
-    'max-age': 1200
-  });
-  setCookie('refreshToken', refreshToken);
-}
+

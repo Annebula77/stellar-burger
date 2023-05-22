@@ -9,15 +9,21 @@ import {
   REFRESH_TOKEN_SUCCESS,
   REFRESH_TOKEN_FAILED,
   ISAUTH_CHECKED,
-  ISAUTH_CHECKED_FAILD
-} from "../actions/user-actions";
+  ISAUTH_CHECKED_FAILD,
+  LOGOUT_SUCCESS,
+  START_LOADING,
+  END_LOADING,
+} from '../actions/user-actions';
+
 
 
 const initialState = {
-  email: null,
-  password: null,
-  name: null,
+  success: false,
+  user: null,
   isAuthChecked: false,
+  accessToken: null,
+  refreshToken: null,
+  isLoading: false,
 };
 
 export const userReducer = (state = initialState, action) => {
@@ -30,20 +36,29 @@ export const userReducer = (state = initialState, action) => {
       };
     case GET_USER_SUCCESS:
     case UPDATE_USER_SUCCESS:
+
       return {
         ...state,
-        email: action.payload.email,
-        password: action.payload.password,
-        name: action.payload.name,
+        success: true,
+        user: action.payload,
+
       };
     case GET_USER_FAILED:
     case UPDATE_USER_FAILED:
-      return {
-        ...state,
-        email: null,
-        password: null,
-        name: null,
-      };
+      if (action.payload && action.payload.message) {
+        return {
+          ...state,
+          success: false,
+          name: '',
+          email: '',
+        };
+      } else {
+        return {
+          ...state,
+          success: false,
+          user: null,
+        };
+      }
     case REFRESH_TOKEN_SUCCESS:
       return {
         ...state,
@@ -51,19 +66,39 @@ export const userReducer = (state = initialState, action) => {
     case REFRESH_TOKEN_FAILED:
       return {
         ...state,
-        email: null,
-        password: null,
-        name: null,
+        user: null,
+        accessToken: null,
+        refreshToken: null,
+        isAuthChecked: false,
       };
     case ISAUTH_CHECKED:
       return {
         ...state,
-        isAuthChecked: true,
+        isAuthChecked: action.payload,
       };
     case ISAUTH_CHECKED_FAILD:
       return {
         ...state,
         isAuthChecked: false,
+      };
+    case LOGOUT_SUCCESS:
+      console.log(userReducer.action)
+      return {
+        ...state,
+        isAuthChecked: false,
+        user: null,
+        accessToken: null,
+        refreshToken: null,
+      };
+    case START_LOADING:
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case END_LOADING:
+      return {
+        ...state,
+        isLoading: false,
       };
     default:
       return state;

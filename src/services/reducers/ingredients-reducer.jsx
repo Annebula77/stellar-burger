@@ -2,7 +2,7 @@ import {
   FETCH_INGREDIENTS_REQUEST,
   FETCH_INGREDIENTS_SUCCESS,
   FETCH_INGREDIENTS_FAILED,
-} from "../actions/ingredients-actions";
+} from '../actions/ingredients-actions';
 
 const initialState = {
   ingredients: [],

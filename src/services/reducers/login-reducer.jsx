@@ -21,8 +21,8 @@ export const loginReducer = (state = initialState, action) => {
       return {
         ...state,
         status: true,
-        accessToken: action.accessToken,
-        refreshToken: action.refreshToken,
+        accessToken: action.payload.accessToken,
+        refreshToken: action.payload.refreshToken,
       };
     case LOGIN_FAILED:
       return {
