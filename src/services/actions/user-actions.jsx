@@ -185,14 +185,7 @@ export const logoutApi = () => {
       if (data.success) {
         dispatch(logoutSuccess());
         clearCookie('refreshToken');
-
-        dispatch(refreshTokenSuccess({
-          refreshToken: '',
-          accessToken: '',
-        }));
-
-        setCookie('refreshToken', '');
-        setCookie('accessToken', '');
+        clearCookie('accessToken');
       } else {
         throw new Error('Failed to logout');
       }
@@ -202,8 +195,7 @@ export const logoutApi = () => {
   };
 };
 
-
-async function refreshToken() {
+async function refreshTokenApi() {
   const refreshToken = getCookie('refreshToken');
   if (!refreshToken) {
     throw new Error('Refresh token is invalid');
@@ -215,8 +207,11 @@ async function refreshToken() {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + refreshToken,
     },
+    body: JSON.stringify({
+      token: refreshToken
+    })
   };
-
+  console.log(requestOptions);
   const response = await fetch(`${BASE_URL}/auth/token`, requestOptions);
   if (!response.ok) {
     throw new Error('Failed to refresh token.');
@@ -234,25 +229,31 @@ async function refreshToken() {
 }
 
 export const fetchWithRefresh = async (url, options) => {
+  console.log("fetchWithRefresh called with URL:", url);
   try {
     const res = await fetch(url, options);
-    return await checkResponse(res);
+    const response = await checkResponse(res);
+    console.log("Response from first fetch:", response);
+    return response;
   } catch (err) {
+    console.log("Error from first fetch:", err);
     if (err.message === "jwt expired") {
       console.log("Token expired, trying to refresh...");
-      const refreshData = await refreshToken();
+      const refreshData = await refreshTokenApi();
+      console.log("Refresh data:", refreshData);
       localStorage.setItem("refreshToken", refreshData.refreshToken);
       localStorage.setItem("accessToken", refreshData.accessToken);
       options.headers.authorization = 'Bearer ' + refreshData.accessToken;
       console.log("Token refreshed, retrying request...");
       const res = await fetch(url, options);
-      return await checkResponse(res);
+      const response = await checkResponse(res);
+      console.log("Response from retry fetch:", response);
+      return response;
     } else {
       return Promise.reject(err);
     }
   }
 };
-
 export const checkUserAuth = () => {
   return function (dispatch) {
     if (getCookie('accessToken')) {
