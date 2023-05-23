@@ -44,10 +44,10 @@ export function loginApi(email, password) {
       const data = await checkResponse(response);
       if (data.success) {
         const { accessToken, refreshToken } = data;
-        setCookie('accessToken', accessToken, 1200); // Установка времени жизни accessToken на 1200 мс
+        setCookie('accessToken', accessToken, 1200);
         setCookie('refreshToken', refreshToken);
         dispatch(loginSuccess(accessToken, refreshToken));
-        dispatch({ type: 'ISAUTH_CHECKED', payload: true }); // Обновляем статус isAuthChecked после успешного входа
+        dispatch({ type: 'ISAUTH_CHECKED', payload: true });
       } else {
         dispatch(loginFailed('No such user found! Please check your details!'));
       }
