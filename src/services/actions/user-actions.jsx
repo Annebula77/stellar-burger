@@ -211,7 +211,7 @@ async function refreshTokenApi() {
       token: refreshToken
     })
   };
-  console.log(requestOptions);
+
   const response = await fetch(`${BASE_URL}/auth/token`, requestOptions);
   if (!response.ok) {
     throw new Error('Failed to refresh token.');
@@ -229,25 +229,18 @@ async function refreshTokenApi() {
 }
 
 export const fetchWithRefresh = async (url, options) => {
-  console.log("fetchWithRefresh called with URL:", url);
   try {
     const res = await fetch(url, options);
     const response = await checkResponse(res);
-    console.log("Response from first fetch:", response);
     return response;
   } catch (err) {
-    console.log("Error from first fetch:", err);
     if (err.message === "jwt expired") {
-      console.log("Token expired, trying to refresh...");
       const refreshData = await refreshTokenApi();
-      console.log("Refresh data:", refreshData);
       localStorage.setItem("refreshToken", refreshData.refreshToken);
       localStorage.setItem("accessToken", refreshData.accessToken);
       options.headers.authorization = 'Bearer ' + refreshData.accessToken;
-      console.log("Token refreshed, retrying request...");
       const res = await fetch(url, options);
       const response = await checkResponse(res);
-      console.log("Response from retry fetch:", response);
       return response;
     } else {
       return Promise.reject(err);
