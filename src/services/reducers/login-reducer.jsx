@@ -1,7 +1,8 @@
 import {
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
-  LOGIN_FAILED
+  LOGIN_FAILED,
+  LOGOUT
 } from '../actions/login-actions';
 
 
@@ -30,6 +31,13 @@ export const loginReducer = (state = initialState, action) => {
         status: false,
         accessToken: null,
         refreshToken: null,
+      };
+    case LOGOUT:
+      return {
+        ...state,
+        status: false,
+        accessToken: '',
+        refreshToken: '',
       };
     default:
       return state;
