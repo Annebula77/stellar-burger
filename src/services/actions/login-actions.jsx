@@ -1,5 +1,6 @@
 import { BASE_URL, checkResponse } from '../../utils/consts';
 import { setCookie } from '../../utils/cookies';
+import { getUserDetails } from './user-actions';
 
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
@@ -52,6 +53,7 @@ export function loginApi(email, password) {
         setCookie('refreshToken', refreshToken);
         dispatch(loginSuccess(accessToken, refreshToken));
         dispatch({ type: 'ISAUTH_CHECKED', payload: true });
+        dispatch(getUserDetails());
       } else {
         dispatch(loginFailed('No such user found! Please check your details!'));
       }
