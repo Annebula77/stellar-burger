@@ -5,6 +5,7 @@ import { setCookie } from '../../utils/cookies';
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAILED = 'LOGIN_FAILED';
+export const LOGOUT = 'LOGOUT';
 
 export const loginRequest = () => ({
   type: LOGIN_REQUEST,
@@ -24,6 +25,9 @@ export const loginFailed = (err) => ({
   payload: err,
 });
 
+export const logoutStatus = () => ({
+  type: LOGOUT,
+})
 
 export function loginApi(email, password) {
   return async (dispatch) => {

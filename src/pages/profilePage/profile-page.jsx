@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { NotFoundPage } from '../notFoundPage/not-found-page';
 import { CustomNavLink } from '../../utils/hoc';
+import { logoutStatus } from '../../services/actions/login-actions';
 import { isAuthChecked, logoutApi } from '../../services/actions/user-actions';
 import Loader from '../../components/loader/loader';
 import { updateUserDetails } from '../../services/actions/user-actions';
@@ -14,10 +15,12 @@ import { useParams } from 'react-router-dom';
 
 
 
+
 const ProfilePage = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const { isLoading, user } = useSelector((state) => state.user);
+
 
   const [formValues, setFormValues] = useState({
     name: '',
@@ -47,6 +50,7 @@ const ProfilePage = () => {
   let { '*': subpath } = useParams();
 
   const onLogout = () => {
+    dispatch(logoutStatus());
     dispatch(logoutApi());
     dispatch(isAuthChecked(false));
   };
