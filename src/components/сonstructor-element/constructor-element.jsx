@@ -48,7 +48,7 @@ const ConstructorEl = ({ index, item }) => {
       style={{ opacity }}
       ref={ref}
     >
-      <DragIcon type="primary" className={styles.dragButton} />
+      <DragIcon type='primary' className={styles.dragButton} />
       <ConstructorElement
         text={name}
         price={price}

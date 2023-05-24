@@ -1,30 +1,32 @@
 import styles from './burger-ingredients.module.css';
 import Tabs from '../tabs/tabs';
 import IngredientsCategory from '../ingredients-category/ingredients-category';
-import { useState, useRef, forwardRef, useMemo } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import Modal from '../modal/modal';
-import IngredientDetails from '../ingredient-details/ingredient-details';
-import { setIngredientDetails, clearIngredientDetails } from '../../services/actions/ingredient-action';
-import { TabItems } from '../../utils/consts'
+import { useState, useRef, forwardRef, useMemo } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { setIngredientDetails } from '../../services/actions/ingredient-action';
+import { TabItems } from '../../utils/consts';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 
 
-const BurgerIngredients = forwardRef((props, ref) => {
+const BurgerIngredients = ({ closeModal }) => {
   const ingredientList = useSelector((state) => state.ingredients);
   const dispatch = useDispatch();
 
-  const [showModal, setShowModal] = useState(false);
   const containerRef = useRef(null);
   const bunRef = useRef(null);
   const sauceRef = useRef(null);
   const mainRef = useRef(null);
   const [current, setCurrent] = useState(TabItems.BUN);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+
 
   const buns = useMemo(
     () =>
       ingredientList.ingredients.filter((item) => {
-        return item.type === "bun"
+        return item.type === 'bun'
       }),
     [ingredientList]
   );
@@ -32,7 +34,7 @@ const BurgerIngredients = forwardRef((props, ref) => {
   const sauce = useMemo(
     () =>
       ingredientList.ingredients.filter((item) => {
-        return item.type === "sauce"
+        return item.type === 'sauce'
       }),
     [ingredientList]
   );
@@ -40,7 +42,7 @@ const BurgerIngredients = forwardRef((props, ref) => {
   const main = useMemo(
     () =>
       ingredientList.ingredients.filter((item) => {
-        return item.type === "main"
+        return item.type === 'main'
       }),
     [ingredientList]
   );
@@ -57,32 +59,31 @@ const BurgerIngredients = forwardRef((props, ref) => {
     }
   };
 
+  const openModal = (ingredientId, ingredient) => {
+    const modalLocation = `/ingredients/${ingredientId}`;
+    const currentLocation = location.pathname;
 
-  const openModal = (ingredient) => {
+    navigate(modalLocation, {
+      state: { modal: true, background: currentLocation }
+    });
+
+    window.history.replaceState(null, '', modalLocation);
+    window.addEventListener('popstate', closeModal);
+
     dispatch(setIngredientDetails(ingredient));
-    setShowModal(true);
   };
-  const closeModal = () => {
-    dispatch(clearIngredientDetails());
-    setShowModal(false);
-  }
 
   return (
     <section className={styles.section}>
       <h1 className={`text text_type_main-large ${styles.title}`}>Собери бургер</h1>
       <Tabs bunRef={bunRef} sauceRef={sauceRef} mainRef={mainRef} current={current} />
       <section className={styles.container} ref={containerRef} onScroll={handleScroll} >
-        <IngredientsCategory title='Булки' data={buns} openModal={openModal} ref={bunRef} />
-        <IngredientsCategory title='Соусы' data={sauce} openModal={openModal} ref={sauceRef} />
-        <IngredientsCategory title='Начинки' data={main} openModal={openModal} ref={mainRef} />
+        <IngredientsCategory title='Булки' data={buns} openModal={(ingredient) => openModal(ingredient._id, ingredient)} ref={bunRef} />
+        <IngredientsCategory title='Соусы' data={sauce} openModal={(ingredient) => openModal(ingredient._id, ingredient)} ref={sauceRef} />
+        <IngredientsCategory title='Начинки' data={main} openModal={(ingredient) => openModal(ingredient._id, ingredient)} ref={mainRef} />
       </section>
-      {showModal && (
-        <Modal onClose={closeModal}>
-          <IngredientDetails />
-        </Modal>
-      )}
     </section>
   );
-});
+};
 
 export default BurgerIngredients;

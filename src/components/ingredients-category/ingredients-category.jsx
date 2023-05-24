@@ -8,7 +8,7 @@ const IngredientsCategory = forwardRef((props, ref) => {
   const { title, openModal, data } = props;
   return (
     <div ref={ref}>
-      <h2 className="text_type_main-medium mt-10">{title}</h2>
+      <h2 className='text_type_main-medium mt-10'>{title}</h2>
       <ul className={styles.ingredient__box}>
         {data.map((ingredient) => {
           return (
