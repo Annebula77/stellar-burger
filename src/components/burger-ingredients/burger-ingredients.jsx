@@ -1,51 +1,34 @@
 import styles from './burger-ingredients.module.css';
 import Tabs from '../tabs/tabs';
 import IngredientsCategory from '../ingredients-category/ingredients-category';
-import { useState, useRef, forwardRef, useMemo } from 'react';
+import IngredientDetails from '../ingredient-details/ingredient-details';
+import Modal from '../modal/modal';
+import { useState, useRef, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setIngredientDetails } from '../../services/actions/ingredient-action';
 import { TabItems } from '../../utils/consts';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { setIngredientDetails, clearIngredientDetails } from '../../services/actions/ingredient-action';
 
 
 
-const BurgerIngredients = ({ closeModal }) => {
+
+const BurgerIngredients = () => {
   const ingredientList = useSelector((state) => state.ingredients);
-  const dispatch = useDispatch();
-
   const containerRef = useRef(null);
   const bunRef = useRef(null);
   const sauceRef = useRef(null);
   const mainRef = useRef(null);
   const [current, setCurrent] = useState(TabItems.BUN);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+  const { id } = useParams();
+  const background = location.state?.background;
 
 
-
-  const buns = useMemo(
-    () =>
-      ingredientList.ingredients.filter((item) => {
-        return item.type === 'bun'
-      }),
-    [ingredientList]
-  );
-
-  const sauce = useMemo(
-    () =>
-      ingredientList.ingredients.filter((item) => {
-        return item.type === 'sauce'
-      }),
-    [ingredientList]
-  );
-
-  const main = useMemo(
-    () =>
-      ingredientList.ingredients.filter((item) => {
-        return item.type === 'main'
-      }),
-    [ingredientList]
-  );
+  const buns = ingredientList.ingredients.filter((item) => item.type === 'bun');
+  const sauce = ingredientList.ingredients.filter((item) => item.type === 'sauce');
+  const main = ingredientList.ingredients.filter((item) => item.type === 'main');
 
   const handleScroll = () => {
     if (containerRef.current.getBoundingClientRect().top > bunRef.current.getBoundingClientRect().top) {
@@ -59,29 +42,30 @@ const BurgerIngredients = ({ closeModal }) => {
     }
   };
 
-  const openModal = (ingredientId, ingredient) => {
-    const modalLocation = `/ingredients/${ingredientId}`;
-    const currentLocation = location.pathname;
+  const openModal = useCallback((ingredientId) => {
+    dispatch(setIngredientDetails());
+    navigate(`/ingredients/${ingredientId}`, { state: { modal: true, background: location } });
+  }, [navigate, location]);
 
-    navigate(modalLocation, {
-      state: { modal: true, background: currentLocation }
-    });
-
-    window.history.replaceState(null, '', modalLocation);
-    window.addEventListener('popstate', closeModal);
-
-    dispatch(setIngredientDetails(ingredient));
-  };
-
+  const closeModal = useCallback(() => {
+    dispatch(clearIngredientDetails());
+    navigate('/', { state: { modal: false } });
+  }, [navigate, background]);
   return (
     <section className={styles.section}>
       <h1 className={`text text_type_main-large ${styles.title}`}>Собери бургер</h1>
       <Tabs bunRef={bunRef} sauceRef={sauceRef} mainRef={mainRef} current={current} />
       <section className={styles.container} ref={containerRef} onScroll={handleScroll} >
-        <IngredientsCategory title='Булки' data={buns} openModal={(ingredient) => openModal(ingredient._id, ingredient)} ref={bunRef} />
-        <IngredientsCategory title='Соусы' data={sauce} openModal={(ingredient) => openModal(ingredient._id, ingredient)} ref={sauceRef} />
-        <IngredientsCategory title='Начинки' data={main} openModal={(ingredient) => openModal(ingredient._id, ingredient)} ref={mainRef} />
+        <IngredientsCategory title='Булки' data={buns} openModal={(ingredientId) => openModal(ingredientId)} ref={bunRef} />
+        <IngredientsCategory title='Соусы' data={sauce} openModal={(ingredientId) => openModal(ingredientId)} ref={sauceRef} />
+        <IngredientsCategory title='Начинки' data={main} openModal={(ingredientId) => openModal(ingredientId)} ref={mainRef} />
       </section>
+      {background && (
+        <Modal onClose={closeModal}>
+          <IngredientDetails ingredientId={id} />
+        </Modal>
+      )}
+
     </section>
   );
 };
