@@ -30,13 +30,15 @@ function Ingredient({ ingredient, onClick }) {
     return count;
   }, [bun, ingredient._id, ingredients]);
 
+  const handleClick = () => {
+    if (id !== _id) {
+      navigate(`/ingredients/${_id}`, { state: { modal: true } });
+      onClick(_id);
+    }
+  };
+
   return (
-    <li className={styles.element} onClick={() => {
-      if (id !== ingredient._id) {
-        navigate(`/ingredients/${ingredient._id}`, { state: { modal: true } });
-        onClick();
-      }
-    }} style={{ opacity }} ref={dragRef}>
+    <li className={styles.element} onClick={handleClick} style={{ opacity }} ref={dragRef}>
       {counter > 0 && <Counter count={counter} size='default' extraClass='m-1' />}
       <img className={styles.image} src={image} alt={name} />
       <div className={styles.price}>
