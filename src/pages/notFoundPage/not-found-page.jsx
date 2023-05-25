@@ -1,9 +1,9 @@
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './not-found-page.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+
 
 const NotFoundPage = () => {
-
   return (
     <section className={styles.container}>
       <h1 className={`${styles.title} text text_type_main-medium`}>4O4</h1>

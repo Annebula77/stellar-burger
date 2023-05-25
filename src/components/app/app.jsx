@@ -16,6 +16,7 @@ import ProfilePage from '../../pages/profilePage/profile-page';
 import ProtectedRouteElement from '../ProtectedRouteElement/protectedRouteElement';
 import PublicRouteElement from '../PublicRouteElement/public-route-element';
 import { IngredientPage } from '../../pages/ingredientPage/ingredient-page';
+import { getUserDetails } from '../../services/actions/user-actions';
 
 
 function App() {
@@ -37,6 +38,13 @@ function App() {
     }
   }, [dispatch]);
 
+  useEffect(() => {
+    const accessToken = getCookie('accessToken');
+    if (accessToken) {
+      dispatch(getUserDetails());
+    }
+  }, [location, dispatch]);
+
   return (
     <section className={styles.app}>
       <AppHeader />
@@ -51,7 +59,7 @@ function App() {
           <Route path="/forgot-password" element={<PublicRouteElement element={<ForgotPasswordPage />} />} />
           <Route path="/reset-password" element={<PublicRouteElement element={<ResetPasswordPage />} />} />
           <Route path="/profile/*" element={<ProtectedRouteElement element={<ProfilePage />} />} />
-          <Route path="*" element={<NotFoundPage />} />
+          <Route path="/*" element={<NotFoundPage />} />
         </Routes>
       )}
     </section>

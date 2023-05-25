@@ -16,6 +16,7 @@ function AppHeader() {
   const [userName, setUserName] = useState("");
 
   useEffect(() => {
+    console.log(user); // Логирование состояния user
     if (isLoggedIn && user) {
       setUserName(user.name);
     } else {
