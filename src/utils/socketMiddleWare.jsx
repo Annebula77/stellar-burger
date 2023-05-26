@@ -1,7 +1,11 @@
 import {
   WS_CONNECTION_START,
   WS_SEND_DATA,
-} from '../actions/webSocket-actions';
+  wsConnectionSuccess,
+  wsConnectionError,
+  wsGetData,
+  wsConnectionClosed
+} from '../services/actions/webSocket-actions';
 
 export const socketMiddleware = (wsUrl, wsUserUrl) => {
   let socketAllOrders = null;

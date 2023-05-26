@@ -20,7 +20,7 @@ export const wsConnectionError = (event) => ({
   payload: event,
 });
 
-export const wsGetData = (message) => ({
+export const wsGetData = (data) => ({
   type: WS_GET_DATA,
   payload: data,
 });
@@ -30,7 +30,7 @@ export const wsConnectionClosed = (event) => ({
   payload: event,
 });
 
-export const wsSendData = (message) => ({
+export const wsSendData = (data) => ({
   type: WS_SEND_DATA,
   payload: data,
 });

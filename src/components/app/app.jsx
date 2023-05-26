@@ -17,6 +17,7 @@ import ProtectedRouteElement from '../ProtectedRouteElement/protectedRouteElemen
 import PublicRouteElement from '../PublicRouteElement/public-route-element';
 import { IngredientPage } from '../../pages/ingredientPage/ingredient-page';
 import { getUserDetails } from '../../services/actions/user-actions';
+import { FeedPage } from '../../pages/feedPage/feed-page';
 
 
 function App() {
@@ -54,12 +55,14 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/ingredients/:id" element={!background ? <IngredientPage /> : <HomePage />} />
+          <Route path="/feed" element={<FeedPage />} />
           <Route path="/login" element={<PublicRouteElement element={<LoginPage />} />} />
           <Route path="/register" element={<PublicRouteElement element={<RegisterPage />} />} />
           <Route path="/forgot-password" element={<PublicRouteElement element={<ForgotPasswordPage />} />} />
           <Route path="/reset-password" element={<PublicRouteElement element={<ResetPasswordPage />} />} />
           <Route path="/profile/*" element={<ProtectedRouteElement element={<ProfilePage />} />} />
           <Route path="/*" element={<NotFoundPage />} />
+
         </Routes>
       )}
     </section>
