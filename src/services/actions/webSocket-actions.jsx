@@ -5,9 +5,9 @@ export const WS_GET_DATA = 'WS_GET_DATA';
 export const WS_CONNECTION_CLOSED = 'WS_CONNECTION_CLOSED';
 export const WS_SEND_DATA = 'WS_SEND_DATA';
 
-export const startWsConnection = (accessToken) => ({
+export const startWsConnection = (serverType, accessToken, callback) => ({
   type: WS_CONNECTION_START,
-  payload: accessToken,
+  payload: { serverType, accessToken, callback },
 });
 
 export const wsConnectionSuccess = (event) => ({

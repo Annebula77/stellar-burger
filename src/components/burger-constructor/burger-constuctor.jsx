@@ -9,7 +9,8 @@ import { addIngridientItem, addBunItem, clearContainer } from '../../services/ac
 import { useDrop } from 'react-dnd';
 import ConstructorEl from '../сonstructor-element/constructor-element';
 import { useLocation, useNavigate } from 'react-router-dom';
-
+import { startWsConnection, wsSendData } from '../../services/actions/webSocket-actions';
+import { getCookie } from '../../utils/cookies';
 
 function BurgerConstructor() {
   const { bun, ingredients } = useSelector((state) => state.burgerOrderList);
@@ -21,6 +22,7 @@ function BurgerConstructor() {
   const location = useLocation();
   const navigate = useNavigate();
   const isAuthenticated = useSelector((state) => state.user.isAuthChecked);
+
 
 
   const [, dropTarget] = useDrop({
@@ -49,9 +51,16 @@ function BurgerConstructor() {
       const ingredientIds = ingredients.map((item) => item._id);
       const bunId = bun._id;
       const orderItems = [bunId, ...ingredientIds, bunId];
+      dispatch(sendOrder(orderItems))
+        .then(() => {
+          const accessToken = getCookie('accessToken');
+          dispatch(startWsConnection('user', accessToken));
+          setShowModal(true);
+        })
+        .catch((error) => {
+          console.error("Ошибка при отправке заказа: ", error);
 
-      dispatch(sendOrder(orderItems));
-      setShowModal(true);
+        });
     } else {
       navigate('/login', {
         replace: true,

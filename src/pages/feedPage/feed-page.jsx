@@ -1,4 +1,5 @@
 import styles from './feed-page.module.css';
+import FeedOrderStatusInfo from '../../components/feed-order-status-info/feed-order-status-info';
 const FeedPage = () => {
   return (
     <section className={styles.section}>
@@ -6,25 +7,7 @@ const FeedPage = () => {
       <div className={styles.orders__section}>
         <div className={styles.orders__container}></div>
       </div>
-      <ul className={styles.list__section}>
-        <li className={styles.list__container}>
-          <div className={styles.status__box}>
-            <h3>Готовы:</h3>
-          </div>
-          <div className={styles.status__box}>
-            <h3>В работе:</h3>
-          </div>
-        </li>
-        <li className={styles.total__box}>
-          <h3>Выполнено за все время:</h3>
-          <p>123455</p>
-        </li>
-        <li className={styles.total__box}>
-          <h3>Выполнено за сегодня:</h3>
-          <p>123455</p>
-        </li>
-      </ul>
-
+      <FeedOrderStatusInfo />
     </section>
   )
 

@@ -17,13 +17,22 @@ export const socketMiddleware = (wsUrl, wsUserUrl) => {
       const { type, payload } = action;
 
       if (type === WS_CONNECTION_START) {
-        const { accessToken, serverType } = payload;
-        const url = serverType === 'user' ? `${wsUserUrl}?token=${accessToken}` : wsUrl;
+        const { serverType, accessToken, callback } = payload;
+
+        // Удаление "Bearer " из токена
+        const cleanAccessToken = accessToken.replace('Bearer ', '');
+
+        const url = serverType === 'user' ? `${wsUserUrl}?token=${cleanAccessToken}` : wsUrl;
 
         if (serverType === 'user') {
           socketUserOrders = new WebSocket(url);
+          socketUserOrders.onopen = event => {
+            dispatch(wsConnectionSuccess(event));
+            if (typeof callback === 'function') callback(); // выполнение callback-функции при установке соединения
+          };
         } else {
           socketAllOrders = new WebSocket(url);
+          // инициализация и обработка событий для socketAllOrders
         }
       }
 
@@ -40,7 +49,7 @@ export const socketMiddleware = (wsUrl, wsUserUrl) => {
         socketAllOrders.onmessage = event => {
           const { data } = event;
           const parsedData = JSON.parse(data);
-          dispatch(wsGetData(parsedData.orders));
+          dispatch(wsGetData(parsedData));  // отправляем все данные, а не только заказы
         };
 
         socketAllOrders.onclose = event => {
@@ -61,7 +70,7 @@ export const socketMiddleware = (wsUrl, wsUserUrl) => {
         socketUserOrders.onmessage = event => {
           const { data } = event;
           const parsedData = JSON.parse(data);
-          dispatch(wsGetData(parsedData.orders));
+          dispatch(wsGetData(parsedData.data));
         };
 
         socketUserOrders.onclose = event => {
