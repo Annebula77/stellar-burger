@@ -53,7 +53,7 @@ const BurgerIngredients = () => {
   }, [navigate, background]);
   return (
     <section className={styles.section}>
-      <h1 className={`text text_type_main-large ${styles.title}`}>Собери бургер</h1>
+      <h2 className={`text text_type_main-large ${styles.title}`}>Собери бургер</h2>
       <Tabs bunRef={bunRef} sauceRef={sauceRef} mainRef={mainRef} current={current} />
       <section className={styles.container} ref={containerRef} onScroll={handleScroll} >
         <IngredientsCategory title='Булки' data={buns} openModal={(ingredientId) => openModal(ingredientId)} ref={bunRef} />

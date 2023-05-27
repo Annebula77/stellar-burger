@@ -41,10 +41,12 @@ function AppHeader() {
               <p className={activeTypology('/')}>Конструктор</p>
             </button>
           </Link>
-          <button type='button' className={styles.header__cell} >
-            <ListIcon type='secondary' />
-            <p className='text text_type_main-default text_color_inactive'>Лента заказов</p>
-          </button>
+          <Link to='/feed' className={styles.link}>
+            <button type='button' className={styles.header__cell} >
+              <ListIcon type={location.pathname === '/feed' ? 'primary' : 'secondary'} />
+              <p className={activeTypology('/feed')}>Лента заказов</p>
+            </button>
+          </Link>
         </div>
         <div className={styles.logo}>
           <Logo />

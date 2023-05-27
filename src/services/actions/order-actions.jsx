@@ -1,5 +1,5 @@
 import { BASE_URL, checkResponse } from '../../utils/consts';
-
+import { getCookie } from '../../utils/cookies';
 
 export const POST_ORDER_REQUEST = 'POST_ORDER_REQUEST';
 export const POST_ORDER_SUCCESS = 'POST_ORDER_SUCCESS';
@@ -31,7 +31,9 @@ export function postOrderClear() {
 export const sendOrder = (data) => async (dispatch) => {
   try {
     dispatch(postOrderRequest());
-    const response = await fetch(`${BASE_URL}/orders`, {
+    const accessTokenWithBearer = getCookie('accessToken');  // Получаем accessToken из куки
+    const accessToken = accessTokenWithBearer.replace('Bearer ', '');  // Удаляем префикс "Bearer "
+    const response = await fetch(`${BASE_URL}/orders?token=${accessToken}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -39,8 +41,11 @@ export const sendOrder = (data) => async (dispatch) => {
       })
     });
     const result = await checkResponse(response);
+    console.log("Заказ успешно отправлен. Результат:", result);
     dispatch(postOrderSuccess(result));
+    return result;
   } catch (error) {
     dispatch(postOrderFailed(error));
+    throw error;
   }
 };
