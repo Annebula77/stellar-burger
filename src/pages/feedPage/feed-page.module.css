@@ -2,17 +2,29 @@
   box-sizing: border-box;
   width: 100%;
   display: flex;
-  flex-direction: row;
-  gap: 60px;
+  flex-direction: column;
   padding: 0;
-  margin: 0;
+  margin: 0 0 0 205px;
 
+}
+
+.wrap {
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  margin: 0;
+  padding: 0;
+  gap: 60px;
 }
 
 .orders__section {
   box-sizing: border-box;
+  display: flex;
+  padding: 0;
   max-width: 600px;
-  margin: 40px 0 0;
+  margin: 0;
 }
 
 .orders__container {
@@ -20,13 +32,19 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin: 40px 0 0;
+  margin: 0;
   height: 775px;
   overflow-y: scroll;
 }
 
 .title {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: flex-start;
+  padding: 0;
   margin-bottom: 10px;
+
+
 }
 
 

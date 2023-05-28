@@ -9,7 +9,7 @@ import { addIngridientItem, addBunItem, clearContainer } from '../../services/ac
 import { useDrop } from 'react-dnd';
 import ConstructorEl from '../сonstructor-element/constructor-element';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { startWsConnection, wsSendData } from '../../services/actions/webSocket-actions';
+import { startWsConnection } from '../../services/actions/webSocket-actions';
 import { getCookie } from '../../utils/cookies';
 
 function BurgerConstructor() {

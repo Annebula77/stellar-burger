@@ -32,29 +32,24 @@ export const socketMiddleware = (wsUrl, wsUserUrl) => {
           };
         } else {
           socketAllOrders = new WebSocket(url);
-          // инициализация и обработка событий для socketAllOrders
+          socketAllOrders.onopen = event => {
+            dispatch(wsConnectionSuccess(event));
+          };
+
+          socketAllOrders.onerror = event => {
+            dispatch(wsConnectionError(event));
+          };
+
+          socketAllOrders.onmessage = event => {
+            const { data } = event;
+            const parsedData = JSON.parse(data);
+            dispatch(wsGetData(parsedData));
+          };
+
+          socketAllOrders.onclose = event => {
+            dispatch(wsConnectionClosed(event));
+          };
         }
-      }
-
-      // обработка событий для all orders socket
-      if (socketAllOrders) {
-        socketAllOrders.onopen = event => {
-          dispatch(wsConnectionSuccess(event));
-        };
-
-        socketAllOrders.onerror = event => {
-          dispatch(wsConnectionError(event));
-        };
-
-        socketAllOrders.onmessage = event => {
-          const { data } = event;
-          const parsedData = JSON.parse(data);
-          dispatch(wsGetData(parsedData));  // отправляем все данные, а не только заказы
-        };
-
-        socketAllOrders.onclose = event => {
-          dispatch(wsConnectionClosed(event));
-        };
       }
 
       // обработка событий для user orders socket
@@ -70,7 +65,8 @@ export const socketMiddleware = (wsUrl, wsUserUrl) => {
         socketUserOrders.onmessage = event => {
           const { data } = event;
           const parsedData = JSON.parse(data);
-          dispatch(wsGetData(parsedData.data));
+          console.log(parsedData);  // добавьте эту строку
+          dispatch(wsGetData(parsedData));
         };
 
         socketUserOrders.onclose = event => {
