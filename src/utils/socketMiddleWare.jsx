@@ -4,12 +4,14 @@ import {
   wsConnectionSuccess,
   wsConnectionError,
   wsGetData,
-  wsConnectionClosed
+  wsConnectionClosed,
+  clearWsData
 } from '../services/actions/webSocket-actions';
+
+let socketUserOrders = null; // Вынесен за пределы функции middleware
 
 export const socketMiddleware = (wsUrl, wsUserUrl) => {
   let socketAllOrders = null;
-  let socketUserOrders = null;
 
   return store => {
     return next => action => {
@@ -25,36 +27,34 @@ export const socketMiddleware = (wsUrl, wsUserUrl) => {
         const url = serverType === 'user' ? `${wsUserUrl}?token=${cleanAccessToken}` : wsUrl;
 
         if (serverType === 'user') {
-          socketUserOrders = new WebSocket(url);
-          socketUserOrders.onopen = event => {
-            dispatch(wsConnectionSuccess(event));
-            if (typeof callback === 'function') callback(); // выполнение callback-функции при установке соединения
-          };
+          if (!socketUserOrders) {
+            socketUserOrders = new WebSocket(url); // Создается только один экземпляр
+            socketUserOrders.onopen = event => {
+              dispatch(wsConnectionSuccess(event));
+              if (typeof callback === 'function') callback(); // выполнение callback-функции при установке соединения
+            };
+          }
         } else {
           socketAllOrders = new WebSocket(url);
-          // инициализация и обработка событий для socketAllOrders
+          socketAllOrders.onopen = event => {
+            dispatch(wsConnectionSuccess(event));
+          };
+
+          socketAllOrders.onerror = event => {
+            dispatch(wsConnectionError(event));
+          };
+
+          socketAllOrders.onmessage = event => {
+            const { data } = event;
+            const parsedData = JSON.parse(data);
+            dispatch(wsGetData(parsedData));
+          };
+
+          socketAllOrders.onclose = event => {
+            dispatch(wsConnectionClosed(event));
+            dispatch(clearWsData());
+          };
         }
-      }
-
-      // обработка событий для all orders socket
-      if (socketAllOrders) {
-        socketAllOrders.onopen = event => {
-          dispatch(wsConnectionSuccess(event));
-        };
-
-        socketAllOrders.onerror = event => {
-          dispatch(wsConnectionError(event));
-        };
-
-        socketAllOrders.onmessage = event => {
-          const { data } = event;
-          const parsedData = JSON.parse(data);
-          dispatch(wsGetData(parsedData));  // отправляем все данные, а не только заказы
-        };
-
-        socketAllOrders.onclose = event => {
-          dispatch(wsConnectionClosed(event));
-        };
       }
 
       // обработка событий для user orders socket
@@ -70,7 +70,8 @@ export const socketMiddleware = (wsUrl, wsUserUrl) => {
         socketUserOrders.onmessage = event => {
           const { data } = event;
           const parsedData = JSON.parse(data);
-          dispatch(wsGetData(parsedData.data));
+          console.log(parsedData); // добавьте эту строку
+          dispatch(wsGetData(parsedData));
         };
 
         socketUserOrders.onclose = event => {

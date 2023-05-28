@@ -4,6 +4,7 @@ import {
   WS_CONNECTION_ERROR,
   WS_GET_DATA,
   WS_CONNECTION_CLOSED,
+  CLEAR_WS_DATA
 } from '../actions/webSocket-actions'
 
 const initialState = {
@@ -37,6 +38,11 @@ export function wsReducer(state = initialState, action) {
       return {
         ...state,
         connected: false,
+      };
+    case CLEAR_WS_DATA:
+      return {
+        ...state,
+        data: null,
       };
     default:
       return state;

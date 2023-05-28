@@ -45,12 +45,12 @@ const BurgerIngredients = () => {
   const openModal = useCallback((ingredientId) => {
     dispatch(setIngredientDetails());
     navigate(`/ingredients/${ingredientId}`, { state: { modal: true, background: location } });
-  }, [navigate, location]);
+  }, [navigate, dispatch, location]);
 
   const closeModal = useCallback(() => {
     dispatch(clearIngredientDetails());
     navigate('/', { state: { modal: false } });
-  }, [navigate, background]);
+  }, [navigate, dispatch]);
   return (
     <section className={styles.section}>
       <h2 className={`text text_type_main-large ${styles.title}`}>Собери бургер</h2>
