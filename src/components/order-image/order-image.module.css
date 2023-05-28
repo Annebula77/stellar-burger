@@ -16,9 +16,6 @@
   z-index: 2;
 }
 
-.box:first-child {
-  margin-left: 0;
-}
 
 .image {
   position: absolute;

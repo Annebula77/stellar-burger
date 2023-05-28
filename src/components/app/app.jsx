@@ -18,6 +18,7 @@ import PublicRouteElement from '../PublicRouteElement/public-route-element';
 import { IngredientPage } from '../../pages/ingredientPage/ingredient-page';
 import { getUserDetails } from '../../services/actions/user-actions';
 import { FeedPage } from '../../pages/feedPage/feed-page';
+import { UserOrdersPage } from '../../pages/userOrdersPage/user-orders-page';
 
 
 function App() {
@@ -60,8 +61,10 @@ function App() {
           <Route path="/register" element={<PublicRouteElement element={<RegisterPage />} />} />
           <Route path="/forgot-password" element={<PublicRouteElement element={<ForgotPasswordPage />} />} />
           <Route path="/reset-password" element={<PublicRouteElement element={<ResetPasswordPage />} />} />
-          <Route path="/profile/*" element={<ProtectedRouteElement element={<ProfilePage />} />} />
-          <Route path="/*" element={<NotFoundPage />} />
+          <Route path="/profile/*" element={<ProtectedRouteElement element={<ProfilePage />} />} >
+            <Route path="orders" element={<UserOrdersPage />} />
+          </Route>
+          <Route path="*" element={<NotFoundPage />} />
 
         </Routes>
       )}

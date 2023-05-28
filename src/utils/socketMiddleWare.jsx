@@ -4,12 +4,14 @@ import {
   wsConnectionSuccess,
   wsConnectionError,
   wsGetData,
-  wsConnectionClosed
+  wsConnectionClosed,
+  clearWsData
 } from '../services/actions/webSocket-actions';
+
+let socketUserOrders = null; // Вынесен за пределы функции middleware
 
 export const socketMiddleware = (wsUrl, wsUserUrl) => {
   let socketAllOrders = null;
-  let socketUserOrders = null;
 
   return store => {
     return next => action => {
@@ -25,11 +27,13 @@ export const socketMiddleware = (wsUrl, wsUserUrl) => {
         const url = serverType === 'user' ? `${wsUserUrl}?token=${cleanAccessToken}` : wsUrl;
 
         if (serverType === 'user') {
-          socketUserOrders = new WebSocket(url);
-          socketUserOrders.onopen = event => {
-            dispatch(wsConnectionSuccess(event));
-            if (typeof callback === 'function') callback(); // выполнение callback-функции при установке соединения
-          };
+          if (!socketUserOrders) {
+            socketUserOrders = new WebSocket(url); // Создается только один экземпляр
+            socketUserOrders.onopen = event => {
+              dispatch(wsConnectionSuccess(event));
+              if (typeof callback === 'function') callback(); // выполнение callback-функции при установке соединения
+            };
+          }
         } else {
           socketAllOrders = new WebSocket(url);
           socketAllOrders.onopen = event => {
@@ -48,6 +52,7 @@ export const socketMiddleware = (wsUrl, wsUserUrl) => {
 
           socketAllOrders.onclose = event => {
             dispatch(wsConnectionClosed(event));
+            dispatch(clearWsData());
           };
         }
       }
@@ -65,7 +70,7 @@ export const socketMiddleware = (wsUrl, wsUserUrl) => {
         socketUserOrders.onmessage = event => {
           const { data } = event;
           const parsedData = JSON.parse(data);
-          console.log(parsedData);  // добавьте эту строку
+          console.log(parsedData); // добавьте эту строку
           dispatch(wsGetData(parsedData));
         };
 

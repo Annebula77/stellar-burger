@@ -4,6 +4,7 @@ export const WS_CONNECTION_ERROR = 'WS_CONNECTION_ERROR';
 export const WS_GET_DATA = 'WS_GET_DATA';
 export const WS_CONNECTION_CLOSED = 'WS_CONNECTION_CLOSED';
 export const WS_SEND_DATA = 'WS_SEND_DATA';
+export const CLEAR_WS_DATA = 'CLEAR_WS_DATA';
 
 export const startWsConnection = (serverType, accessToken, callback) => ({
   type: WS_CONNECTION_START,
@@ -33,4 +34,8 @@ export const wsConnectionClosed = (event) => ({
 export const wsSendData = (data) => ({
   type: WS_SEND_DATA,
   payload: data,
+});
+
+export const clearWsData = () => ({
+  type: CLEAR_WS_DATA,
 });

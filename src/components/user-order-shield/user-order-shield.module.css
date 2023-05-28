@@ -56,3 +56,16 @@
   padding: 0;
   margin: 0 6px 0;
 }
+
+.done {
+  color: rgba(0, 204, 204, 1);
+
+}
+
+.pending {
+  color: rgb(157, 176, 176);
+}
+
+.created {
+  color: rgb(255, 255, 255);
+}

@@ -31,17 +31,20 @@ export function postOrderClear() {
 export const sendOrder = (data) => async (dispatch) => {
   try {
     dispatch(postOrderRequest());
-    const accessTokenWithBearer = getCookie('accessToken');  // Получаем accessToken из куки
-    const accessToken = accessTokenWithBearer.replace('Bearer ', '');  // Удаляем префикс "Bearer "
-    const response = await fetch(`${BASE_URL}/orders?token=${accessToken}`, {
+    const accessTokenWithBearer = getCookie('accessToken');
+    const accessToken = accessTokenWithBearer.replace('Bearer ', '');
+    const response = await fetch(`${BASE_URL}/orders`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`, // Добавлен заголовок Authorization
+      },
       body: JSON.stringify({
-        ingredients: data
-      })
+        ingredients: data,
+      }),
     });
     const result = await checkResponse(response);
-    console.log("Заказ успешно отправлен. Результат:", result);
+    console.log('Заказ успешно отправлен. Результат:', result);
     dispatch(postOrderSuccess(result));
     return result;
   } catch (error) {

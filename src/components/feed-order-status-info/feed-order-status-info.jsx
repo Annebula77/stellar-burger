@@ -1,9 +1,8 @@
 import styles from './feed-order-status-info.module.css'
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getCookie } from '../../utils/cookies';
-import { startWsConnection } from '../../services/actions/webSocket-actions';
-import uniqid from 'uniqid';
+import { startWsConnection, wsConnectionClosed } from '../../services/actions/webSocket-actions';
 
 const FeedOrderStatusInfo = () => {
   const dispatch = useDispatch();
@@ -11,15 +10,37 @@ const FeedOrderStatusInfo = () => {
   const orders = useSelector((state) => state.ws.data);
   const total = orders ? orders.total : null;
   const totalToday = orders ? orders.totalToday : null;
+
+  const [newOrdersReady, setNewOrdersReady] = useState([]);
+  const [newOrdersInProgress, setNewOrdersInProgress] = useState([]);
+
   useEffect(() => {
     dispatch(startWsConnection('orders', accessToken));
-  }, [dispatch, accessToken]);
+    return () => {
+      dispatch(wsConnectionClosed()); // Закрытие WebSocket соединения
+    };
+  }, []);
 
-  // Обрабатываем данные заказов и классифицируем их для отображения...
-  const ordersReady = [];  // здесь будут готовые заказы
-  const ordersInProgress = [];  // здесь будут заказы в процессе выполнения
-  ordersReady.reverse();
-  ordersInProgress.reverse();
+  useEffect(() => {
+    // Фильтрация и обновление массивов заказов только при изменении orders
+    if (orders && orders.orders) {
+      const updatedOrdersReady = [];
+      const updatedOrdersInProgress = [];
+
+      for (let order of orders.orders) {
+        // Проверяем статус каждого заказа и классифицируем его
+        // Примечание: Замените 'orderStatus' и 'ready' на свои конкретные поля и значения
+        if (order.status === 'done') {
+          updatedOrdersReady.push(order);
+        } else {
+          updatedOrdersInProgress.push(order);
+        }
+      }
+
+      setNewOrdersReady(updatedOrdersReady);
+      setNewOrdersInProgress(updatedOrdersInProgress);
+    }
+  }, [orders]);
 
   function chunkArray(array, size) {
     const result = [];
@@ -29,20 +50,8 @@ const FeedOrderStatusInfo = () => {
     return result;
   }
 
-
-  if (orders && orders.orders) {
-    for (let order of orders.orders) {
-      // Проверяем статус каждого заказа и классифицируем его
-      // Примечание: Замените 'orderStatus' и 'ready' на свои конкретные поля и значения
-      if (order.status === 'done') {
-        ordersReady.push(order);
-      } else {
-        ordersInProgress.push(order);
-      }
-    }
-  }
-  const readyChunks = chunkArray(ordersReady, 10);
-  const inProgressChunks = chunkArray(ordersInProgress, 10);
+  const readyChunks = chunkArray(newOrdersReady, 10);
+  const inProgressChunks = chunkArray(newOrdersInProgress, 10);
 
   return (
     <>
@@ -54,8 +63,7 @@ const FeedOrderStatusInfo = () => {
               {readyChunks.map((chunk, index) => (
                 <ul key={index} className={styles.column}>
                   {chunk.map((order) => {
-                    const key = uniqid();
-                    return <li className={`${styles.status__ready} text text_type_digits-default`} key={key}>{order.number}</li>
+                    return <li className={`${styles.status__ready} text text_type_digits-default`} key={order._id}>{order.number}</li>
                   })}
                 </ul>
               ))}
@@ -67,8 +75,7 @@ const FeedOrderStatusInfo = () => {
               {inProgressChunks.map((chunk, key) => (
                 <ul key={key} className={styles.column}>
                   {chunk.map((order) => {
-                    const key = uniqid();
-                    return <li className="text text_type_digits-default" key={key}>{order.number}</li>
+                    return <li className="text text_type_digits-default" key={order._id}>{order.number}</li>
                   })}
                 </ul>
               ))}
