@@ -1,7 +1,7 @@
 import { BASE_URL } from '../../utils/consts';
 import { setCookie } from '../../utils/cookies';
 export const REGISTER_USER_REQUEST = 'REGISTER_USER_REQUEST';
-export const REGISTER_USER_SUCCESS = 'REGISTER_USER_SUCCESS'; // Исправлено
+export const REGISTER_USER_SUCCESS = 'REGISTER_USER_SUCCESS';
 export const REGISTER_USER_FAILED = 'REGISTER_USER_FAILED';
 
 export const registerUserRequest = () => ({

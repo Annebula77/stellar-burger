@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchIngredients } from '../../services/actions/ingredients-actions';
 import AppHeader from '../app-header/app-header';
@@ -16,15 +16,14 @@ import ProfilePage from '../../pages/profilePage/profile-page';
 import ProtectedRouteElement from '../ProtectedRouteElement/protectedRouteElement';
 import PublicRouteElement from '../PublicRouteElement/public-route-element';
 import { IngredientPage } from '../../pages/ingredientPage/ingredient-page';
-import { getUserDetails, fetchWithRefresh } from '../../services/actions/user-actions';
+import { getUserDetails, } from '../../services/actions/user-actions';
 import { FeedPage } from '../../pages/feedPage/feed-page';
 import { UserOrdersPage } from '../../pages/userOrdersPage/user-orders-page';
+import { ExplicitOrderPage } from '../../pages/explicitOrderPage/explicit-order-page';
 
 
 function App() {
   const dispatch = useDispatch();
-  const location = useLocation();
-  const background = location.state?.background;
   const { loadingIngredients, errorIngredients, dataRequest } = useSelector(
     (state) => state.ingredients
   );
@@ -37,8 +36,6 @@ function App() {
     if (accessToken && refreshToken) {
       dispatch(loginSuccess(accessToken, refreshToken));
       dispatch({ type: 'ISAUTH_CHECKED', payload: true });
-    } else {
-      dispatch(fetchWithRefresh());
     }
   }, [dispatch]);
 
@@ -47,7 +44,7 @@ function App() {
     if (accessToken) {
       dispatch(getUserDetails());
     }
-  }, [location, dispatch]);
+  }, [dispatch]);
 
   return (
     <section className={styles.app}>
@@ -58,6 +55,8 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/ingredients/:id" element={<IngredientPage />} />
+          <Route path="/feed/:id" element={<ExplicitOrderPage />} />
+          <Route path="/orders/:id" element={<ExplicitOrderPage />} />
           <Route path="/feed" element={<FeedPage />} />
           <Route path="/login" element={<PublicRouteElement element={<LoginPage />} />} />
           <Route path="/register" element={<PublicRouteElement element={<RegisterPage />} />} />

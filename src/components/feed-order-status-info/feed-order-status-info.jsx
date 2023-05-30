@@ -17,7 +17,7 @@ const FeedOrderStatusInfo = () => {
   useEffect(() => {
     dispatch(startWsConnection('orders', accessToken));
     return () => {
-      dispatch(wsConnectionClosed()); // Закрытие WebSocket соединения
+      dispatch(wsConnectionClosed());
     };
   }, []);
 
