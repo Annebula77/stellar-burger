@@ -1,5 +1,5 @@
 import styles from './order-image.module.css';
-
+import PropTypes from 'prop-types';
 
 const OrderImage = ({ name, image, count, extraCountClass }) => {
   return (
@@ -15,6 +15,11 @@ const OrderImage = ({ name, image, count, extraCountClass }) => {
     </div>
   )
 }
-
+OrderImage.propTypes = {
+  name: PropTypes.string.isRequired,
+  image: PropTypes.string.isRequired,
+  count: PropTypes.number.isRequired,
+  extraCountClass: PropTypes.string,
+};
 
 export default OrderImage;

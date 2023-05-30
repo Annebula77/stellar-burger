@@ -12,6 +12,11 @@
   z-index: 100;
 }
 
+.page {
+  background-color: transparent;
+  border-radius: 0;
+}
+
 .upper__box {
   box-sizing: border-box;
   width: 100%;

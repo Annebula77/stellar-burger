@@ -4,9 +4,15 @@ import { formatDate } from '../../utils/consts';
 import OrderImage from '../order-image/order-image';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './order-overview-shield.module.css';
+import { useNavigate, useMatch, useLocation } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-const OrderOverviewShield = ({ order, onClick }) => {
+const OrderOverviewShield = ({ order }) => {
   const ingredientList = useSelector((state) => state.ingredients.ingredients);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const match = useMatch('/feed/:id');
+  const { id } = match?.params || {};
 
   let totalPrice = 0;
 
@@ -39,8 +45,14 @@ const OrderOverviewShield = ({ order, onClick }) => {
     })
   })
 
+  const handleClick = () => {
+    if (id !== order._id) {
+      navigate(`/feed/${order._id}`, { state: { modal: true, background: location } });
+    }
+  };
+
   return (
-    <div className={styles.container} onClick={onClick}>
+    <div className={styles.container} onClick={handleClick}>
       <div className={styles.upper__box}>
         <p className="text text_type_digits-default">{`#${order.number}`}</p>
         <p className="text text_type_main-small text_color_inactive">{formatDate(order.updatedAt)}</p>
@@ -57,6 +69,10 @@ const OrderOverviewShield = ({ order, onClick }) => {
       </div>
     </div>
   );
+};
+
+OrderOverviewShield.propTypes = {
+  order: PropTypes.object.isRequired,
 };
 
 export default OrderOverviewShield;
