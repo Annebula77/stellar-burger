@@ -1,12 +1,10 @@
 import styles from './feed-order-status-info.module.css'
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { getCookie } from '../../utils/cookies';
 import { startWsConnection, wsConnectionClosed } from '../../services/actions/webSocket-actions';
 
 const FeedOrderStatusInfo = () => {
   const dispatch = useDispatch();
-  const accessToken = getCookie('accessToken');
   const orders = useSelector((state) => state.ws.data);
   const total = orders ? orders.total : null;
   const totalToday = orders ? orders.totalToday : null;
@@ -15,21 +13,19 @@ const FeedOrderStatusInfo = () => {
   const [newOrdersInProgress, setNewOrdersInProgress] = useState([]);
 
   useEffect(() => {
-    dispatch(startWsConnection('orders', accessToken));
+    dispatch(startWsConnection('orders'));
     return () => {
       dispatch(wsConnectionClosed());
     };
   }, []);
 
   useEffect(() => {
-    // Фильтрация и обновление массивов заказов только при изменении orders
+
     if (orders && orders.orders) {
       const updatedOrdersReady = [];
       const updatedOrdersInProgress = [];
 
       for (let order of orders.orders) {
-        // Проверяем статус каждого заказа и классифицируем его
-        // Примечание: Замените 'orderStatus' и 'ready' на свои конкретные поля и значения
         if (order.status === 'done') {
           updatedOrdersReady.push(order);
         } else {

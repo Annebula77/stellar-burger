@@ -8,7 +8,7 @@ import { resetPasswordReducer } from './reset-password-reducer';
 import { userReducer } from './user-reducer';
 import { loginReducer } from './login-reducer';
 import { registerUserReducer } from './register-reducer';
-import { wsReducer } from './webSocket-reducer';
+import { wsReducer, wsUserReducer } from './webSocket-reducer';
 
 
 export const rootReducer = combineReducers({
@@ -22,4 +22,5 @@ export const rootReducer = combineReducers({
   order: orderReducer,
   burgerOrderList: burgerConstructorReducer,
   ws: wsReducer,
+  wsUser: wsUserReducer,
 })
