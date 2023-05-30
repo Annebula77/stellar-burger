@@ -4,12 +4,13 @@ import styles from './ingredient.module.css';
 import { useDrag } from 'react-dnd';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate, useMatch } from 'react-router-dom';
+import { useNavigate, useMatch, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 
 function Ingredient({ ingredient, onClick }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const match = useMatch('/ingredients/:id');
   const { id } = match?.params || {};
   const { _id, image, price, name } = ingredient;
@@ -32,7 +33,7 @@ function Ingredient({ ingredient, onClick }) {
 
   const handleClick = () => {
     if (id !== _id) {
-      navigate(`/ingredients/${_id}`, { state: { modal: true } });
+      navigate(`/ingredients/${_id}`, { state: { modal: true, background: location } });
       onClick(_id);
     }
   };
@@ -49,7 +50,6 @@ function Ingredient({ ingredient, onClick }) {
     </li>
   )
 }
-
 Ingredient.propTypes = {
   ingredient: ingredientType,
   onClick: PropTypes.func,

@@ -8,7 +8,7 @@ import {
   clearWsData
 } from '../services/actions/webSocket-actions';
 
-let socketUserOrders = null; // Вынесен за пределы функции middleware
+let socketUserOrders = null;
 
 export const socketMiddleware = (wsUrl, wsUserUrl) => {
   let socketAllOrders = null;
@@ -21,17 +21,19 @@ export const socketMiddleware = (wsUrl, wsUserUrl) => {
       if (type === WS_CONNECTION_START) {
         const { serverType, accessToken, callback } = payload;
 
-        // Удаление "Bearer " из токена
-        const cleanAccessToken = accessToken.replace('Bearer ', '');
+        const cleanAccessToken = accessToken ? accessToken.replace('Bearer ', '') : '';
+        let url = wsUrl;
 
-        const url = serverType === 'user' ? `${wsUserUrl}?token=${cleanAccessToken}` : wsUrl;
+        if (serverType === 'user' && cleanAccessToken) {
+          url = `${wsUserUrl}?token=${cleanAccessToken}`;
+        }
 
         if (serverType === 'user') {
           if (!socketUserOrders) {
-            socketUserOrders = new WebSocket(url); // Создается только один экземпляр
+            socketUserOrders = new WebSocket(url);
             socketUserOrders.onopen = event => {
               dispatch(wsConnectionSuccess(event));
-              if (typeof callback === 'function') callback(); // выполнение callback-функции при установке соединения
+              if (typeof callback === 'function') callback();
             };
           }
         } else {
@@ -57,7 +59,6 @@ export const socketMiddleware = (wsUrl, wsUserUrl) => {
         }
       }
 
-      // обработка событий для user orders socket
       if (socketUserOrders) {
         socketUserOrders.onopen = event => {
           dispatch(wsConnectionSuccess(event));
@@ -70,7 +71,7 @@ export const socketMiddleware = (wsUrl, wsUserUrl) => {
         socketUserOrders.onmessage = event => {
           const { data } = event;
           const parsedData = JSON.parse(data);
-          console.log(parsedData); // добавьте эту строку
+          console.log(parsedData);
           dispatch(wsGetData(parsedData));
         };
 
@@ -81,7 +82,6 @@ export const socketMiddleware = (wsUrl, wsUserUrl) => {
 
       if (type === WS_SEND_DATA) {
         const data = JSON.stringify(payload);
-        // отправляем данные только через сокет socketUserOrders
         if (socketUserOrders) {
           socketUserOrders.send(data);
         } else {

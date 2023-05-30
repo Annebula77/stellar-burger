@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { ingredientsReducer } from './ingredients-reducer';
-import { ingredientReducer } from './ingredient-reducer';
+import { modalReducer } from './modal-reducer';
 import { orderReducer } from './order-reducer';
 import { burgerConstructorReducer } from './burger-constructor-reducer';
 import { forgotPasswordReducer } from './forgot-password-reducer';
@@ -18,7 +18,7 @@ export const rootReducer = combineReducers({
   user: userReducer,
   login: loginReducer,
   ingredients: ingredientsReducer,
-  ingredientDetails: ingredientReducer,
+  modal: modalReducer,
   order: orderReducer,
   burgerOrderList: burgerConstructorReducer,
   ws: wsReducer,

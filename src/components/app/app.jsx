@@ -16,7 +16,7 @@ import ProfilePage from '../../pages/profilePage/profile-page';
 import ProtectedRouteElement from '../ProtectedRouteElement/protectedRouteElement';
 import PublicRouteElement from '../PublicRouteElement/public-route-element';
 import { IngredientPage } from '../../pages/ingredientPage/ingredient-page';
-import { getUserDetails } from '../../services/actions/user-actions';
+import { getUserDetails, fetchWithRefresh } from '../../services/actions/user-actions';
 import { FeedPage } from '../../pages/feedPage/feed-page';
 import { UserOrdersPage } from '../../pages/userOrdersPage/user-orders-page';
 
@@ -37,6 +37,8 @@ function App() {
     if (accessToken && refreshToken) {
       dispatch(loginSuccess(accessToken, refreshToken));
       dispatch({ type: 'ISAUTH_CHECKED', payload: true });
+    } else {
+      dispatch(fetchWithRefresh());
     }
   }, [dispatch]);
 
@@ -55,7 +57,7 @@ function App() {
       {dataRequest && (
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/ingredients/:id" element={!background ? <IngredientPage /> : <HomePage />} />
+          <Route path="/ingredients/:id" element={<IngredientPage />} />
           <Route path="/feed" element={<FeedPage />} />
           <Route path="/login" element={<PublicRouteElement element={<LoginPage />} />} />
           <Route path="/register" element={<PublicRouteElement element={<RegisterPage />} />} />

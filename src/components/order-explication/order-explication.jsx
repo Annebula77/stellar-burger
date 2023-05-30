@@ -3,9 +3,9 @@ import { useMemo } from 'react';
 import { formatDate } from '../../utils/consts';
 import OrderImage from '../order-image/order-image';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import styles from './user-order-shield.module.css';
+import styles from './order-explication.module.css';
 
-const UserOrderShield = ({ order }) => {
+const OrderExplication = ({ order }) => {
   const ingredientList = useSelector((state) => state.ingredients.ingredients);
 
   let totalPrice = 0;
@@ -29,12 +29,16 @@ const UserOrderShield = ({ order }) => {
       totalPrice += ingredient.price * count;
 
       return (
-        <OrderImage
-          key={ingredientId}
-          alt={ingredient.name}
-          image={ingredient.image}
-          count={count > 1 ? `+${count}` : ''}
-        />
+        <li key={ingredientId} className={styles.ingredient__container}>
+          <OrderImage
+            alt={ingredient.name}
+            image={ingredient.image}
+            count={count > 1 ? `+${count}` : ''}
+            extraCountClass={styles.explicit}
+          />
+          <span className={`${styles.name} text text_type_main-small`}>{ingredient.name}</span>
+          <span className={`${styles.price} text text_type_digits-default`}>{`${count} x ${ingredient.price}`} <CurrencyIcon type="primary" /> </span>
+        </li>
       );
     })
   })
@@ -55,22 +59,24 @@ const UserOrderShield = ({ order }) => {
   return (
     <div className={styles.container}>
       <div className={styles.upper__box}>
-        <p className="text text_type_digits-default">{`#${order.number}`}</p>
-        <p className="text text_type_main-small text_color_inactive">{formatDate(order.updatedAt)}</p>
+        <p className="text text_type_digits-default mb-15">{`#${order.number}`}</p>
       </div>
-      <p className={`text text_type_main-small mb-2 mt-2 ${statusStyle}`}>{statusText}</p>
       <h2 className="text text_type_main-medium mb-6 mt-2">{order.name}</h2>
+      <p className={`text text_type_main-small mb-15 ${statusStyle}`}>{statusText}</p>
+      <h3 className="text text_type_main-medium mb-6">Состав: </h3>
       <div className={styles.ingredients__container}>
         <div className={styles.image__container}>
           {ingredientsMarkup}
         </div>
-        <div className={styles.price__container}>
-          <p className={`${styles.price} text text_type_digits-default`}>{totalPrice}</p>
+      </div>
+      <div className={styles.price__container}>
+        <p className="text text_type_main-small text_color_inactive">{formatDate(order.updatedAt)}</p>
+        <p className={`${styles.price} text text_type_digits-default`}>{totalPrice}
           <CurrencyIcon type="primary" />
-        </div>
+        </p>
       </div>
     </div>
   );
 };
 
-export default UserOrderShield;
+export default OrderExplication;

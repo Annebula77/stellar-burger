@@ -1,13 +1,13 @@
 import styles from './ingredient-details.module.css'
 import { useSelector } from 'react-redux';
 
-function IngredientDetails({ ingredientId }) {
+function IngredientDetails({ ingredientId, extraClass }) {
   const ingredient = useSelector((state) => state.ingredients.ingredients.find(item => item._id === ingredientId));
 
 
   return (
     <div className={styles.container}>
-      <h2 className='text text_type_main-large ml-10 mr-25'>Детали ингредиента</h2>
+      <h2 className={`'text text_type_main-large ml-10 mr-25' ${extraClass}`}>Детали ингредиента</h2>
       <img src={ingredient.image_large} alt={ingredient.name} />
       <div className={styles.details__box}>
         <p className='text text_type_main-medium mt-4 mb-8'>{ingredient.name}</p>
