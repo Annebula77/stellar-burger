@@ -15,14 +15,17 @@ export const ExplicitOrderPage = () => {
   const background = location.state?.background;
   const { id } = useParams();
   const accessToken = getCookie('accessToken');
+  const userOrders = useSelector(state => state.wsUser.data?.orders);
   const orders = useSelector(state => state.ws.data?.orders);
-  const order = orders?.find(order => order._id === id);
+
+  const ordersList = location.pathname.includes('feed') ? orders : userOrders;
+  const order = ordersList?.find(order => order._id === id);
 
   useEffect(() => {
     if (location.pathname.includes('/orders')) {
       dispatch(startWsConnection('user', accessToken));
     } else {
-      dispatch(startWsConnection());
+      dispatch(startWsConnection('orders'));
     }
     return () => {
       dispatch(wsConnectionClosed());

@@ -8,4 +8,5 @@ const wsUrl = 'wss://norma.nomoreparties.space/orders/all';
 const wsUserUrl = 'wss://norma.nomoreparties.space/orders';
 
 
+
 export const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk, socketMiddleware(wsUrl, wsUserUrl))));

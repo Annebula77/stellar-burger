@@ -195,7 +195,7 @@ export const logoutApi = () => {
   };
 };
 
-async function refreshTokenApi() {
+export async function refreshTokenApi() {
   const refreshToken = getCookie('refreshToken');
   if (!refreshToken) {
     throw new Error('Refresh token is invalid');

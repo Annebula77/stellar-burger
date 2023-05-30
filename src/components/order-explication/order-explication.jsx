@@ -1,19 +1,23 @@
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { useMemo } from 'react';
 import { formatDate } from '../../utils/consts';
 import OrderImage from '../order-image/order-image';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './order-explication.module.css';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 
-
-const OrderExplication = ({ inModal }) => {
+const OrderExplication = React.memo(({ inModal }) => {
   const ingredientList = useSelector((state) => state.ingredients.ingredients);
   const { id } = useParams();
+  const location = useLocation();
+  const userOrders = useSelector(state => state.wsUser.data?.orders);
   const orders = useSelector(state => state.ws.data?.orders);
-  const order = orders?.find(order => order._id === id);
+
+  const ordersList = location.pathname.includes('feed') ? orders : userOrders;
+  const order = ordersList?.find(order => order._id === id);
 
   let containerStyles = inModal ? styles.container : `${styles.container} ${styles.page}`
 
@@ -92,7 +96,7 @@ const OrderExplication = ({ inModal }) => {
       </div>
     </div>
   );
-};
+});
 
 OrderExplication.propTypes = {
   inModal: PropTypes.bool.isRequired,

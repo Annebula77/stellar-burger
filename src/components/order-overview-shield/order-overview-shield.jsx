@@ -1,3 +1,4 @@
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { useMemo } from 'react';
 import { formatDate } from '../../utils/consts';
@@ -7,7 +8,7 @@ import styles from './order-overview-shield.module.css';
 import { useNavigate, useMatch, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-const OrderOverviewShield = ({ order }) => {
+const OrderOverviewShield = React.memo(({ order }) => {
   const ingredientList = useSelector((state) => state.ingredients.ingredients);
   const navigate = useNavigate();
   const location = useLocation();
@@ -69,7 +70,7 @@ const OrderOverviewShield = ({ order }) => {
       </div>
     </div>
   );
-};
+});
 
 OrderOverviewShield.propTypes = {
   order: PropTypes.object.isRequired,

@@ -9,7 +9,7 @@ import { startWsConnection, wsConnectionClosed } from '../../services/actions/we
 const UserOrderFeed = () => {
   const dispatch = useDispatch();
   const accessToken = getCookie('accessToken');
-  const orders = useSelector((state) => state.ws.data?.orders);
+  const orders = useSelector((state) => state.wsUser.data?.orders);
 
   useEffect(() => {
     dispatch(startWsConnection('user', accessToken));

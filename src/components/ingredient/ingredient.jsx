@@ -5,10 +5,10 @@ import { useDrag } from 'react-dnd';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useMatch, useLocation } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import React from 'react';
 
 
-function Ingredient({ ingredient, onClick }) {
+const Ingredient = React.memo(({ ingredient }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const match = useMatch('/ingredients/:id');
@@ -48,7 +48,8 @@ function Ingredient({ ingredient, onClick }) {
       <p className={`text text_type_main-default pb-8 ${styles.title}`}>{name}</p>
     </li>
   )
-}
+})
+
 Ingredient.propTypes = {
   ingredient: ingredientType,
 
