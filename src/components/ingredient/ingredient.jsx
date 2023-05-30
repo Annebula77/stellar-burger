@@ -34,7 +34,6 @@ function Ingredient({ ingredient, onClick }) {
   const handleClick = () => {
     if (id !== _id) {
       navigate(`/ingredients/${_id}`, { state: { modal: true, background: location } });
-      onClick(_id);
     }
   };
 
@@ -52,7 +51,7 @@ function Ingredient({ ingredient, onClick }) {
 }
 Ingredient.propTypes = {
   ingredient: ingredientType,
-  onClick: PropTypes.func,
+
 };
 
 export default Ingredient;

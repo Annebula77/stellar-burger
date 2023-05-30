@@ -1,5 +1,5 @@
 import styles from './order-details.module.css';
-import PropTypes from 'prop-types';
+
 
 
 function OrderDetails({ orderNumber }) {
@@ -15,7 +15,5 @@ function OrderDetails({ orderNumber }) {
   )
 }
 
-OrderDetails.propTypes = {
-  orderNumber: PropTypes.string.isRequired,
-};
+
 export default OrderDetails;

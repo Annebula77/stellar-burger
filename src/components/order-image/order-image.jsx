@@ -16,9 +16,7 @@ const OrderImage = ({ name, image, count, extraCountClass }) => {
   )
 }
 OrderImage.propTypes = {
-  name: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
-  count: PropTypes.number.isRequired,
   extraCountClass: PropTypes.string,
 };
 
