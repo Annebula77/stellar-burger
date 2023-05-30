@@ -22,7 +22,7 @@ const initialState = {
   accessToken: '',
   refreshToken: '',
   isLoading: false,
-  authError: null, // New field for authentication error
+  authError: null,
 };
 
 export const userReducer = (state = initialState, action) => {
@@ -39,7 +39,7 @@ export const userReducer = (state = initialState, action) => {
         ...state,
         success: true,
         user: action.payload,
-        authError: null, // Reset authError on success
+        authError: null,
       };
     case GET_USER_FAILED:
     case UPDATE_USER_FAILED:
@@ -47,12 +47,12 @@ export const userReducer = (state = initialState, action) => {
         ...state,
         success: false,
         user: null,
-        authError: action.payload, // Update authError on failure
+        authError: action.payload,
       };
     case REFRESH_TOKEN_SUCCESS:
       return {
         ...state,
-        authError: null, // Reset authError on success
+        authError: null,
       };
     case REFRESH_TOKEN_FAILED:
       return {
@@ -61,13 +61,13 @@ export const userReducer = (state = initialState, action) => {
         accessToken: '',
         refreshToken: '',
         isAuthChecked: false,
-        authError: action.payload, // Update authError on failure
+        authError: action.payload,
       };
     case ISAUTH_CHECKED:
       return {
         ...state,
         isAuthChecked: action.payload,
-        authError: null, // Reset authError when auth is checked
+        authError: null,
       };
     case ISAUTH_CHECKED_FAILD:
       return {

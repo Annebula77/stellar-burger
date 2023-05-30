@@ -4,22 +4,36 @@ import { formatDate } from '../../utils/consts';
 import OrderImage from '../order-image/order-image';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './order-explication.module.css';
+import { useParams } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-const OrderExplication = ({ order }) => {
+
+
+const OrderExplication = ({ inModal }) => {
   const ingredientList = useSelector((state) => state.ingredients.ingredients);
+  const { id } = useParams();
+  const orders = useSelector(state => state.ws.data?.orders);
+  const order = orders?.find(order => order._id === id);
+
+  let containerStyles = inModal ? styles.container : `${styles.container} ${styles.page}`
+
 
   let totalPrice = 0;
 
-  const ingredients = order.ingredients;
+  const ingredients = order?.ingredients;
   const ingredientCounts = {};
 
-  ingredients.forEach((ingredientId) => {
-    if (ingredientCounts[ingredientId]) {
-      ingredientCounts[ingredientId]++;
-    } else {
-      ingredientCounts[ingredientId] = 1;
-    }
-  });
+  if (ingredients) {
+    ingredients.forEach((ingredientId) => {
+      if (ingredientCounts[ingredientId]) {
+        ingredientCounts[ingredientId]++;
+      } else {
+        ingredientCounts[ingredientId] = 1;
+      }
+    });
+  } else {
+    console.warn("Order ingredients are undefined");
+  }
 
   const ingredientsMarkup = useMemo(() => {
     return Object.entries(ingredientCounts).map(([ingredientId, count]) => {
@@ -56,8 +70,9 @@ const OrderExplication = ({ order }) => {
     statusStyle = styles.created;
   }
 
+
   return (
-    <div className={styles.container}>
+    <div className={containerStyles}>
       <div className={styles.upper__box}>
         <p className="text text_type_digits-default mb-15">{`#${order.number}`}</p>
       </div>
@@ -79,4 +94,7 @@ const OrderExplication = ({ order }) => {
   );
 };
 
+OrderExplication.propTypes = {
+  inModal: PropTypes.bool.isRequired,
+};
 export default OrderExplication;

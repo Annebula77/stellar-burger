@@ -1,5 +1,6 @@
 import styles from './ingredient-details.module.css'
 import { useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 
 function IngredientDetails({ ingredientId, extraClass }) {
   const ingredient = useSelector((state) => state.ingredients.ingredients.find(item => item._id === ingredientId));
@@ -33,5 +34,14 @@ function IngredientDetails({ ingredientId, extraClass }) {
     </div>
   )
 }
+
+IngredientDetails.propTypes = {
+  ingredientId: PropTypes.string.isRequired,
+  extraClass: PropTypes.string
+};
+
+IngredientDetails.defaultProps = {
+  extraClass: ''
+};
 
 export default IngredientDetails;

@@ -37,7 +37,7 @@ export const sendOrder = (data) => async (dispatch) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`, // Добавлен заголовок Authorization
+        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify({
         ingredients: data,

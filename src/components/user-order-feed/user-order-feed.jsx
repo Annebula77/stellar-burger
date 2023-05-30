@@ -14,9 +14,9 @@ const UserOrderFeed = () => {
   useEffect(() => {
     dispatch(startWsConnection('user', accessToken));
     return () => {
-      dispatch(wsConnectionClosed()); // Закрытие WebSocket соединения
+      dispatch(wsConnectionClosed());
     };
-  }, []); // Добавлен accessToken в зависимости
+  }, []);
 
   const reversedOrders = orders ? [...orders].reverse() : [];
 

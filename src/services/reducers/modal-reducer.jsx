@@ -21,7 +21,7 @@ export const modalReducer = (state = initialState, action) => {
     case CLEAR_MODAL_CONTENT: {
       return {
         ...state,
-        modalType: null,  // очищаем тип модального окна
+        modalType: null,
         modalContent: null,
       };
     }

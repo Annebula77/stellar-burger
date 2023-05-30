@@ -4,9 +4,15 @@ import { formatDate } from '../../utils/consts';
 import OrderImage from '../order-image/order-image';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './user-order-shield.module.css';
+import { useNavigate, useMatch, useLocation } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 const UserOrderShield = ({ order }) => {
   const ingredientList = useSelector((state) => state.ingredients.ingredients);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const match = useMatch('/feed/:id');
+  const { id } = match?.params || {};
 
   let totalPrice = 0;
 
@@ -51,9 +57,14 @@ const UserOrderShield = ({ order }) => {
     statusText = 'Создан';
     statusStyle = styles.created;
   }
+  const handleClick = () => {
+    if (id !== order._id) {
+      navigate(`/orders/${order._id}`, { state: { modal: true, background: location } });
+    }
+  };
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} onClick={handleClick}>
       <div className={styles.upper__box}>
         <p className="text text_type_digits-default">{`#${order.number}`}</p>
         <p className="text text_type_main-small text_color_inactive">{formatDate(order.updatedAt)}</p>
@@ -71,6 +82,10 @@ const UserOrderShield = ({ order }) => {
       </div>
     </div>
   );
+};
+
+UserOrderShield.propTypes = {
+  order: PropTypes.object.isRequired,
 };
 
 export default UserOrderShield;
