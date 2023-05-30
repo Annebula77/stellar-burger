@@ -7,7 +7,7 @@ import { useState, useRef, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { TabItems } from '../../utils/consts';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { setIngredientDetails, clearIngredientDetails } from '../../services/actions/ingredient-action';
+import { setModalContent, clearModalContent } from '../../services/actions/modal-action';
 
 
 
@@ -43,12 +43,12 @@ const BurgerIngredients = () => {
   };
 
   const openModal = useCallback((ingredientId) => {
-    dispatch(setIngredientDetails());
+    dispatch(setModalContent('ingredientDetails', ingredientId))
     navigate(`/ingredients/${ingredientId}`, { state: { modal: true, background: location } });
   }, [navigate, dispatch, location]);
 
   const closeModal = useCallback(() => {
-    dispatch(clearIngredientDetails());
+    dispatch(clearModalContent());
     navigate('/', { state: { modal: false } });
   }, [navigate, dispatch]);
   return (
