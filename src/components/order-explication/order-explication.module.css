@@ -1,0 +1,119 @@
+.container {
+  box-sizing: border-box;
+  width: 584px;
+  max-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(28, 28, 33, 1);
+  border-radius: 40px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.04), 0px 0px 2px rgba(0, 0, 0, 0.06), 0px 0px 1px rgba(0, 0, 0, 0.04);
+  margin: 0;
+  padding: 24px 24px 24px;
+  z-index: 100;
+}
+
+.upper__box {
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+
+.ingredients__container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100px;
+  max-height: 336px;
+  box-sizing: border-box;
+  gap: 52px;
+  overflow-y: scroll;
+  margin: 0;
+  padding: 0;
+}
+
+.ingredients__container::-webkit-scrollbar {
+  width: 8px;
+  box-sizing: border-box;
+}
+
+.ingredients__container::-webkit-scrollbar-track {
+  background: #2F2F37;
+}
+
+.ingredients__container::-webkit-scrollbar-thumb {
+  background-color: #8585AD;
+}
+
+.ingredient__container {
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  list-style: none;
+  margin: 5px 0 0;
+  padding: 0;
+}
+
+.image__container {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+  margin: 0;
+  padding: 0 0 0 15px;
+  gap: 20px
+}
+
+
+
+.price__container {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+  margin: 40px 0 0;
+}
+
+.price {
+  box-sizing: border-box;
+  display: flex;
+  padding: 0;
+  margin: 0;
+  gap: 8px;
+}
+
+.name {
+  box-sizing: border-box;
+  display: flex;
+  width: 50%;
+  overflow-wrap: break-word;
+  padding-left: 16px;
+  margin-right: auto;
+  gap: 8px;
+}
+
+.done {
+  color: rgba(0, 204, 204, 1);
+
+}
+
+.pending {
+  color: rgb(157, 176, 176);
+}
+
+.created {
+  color: rgb(255, 255, 255);
+}
+
+.explicit {
+  display: none
+}

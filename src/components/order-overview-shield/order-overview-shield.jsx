@@ -1,10 +1,11 @@
 import { useSelector } from 'react-redux';
+import { useMemo } from 'react';
 import { formatDate } from '../../utils/consts';
 import OrderImage from '../order-image/order-image';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './order-overview-shield.module.css';
 
-const OrderOverviewShield = ({ order }) => {
+const OrderOverviewShield = ({ order, onClick }) => {
   const ingredientList = useSelector((state) => state.ingredients.ingredients);
 
   let totalPrice = 0;
@@ -20,24 +21,26 @@ const OrderOverviewShield = ({ order }) => {
     }
   });
 
-  const ingredientsMarkup = Object.entries(ingredientCounts).map(([ingredientId, count]) => {
-    const ingredient = ingredientList.find((item) => item._id === ingredientId);
-    if (!ingredient) return null;
+  const ingredientsMarkup = useMemo(() => {
+    return Object.entries(ingredientCounts).map(([ingredientId, count]) => {
+      const ingredient = ingredientList.find((item) => item._id === ingredientId);
+      if (!ingredient) return null;
 
-    totalPrice += ingredient.price * count;
+      totalPrice += ingredient.price * count;
 
-    return (
-      <OrderImage
-        key={ingredientId}
-        alt={ingredient.name}
-        image={ingredient.image}
-        count={count > 1 ? `+${count}` : ''}
-      />
-    );
-  });
+      return (
+        <OrderImage
+          key={ingredientId}
+          alt={ingredient.name}
+          image={ingredient.image}
+          count={count > 1 ? `+${count}` : ''}
+        />
+      );
+    })
+  })
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} onClick={onClick}>
       <div className={styles.upper__box}>
         <p className="text text_type_digits-default">{`#${order.number}`}</p>
         <p className="text text_type_main-small text_color_inactive">{formatDate(order.updatedAt)}</p>
