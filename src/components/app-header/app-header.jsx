@@ -5,9 +5,6 @@ import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 
 
-
-
-
 function AppHeader() {
   const location = useLocation();
   const isLoggedIn = useSelector((store) => store.user.isAuthChecked);
@@ -16,7 +13,6 @@ function AppHeader() {
   const [userName, setUserName] = useState("");
 
   useEffect(() => {
-    console.log(user); // Логирование состояния user
     if (isLoggedIn && user) {
       setUserName(user.name);
     } else {
