@@ -5,7 +5,7 @@ import { forwardRef } from 'react';
 
 
 const IngredientsCategory = forwardRef((props, ref) => {
-  const { title, openModal, data } = props;
+  const { title, data } = props;
   return (
     <div ref={ref}>
       <h2 className='text_type_main-medium mt-10'>{title}</h2>
@@ -15,7 +15,6 @@ const IngredientsCategory = forwardRef((props, ref) => {
             <Ingredient
               key={ingredient._id}
               ingredient={ingredient}
-              onClick={() => openModal(ingredient)}
             />
           );
         })}

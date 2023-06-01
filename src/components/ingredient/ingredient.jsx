@@ -4,12 +4,13 @@ import styles from './ingredient.module.css';
 import { useDrag } from 'react-dnd';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate, useMatch } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import { useNavigate, useMatch, useLocation } from 'react-router-dom';
+import React from 'react';
 
 
-function Ingredient({ ingredient, onClick }) {
+const Ingredient = React.memo(({ ingredient }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const match = useMatch('/ingredients/:id');
   const { id } = match?.params || {};
   const { _id, image, price, name } = ingredient;
@@ -30,13 +31,14 @@ function Ingredient({ ingredient, onClick }) {
     return count;
   }, [bun, ingredient._id, ingredients]);
 
+  const handleClick = () => {
+    if (id !== _id) {
+      navigate(`/ingredients/${_id}`, { state: { modal: true, background: location } });
+    }
+  };
+
   return (
-    <li className={styles.element} onClick={() => {
-      if (id !== ingredient._id) {
-        navigate(`/ingredients/${ingredient._id}`, { state: { modal: true } });
-        onClick();
-      }
-    }} style={{ opacity }} ref={dragRef}>
+    <li className={styles.element} onClick={handleClick} style={{ opacity }} ref={dragRef}>
       {counter > 0 && <Counter count={counter} size='default' extraClass='m-1' />}
       <img className={styles.image} src={image} alt={name} />
       <div className={styles.price}>
@@ -46,11 +48,11 @@ function Ingredient({ ingredient, onClick }) {
       <p className={`text text_type_main-default pb-8 ${styles.title}`}>{name}</p>
     </li>
   )
-}
+})
 
 Ingredient.propTypes = {
   ingredient: ingredientType,
-  onClick: PropTypes.func,
+
 };
 
 export default Ingredient;

@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { ingredientsReducer } from './ingredients-reducer';
-import { ingredientReducer } from './ingredient-reducer';
+import { modalReducer } from './modal-reducer';
 import { orderReducer } from './order-reducer';
 import { burgerConstructorReducer } from './burger-constructor-reducer';
 import { forgotPasswordReducer } from './forgot-password-reducer';
@@ -8,6 +8,7 @@ import { resetPasswordReducer } from './reset-password-reducer';
 import { userReducer } from './user-reducer';
 import { loginReducer } from './login-reducer';
 import { registerUserReducer } from './register-reducer';
+import { wsReducer, wsUserReducer } from './webSocket-reducer';
 
 
 export const rootReducer = combineReducers({
@@ -17,7 +18,9 @@ export const rootReducer = combineReducers({
   user: userReducer,
   login: loginReducer,
   ingredients: ingredientsReducer,
-  ingredientDetails: ingredientReducer,
+  modal: modalReducer,
   order: orderReducer,
   burgerOrderList: burgerConstructorReducer,
+  ws: wsReducer,
+  wsUser: wsUserReducer,
 })

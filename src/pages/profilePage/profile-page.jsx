@@ -1,9 +1,8 @@
 import { Input, EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './profile-page.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { NotFoundPage } from '../notFoundPage/not-found-page';
+import { UserOrdersPage } from '../userOrdersPage/user-orders-page';
 import { CustomNavLink } from '../../utils/hoc';
 import { logoutStatus } from '../../services/actions/login-actions';
 import { isAuthChecked, logoutApi } from '../../services/actions/user-actions';
@@ -17,7 +16,8 @@ import { useParams } from 'react-router-dom';
 
 
 const ProfilePage = () => {
-  const location = useLocation();
+
+
   const dispatch = useDispatch();
   const { isLoading, user } = useSelector((state) => state.user);
 
@@ -97,7 +97,7 @@ const ProfilePage = () => {
         </p>
       </nav>
       {subpath === 'orders'
-        ? <NotFoundPage />
+        ? <UserOrdersPage />
         : (
           <form className={styles.profile} onSubmit={onSubmit}>
             <div className={styles.input}>

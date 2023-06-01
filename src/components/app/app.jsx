@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchIngredients } from '../../services/actions/ingredients-actions';
 import AppHeader from '../app-header/app-header';
@@ -12,20 +12,19 @@ import { RegisterPage } from '../../pages/registerPage/register-page';
 import { ForgotPasswordPage } from '../../pages/forgotPasswordPage/forgot-password-page';
 import { ResetPasswordPage } from '../../pages/resetPasswordPage/reset-password-page';
 import { NotFoundPage } from '../../pages/notFoundPage/not-found-page';
-import { IngredientPage } from '../../pages/ingredientPage/ingredient-page';
 import ProfilePage from '../../pages/profilePage/profile-page';
-import Modal from '../modal/modal';
-import IngredientDetails from '../ingredient-details/ingredient-details';
-import { clearIngredientDetails } from '../../services/actions/ingredient-action';
 import ProtectedRouteElement from '../ProtectedRouteElement/protectedRouteElement';
 import PublicRouteElement from '../PublicRouteElement/public-route-element';
+import { IngredientPage } from '../../pages/ingredientPage/ingredient-page';
+import { getUserDetails, } from '../../services/actions/user-actions';
+import { FeedPage } from '../../pages/feedPage/feed-page';
+import { UserOrdersPage } from '../../pages/userOrdersPage/user-orders-page';
+import { ExplicitOrderPage } from '../../pages/explicitOrderPage/explicit-order-page';
+
 
 function App() {
   const dispatch = useDispatch();
-  const location = useLocation();
-  const navigate = useNavigate();
-  const background = location.state && location.state.modal;
-  const { ingredients, loadingIngredients, errorIngredients, dataRequest } = useSelector(
+  const { loadingIngredients, errorIngredients, dataRequest } = useSelector(
     (state) => state.ingredients
   );
 
@@ -40,54 +39,37 @@ function App() {
     }
   }, [dispatch]);
 
-
-  const closeModal = () => {
-    dispatch(clearIngredientDetails());
-
-    window.removeEventListener('popstate', closeModal);
-
-    const background = location.state && location.state.background;
-    if (background) {
-      navigate(background, { replace: true });
-    } else {
-      navigate(-1, { state: { modal: false } });
+  useEffect(() => {
+    const accessToken = getCookie('accessToken');
+    if (accessToken) {
+      dispatch(getUserDetails());
     }
-  };
+  }, [dispatch]);
 
   return (
-    <>
-      <section className={styles.app}>
-        <AppHeader />
-        {loadingIngredients && <p>Загрузка...</p>}
-        {errorIngredients && <p>Произошла ошибка</p>}
-        {dataRequest && (
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/ingredients/:id" element={!background ? <IngredientPage /> : null} />
-            <Route
-              path="/login"
-              element={<PublicRouteElement element={<LoginPage />} />}
-            />
-            <Route
-              path="/register"
-              element={<PublicRouteElement element={<RegisterPage />} />}
-            />
-            <Route path="/forgot-password" element={<PublicRouteElement element={<ForgotPasswordPage />} />} />
+    <section className={styles.app}>
+      <AppHeader />
+      {loadingIngredients && <p>Загрузка...</p>}
+      {errorIngredients && <p>Произошла ошибка</p>}
+      {dataRequest && (
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/ingredients/:id" element={<IngredientPage />} />
+          <Route path="/feed/:id" element={<ExplicitOrderPage />} />
+          <Route path="/orders/:id" element={<ExplicitOrderPage />} />
+          <Route path="/feed" element={<FeedPage />} />
+          <Route path="/login" element={<PublicRouteElement element={<LoginPage />} />} />
+          <Route path="/register" element={<PublicRouteElement element={<RegisterPage />} />} />
+          <Route path="/forgot-password" element={<PublicRouteElement element={<ForgotPasswordPage />} />} />
+          <Route path="/reset-password" element={<PublicRouteElement element={<ResetPasswordPage />} />} />
+          <Route path="/profile/*" element={<ProtectedRouteElement element={<ProfilePage />} />} >
+            <Route path="orders" element={<UserOrdersPage />} />
+          </Route>
+          <Route path="*" element={<NotFoundPage />} />
 
-            <Route path="reset-password" element={<PublicRouteElement element={<ResetPasswordPage />} />} />
-            <Route path="/profile/*" element={<ProtectedRouteElement element={<ProfilePage />} />} />
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
-        )}
-        {background && (
-          <Modal onClose={() => closeModal(location)}>
-            <Routes>
-              <Route path="/ingredients/:id" element={<IngredientDetails />} />
-            </Routes>
-          </Modal>
-        )}
-      </section>
-    </>
+        </Routes>
+      )}
+    </section>
   );
 }
 

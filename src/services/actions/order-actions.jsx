@@ -1,5 +1,5 @@
 import { BASE_URL, checkResponse } from '../../utils/consts';
-
+import { getCookie } from '../../utils/cookies';
 
 export const POST_ORDER_REQUEST = 'POST_ORDER_REQUEST';
 export const POST_ORDER_SUCCESS = 'POST_ORDER_SUCCESS';
@@ -31,16 +31,24 @@ export function postOrderClear() {
 export const sendOrder = (data) => async (dispatch) => {
   try {
     dispatch(postOrderRequest());
+    const accessTokenWithBearer = getCookie('accessToken');
+    const accessToken = accessTokenWithBearer.replace('Bearer ', '');
     const response = await fetch(`${BASE_URL}/orders`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
       body: JSON.stringify({
-        ingredients: data
-      })
+        ingredients: data,
+      }),
     });
     const result = await checkResponse(response);
+    console.log('Заказ успешно отправлен. Результат:', result);
     dispatch(postOrderSuccess(result));
+    return result;
   } catch (error) {
     dispatch(postOrderFailed(error));
+    throw error;
   }
 };

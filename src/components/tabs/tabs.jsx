@@ -2,6 +2,7 @@ import styles from './tabs.module.css';
 import { forwardRef } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { TabItems } from '../../utils/consts'
+import PropTypes from 'prop-types';
 
 
 const Tabs = forwardRef((props, ref) => {
@@ -57,5 +58,27 @@ const Tabs = forwardRef((props, ref) => {
     </div>
   );
 });
+
+Tabs.propTypes = {
+  current: PropTypes.string.isRequired,
+  bunRef: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.instanceOf(Element) })
+  ]),
+  sauceRef: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.instanceOf(Element) })
+  ]),
+  mainRef: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.instanceOf(Element) })
+  ]),
+};
+
+Tabs.defaultProps = {
+  bunRef: null,
+  sauceRef: null,
+  mainRef: null,
+};
 
 export default Tabs;
