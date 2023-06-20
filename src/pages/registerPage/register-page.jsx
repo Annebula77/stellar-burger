@@ -3,13 +3,14 @@ import styles from './register-page.module.css';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { registerUser } from '../../services/actions/register-actions';
-import { loginApi } from '../../services/actions/login-actions';
+import { registerUser } from '../../services/thunks/register-thunk';
+import { loginApi } from '../../services/thunks/login-thunk';
 
 const RegisterPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const isAuthenticated = useSelector((store) => store.registerUser.isAuthenticated);
+  const registerUserStatus = useSelector((state) => state.registerUser.status);
+
 
   const [formValues, setFormValues] = useState({
     name: '',
@@ -24,17 +25,17 @@ const RegisterPage = () => {
 
   const onFormSubmit = async (e) => {
     e.preventDefault();
-    const result = await dispatch(registerUser(formValues.name, formValues.email, formValues.password));
-    if (result) {
-      dispatch(loginApi(formValues.email, formValues.password));
+    const result = await dispatch(registerUser(formValues));
+    if (result.meta.requestStatus === 'fulfilled') {
+      await dispatch(loginApi(formValues));
     }
   }
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (registerUserStatus === 'fulfilled') {
       navigate('/');
     }
-  }, [isAuthenticated, navigate]);
+  }, [registerUserStatus, navigate]);
 
   return (
     <form className={styles.container} onSubmit={(e) => onFormSubmit(e)}>

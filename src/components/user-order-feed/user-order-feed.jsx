@@ -3,23 +3,24 @@ import UserOrderShield from '../../components/user-order-shield/user-order-shiel
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { getCookie } from '../../utils/cookies';
-import { startWsConnection, wsConnectionClosed } from '../../services/actions/webSocket-actions';
+import { startUserConnection, wsUserConnectionClosed } from '../../services/slices/webSocket-slice';
 
 
 const UserOrderFeed = () => {
   const dispatch = useDispatch();
   const accessToken = getCookie('accessToken');
-  const orders = useSelector((state) => state.wsUser.data?.orders);
+  const orders = useSelector((state) => state.wsUser.orders);
 
   useEffect(() => {
-    dispatch(startWsConnection('user', accessToken));
+    if (accessToken) {
+      dispatch(startUserConnection(accessToken));
+    }
     return () => {
-      dispatch(wsConnectionClosed());
+      dispatch(wsUserConnectionClosed());
     };
-  }, []);
+  }, [dispatch, accessToken]);
 
   const reversedOrders = orders ? [...orders].reverse() : [];
-
 
   return (
     <div className={styles.container}>

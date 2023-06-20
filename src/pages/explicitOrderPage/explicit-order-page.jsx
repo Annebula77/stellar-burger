@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import OrderExplication from '../../components/order-explication/order-explication';
 import Modal from '../../components/modal/modal';
 import styles from './explicit-order-page.module.css';
-import { startWsConnection, wsConnectionClosed } from '../../services/actions/webSocket-actions';
+import { startConnection, wsConnectionClosed } from '../../services/slices/webSocket-slice';
 import { getCookie } from '../../utils/cookies';
 
 export const ExplicitOrderPage = () => {
@@ -23,9 +23,9 @@ export const ExplicitOrderPage = () => {
 
   useEffect(() => {
     if (location.pathname.includes('/orders')) {
-      dispatch(startWsConnection('user', accessToken));
+      dispatch(startConnection('user', accessToken));
     } else {
-      dispatch(startWsConnection('orders'));
+      dispatch(startConnection('orders'));
     }
     return () => {
       dispatch(wsConnectionClosed());

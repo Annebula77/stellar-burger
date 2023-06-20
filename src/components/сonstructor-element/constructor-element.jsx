@@ -4,7 +4,7 @@ import { ingredientType } from '../../utils/prop-types';
 import { useDispatch } from 'react-redux';
 import { useDrag, useDrop } from 'react-dnd';
 import { useRef } from 'react';
-import { moveIngredientInContainer, deleteIngredientFromConstructor } from '../../services/actions/burger-constructor-action';
+import { moveIngredientInContainer, deleteIngredientFromConstructor } from '../../services/slices/burger-constructor-slice';
 import PropTypes from 'prop-types';
 
 const ConstructorEl = ({ index, item }) => {

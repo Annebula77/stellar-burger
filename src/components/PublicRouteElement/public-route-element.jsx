@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 const PublicRouteElement = ({ element }) => {
-  const isLoggedIn = useSelector((store) => store.user.isAuthChecked);
+  const isLoggedIn = useSelector((store) => store.user.user !== null);
 
   if (isLoggedIn) {
     return <Navigate to="/" replace={true} />

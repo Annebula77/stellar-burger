@@ -1,26 +1,24 @@
 import styles from './feed-order-status-info.module.css'
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { startWsConnection, wsConnectionClosed } from '../../services/actions/webSocket-actions';
+import { startConnection, wsConnectionClosed } from '../../services/slices/webSocket-slice';
 
 const FeedOrderStatusInfo = () => {
   const dispatch = useDispatch();
-  const orders = useSelector((state) => state.ws.data);
+  const orders = useSelector((store) => store.ws);
   const total = orders ? orders.total : null;
   const totalToday = orders ? orders.totalToday : null;
-
   const [newOrdersReady, setNewOrdersReady] = useState([]);
   const [newOrdersInProgress, setNewOrdersInProgress] = useState([]);
 
   useEffect(() => {
-    dispatch(startWsConnection('orders'));
+    dispatch(startConnection());
     return () => {
       dispatch(wsConnectionClosed());
     };
   }, []);
 
   useEffect(() => {
-
     if (orders && orders.orders) {
       const updatedOrdersReady = [];
       const updatedOrdersInProgress = [];
@@ -48,6 +46,7 @@ const FeedOrderStatusInfo = () => {
 
   const readyChunks = chunkArray(newOrdersReady, 10);
   const inProgressChunks = chunkArray(newOrdersInProgress, 10);
+
 
   return (
     <>

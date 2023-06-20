@@ -4,22 +4,22 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { UserOrdersPage } from '../userOrdersPage/user-orders-page';
 import { CustomNavLink } from '../../utils/hoc';
-import { logoutStatus } from '../../services/actions/login-actions';
-import { isAuthChecked, logoutApi } from '../../services/actions/user-actions';
+import { logoutStatus } from '../../services/slices/login-slice';
+import { logoutApi } from '../../services/thunks/user-thunks';
 import Loader from '../../components/loader/loader';
-import { updateUserDetails } from '../../services/actions/user-actions';
-import { getUserDetails } from '../../services/actions/user-actions';
+import { updateUserDetails } from '../../services/thunks/user-thunks';
+import { getUserDetails } from '../../services/thunks/user-thunks';
 import { useParams } from 'react-router-dom';
+import { isAuthChecked } from '../../services/slices/user-slice';
 
 
 
 
 
 const ProfilePage = () => {
-
-
   const dispatch = useDispatch();
   const { isLoading, user } = useSelector((state) => state.user);
+
 
 
   const [formValues, setFormValues] = useState({
@@ -29,8 +29,12 @@ const ProfilePage = () => {
 
   });
   useEffect(() => {
-    dispatch(getUserDetails());
-  }, [dispatch]);
+    if (!user || user.isLoading) {
+      dispatch(getUserDetails());
+    }
+  }, [dispatch, user?.isLoading]);
+
+
 
   useEffect(() => {
     if (user) {
@@ -44,7 +48,7 @@ const ProfilePage = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(updateUserDetails(formValues.name, formValues.email, formValues.password));
+    dispatch(updateUserDetails(formValues));
   };
 
   let { '*': subpath } = useParams();
