@@ -2,16 +2,16 @@ import styles from './order-feed.module.css';
 import OrderOverviewShield from '../../components/order-overview-shield/order-overview-shield';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { startWsConnection, wsConnectionClosed } from '../../services/actions/webSocket-actions';
+import { startConnection, wsConnectionClosed } from '../../services/slices/webSocket-slice';
 
 
 
 const OrderFeed = () => {
   const dispatch = useDispatch();
-  const orders = useSelector((state) => state.ws.data?.orders);
+  const orders = useSelector((state) => state.ws.orders);
 
   useEffect(() => {
-    dispatch(startWsConnection('orders'));
+    dispatch(startConnection());
     return () => {
       dispatch(wsConnectionClosed());
     };

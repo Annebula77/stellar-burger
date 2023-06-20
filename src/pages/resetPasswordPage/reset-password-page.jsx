@@ -3,7 +3,7 @@ import styles from './reset-password-page.module.css';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
-import { resetPasswordApi } from '../../services/actions/reset-password-actions';
+import { resetPasswordApi } from '../../services/thunks/reset-password-thunk.jsx';
 
 const ResetPasswordPage = () => {
   const dispatch = useDispatch();
@@ -26,7 +26,7 @@ const ResetPasswordPage = () => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    dispatch(resetPasswordApi(value.password, value.token));
+    dispatch(resetPasswordApi(value));
   };
 
   return (

@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchIngredients } from '../../services/actions/ingredients-actions';
+import { fetchIngredients } from '../../services/thunks/ingredients-thunks';
 import AppHeader from '../app-header/app-header';
 import styles from './app.module.css';
-import { loginSuccess } from '../../services/actions/login-actions';
+import { initializeLoginFromCookies } from '../../services/slices/login-slice';
 import { getCookie } from '../../utils/cookies';
 import { HomePage } from '../../pages/homePage/homePage';
 import { LoginPage } from '../../pages/loginPage/login-page';
@@ -16,7 +16,8 @@ import ProfilePage from '../../pages/profilePage/profile-page';
 import ProtectedRouteElement from '../ProtectedRouteElement/protectedRouteElement';
 import PublicRouteElement from '../PublicRouteElement/public-route-element';
 import { IngredientPage } from '../../pages/ingredientPage/ingredient-page';
-import { getUserDetails, } from '../../services/actions/user-actions';
+import { getUserDetails } from '../../services/thunks/user-thunks';
+import { isAuthChecked } from '../../services/slices/user-slice';
 import { FeedPage } from '../../pages/feedPage/feed-page';
 import { UserOrdersPage } from '../../pages/userOrdersPage/user-orders-page';
 import { ExplicitOrderPage } from '../../pages/explicitOrderPage/explicit-order-page';
@@ -25,8 +26,7 @@ import { ExplicitOrderPage } from '../../pages/explicitOrderPage/explicit-order-
 function App() {
   const dispatch = useDispatch();
   const { loadingIngredients, errorIngredients, dataRequest } = useSelector(
-    (state) => state.ingredients
-  );
+    (store) => store.ingredients);
 
   useEffect(() => {
     dispatch(fetchIngredients());
@@ -34,9 +34,10 @@ function App() {
     const refreshToken = getCookie('refreshToken');
 
     if (accessToken && refreshToken) {
-      dispatch(loginSuccess(accessToken, refreshToken));
-      dispatch({ type: 'ISAUTH_CHECKED', payload: true });
+      dispatch(initializeLoginFromCookies(accessToken, refreshToken));
+      dispatch(isAuthChecked(true));
     }
+
   }, [dispatch]);
 
   useEffect(() => {
@@ -45,6 +46,8 @@ function App() {
       dispatch(getUserDetails());
     }
   }, [dispatch]);
+
+
 
   return (
     <section className={styles.app}>

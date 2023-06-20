@@ -3,7 +3,7 @@ import styles from './forgot-password-page.module.css';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
-import { forgotPasswordApi } from '../../services/actions/forgot-password-actions';
+import { forgotPasswordApi } from '../../services/thunks/forgot-password-thunk';
 
 
 const ForgotPasswordPage = () => {

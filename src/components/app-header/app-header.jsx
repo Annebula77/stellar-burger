@@ -7,8 +7,9 @@ import { useEffect, useState } from 'react';
 
 function AppHeader() {
   const location = useLocation();
-  const isLoggedIn = useSelector((store) => store.user.isAuthChecked);
+  const isLoggedIn = useSelector((store) => store.user.user !== null);
   const { user } = useSelector((state) => state.user);
+
 
   const [userName, setUserName] = useState("");
 

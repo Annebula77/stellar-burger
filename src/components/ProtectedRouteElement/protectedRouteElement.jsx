@@ -3,10 +3,10 @@ import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
 const ProtectedRouteElement = ({ element }) => {
-  const isLoggedIn = useSelector((store) => store.user.isAuthChecked);
+  const isLoggedIn = useSelector((store) => store.user.user !== null);
   const authError = useSelector((store) => store.user.authError);
 
-  if (!isLoggedIn || authError === 'You should be authorized') {
+  if (!isLoggedIn || authError?.message === 'You should be authorized') {
     return <Navigate to='/login' replace={true} />;
   }
 

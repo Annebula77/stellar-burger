@@ -4,10 +4,11 @@ import styles from './burger-constructor.module.css';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import { useSelector, useDispatch } from 'react-redux';
-import { postOrderClear, sendOrder } from '../../services/actions/order-actions';
-import { addIngridientItem, addBunItem, clearContainer } from '../../services/actions/burger-constructor-action';
+import { sendOrder } from '../../services/thunks/order-thunk';
+import { clearOrderState } from '../../services/slices/order-slice';
+import { addIngredientItem, addBunItem, clearContainer } from '../../services/slices/burger-constructor-slice';
 import { useDrop } from 'react-dnd';
-import { setModalContent, clearModalContent } from '../../services/actions/modal-action';
+import { clearModalContent } from '../../services/slices/modal-slice';
 import ConstructorEl from '../сonstructor-element/constructor-element';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -15,11 +16,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 function BurgerConstructor() {
   const { bun, ingredients } = useSelector((state) => state.burgerOrderList);
-  const orderNumber = useSelector((state) => state.order.data);
+  const { modalType, modalContent } = useSelector((state) => state.modal);
   const dispatch = useDispatch();
-  const modalContent = useSelector((state) => state.modal.modalContent);
   const [totalPrice, setTotalPrice] = useState(null);
-
   const location = useLocation();
   const navigate = useNavigate();
   const isAuthenticated = useSelector((state) => state.user.isAuthChecked);
@@ -32,7 +31,7 @@ function BurgerConstructor() {
       if (item.ingredient.type === 'bun') {
         dispatch(addBunItem(item.ingredient));
       } else {
-        dispatch(addIngridientItem(item.ingredient));
+        dispatch(addIngredientItem(item.ingredient));
       }
     },
   });
@@ -54,7 +53,6 @@ function BurgerConstructor() {
       const bunId = bun._id;
       const orderItems = [bunId, ...ingredientIds, bunId];
       dispatch(sendOrder(orderItems));
-      dispatch(setModalContent('orderDetails', <OrderDetails orderNumber={orderNumber} />))
     } else {
       navigate('/login', {
         replace: true,
@@ -64,16 +62,11 @@ function BurgerConstructor() {
   });
 
   const closeModal = useCallback(() => {
-    dispatch(postOrderClear());
+    dispatch(clearOrderState());
     dispatch(clearContainer());
     dispatch(clearModalContent());
   });
 
-  useEffect(() => {
-    if (orderNumber) {
-      dispatch(setModalContent('orderDetails', <OrderDetails orderNumber={orderNumber.order.number} />));
-    }
-  }, [orderNumber]);
 
   return (
     <section className={styles.section} ref={dropTarget}>
@@ -135,7 +128,7 @@ function BurgerConstructor() {
       {
         modalContent && (
           <Modal onClose={closeModal}>
-            {modalContent}
+            {modalType === 'orderDetails' && <OrderDetails orderNumber={modalContent} />}
           </Modal>
         )
       }

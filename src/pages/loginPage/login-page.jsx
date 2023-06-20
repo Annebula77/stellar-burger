@@ -1,16 +1,17 @@
 import { Button, EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './login-page.module.css';
 import { useState, useEffect } from 'react';
-import { Link, useLocation, Navigate } from 'react-router-dom';
-import { loginApi } from '../../services/actions/login-actions'
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { loginApi } from '../../services/thunks/login-thunk'
 import { useDispatch, useSelector } from 'react-redux';
-import { setCookie } from '../../utils/cookies';
+
 
 const LoginPage = () => {
   const dispatch = useDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
   const loginDetails = useSelector((store) => store.login);
-  const isLoggedIn = useSelector((store) => store.user.isAuthChecked);
+  const isLoggedIn = useSelector((store) => store.user.user !== null);
 
 
   const [formValues, setFormValues] = useState({
@@ -27,7 +28,7 @@ const LoginPage = () => {
 
   function onSubmitFrom(e) {
     e.preventDefault();
-    dispatch(loginApi(formValues.email, formValues.password));
+    dispatch(loginApi(formValues));
   }
 
   useEffect(() => {
@@ -38,17 +39,16 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (loginDetails.status) {
-      setCookie(loginDetails.accessToken, loginDetails.refreshToken);
       setFormValues({
         email: '',
         password: '',
       });
 
       if (isLoggedIn) {
-        return <Navigate to={location?.state?.from || '/'} />;
+        navigate(location?.state?.from || '/');
       }
     }
-  }, [loginDetails, isLoggedIn, location.state]);
+  }, [loginDetails, isLoggedIn, location.state, navigate]);
 
   return (
     <form className={styles.container} onSubmit={onSubmitFrom}>
