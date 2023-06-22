@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../utils/hooks';
 import { useMemo } from 'react';
 import { formatDate } from '../../utils/consts';
 import OrderImage from '../order-image/order-image';
@@ -9,7 +9,7 @@ import { useNavigate, useMatch, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 const UserOrderShield = React.memo(({ order }) => {
-  const ingredientList = useSelector((state) => state.ingredients.ingredients);
+  const ingredientList = useAppSelector((state) => state.ingredients.ingredients);
   const navigate = useNavigate();
   const location = useLocation();
   const match = useMatch('/feed/:id');

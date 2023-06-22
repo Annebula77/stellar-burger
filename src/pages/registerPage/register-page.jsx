@@ -1,15 +1,15 @@
 import { Button, EmailInput, PasswordInput, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './register-page.module.css';
 import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../utils/hooks';
 import { Link, useNavigate } from 'react-router-dom';
 import { registerUser } from '../../services/thunks/register-thunk';
 import { loginApi } from '../../services/thunks/login-thunk';
 
 const RegisterPage = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const registerUserStatus = useSelector((state) => state.registerUser.status);
+  const registerUserStatus = useAppSelector((state) => state.registerUser.status);
 
 
   const [formValues, setFormValues] = useState({

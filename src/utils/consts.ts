@@ -2,7 +2,18 @@ import { format, isToday, isYesterday } from 'date-fns';
 
 export const BASE_URL = 'https://norma.nomoreparties.space/api';
 
-export const checkResponse = res => {
+type Order = {
+  number: number;
+};
+
+type UserResponse = {
+  success: boolean;
+  accessToken: string;
+  refreshToken: string;
+  order?: Order;
+};
+
+export const checkResponse = (res: Response): Promise<UserResponse> => {
   return res.ok ? res.json() : res.json().then(err => Promise.reject(err));
 };
 
@@ -13,10 +24,10 @@ export const TabItems = {
 };
 
 
-export const formatDate = (isoString) => {
+export const formatDate = (isoString: string) => {
   const date = new Date(isoString);
 
-  let formattedDate;
+  let formattedDate: string;
   if (isToday(date)) {
     formattedDate = 'Сегодня';
   } else if (isYesterday(date)) {

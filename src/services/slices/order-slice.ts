@@ -1,14 +1,23 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { sendOrder } from "../thunks/order-thunk";
 
-// Создаём слайс
+interface OrderState {
+  loadingOrder: boolean;
+  errorOrder: null | string;
+  data: null | number; 
+}
+
+type OrderPayload = number; 
+
+const initialState: OrderState = {
+  loadingOrder: false,
+  errorOrder: null,
+  data: null,
+};
+
 const orderSlice = createSlice({
   name: 'order',
-  initialState: {
-    loadingOrder: false,
-    errorOrder: null,
-    data: null,
-  },
+  initialState,
   reducers: {
     clearOrderState: (state) => {
       state.loadingOrder = false;
@@ -20,16 +29,16 @@ const orderSlice = createSlice({
     builder
       .addCase(sendOrder.pending, (state) => {
         state.loadingOrder = true;
-        state.errorOrder = false;
+        state.errorOrder = null;
       })
-      .addCase(sendOrder.fulfilled, (state, action) => {
+      .addCase(sendOrder.fulfilled, (state, action: PayloadAction<OrderPayload>) => {
         state.loadingOrder = false;
-        state.errorOrder = false;
+        state.errorOrder = null;
         state.data = action.payload;
       })
       .addCase(sendOrder.rejected, (state, action) => {
         state.loadingOrder = false;
-        state.errorOrder = action.error.message;
+        state.errorOrder = action.error.message || null;
       });
   },
 });

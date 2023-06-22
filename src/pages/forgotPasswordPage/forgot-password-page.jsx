@@ -1,15 +1,15 @@
 import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './forgot-password-page.module.css';
 import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../utils/hooks';
 import { useNavigate, Link } from 'react-router-dom';
 import { forgotPasswordApi } from '../../services/thunks/forgot-password-thunk';
 
 
 const ForgotPasswordPage = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const forgotPassword = useSelector((state) => state.forgotPassword);
+  const forgotPassword = useAppSelector((state) => state.forgotPassword);
 
   const [emailValue, setEmailValue] = useState(null);
   const onEmailChange = e => {

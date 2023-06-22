@@ -5,9 +5,17 @@ import { isAuthChecked } from '../slices/user-slice';
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 
-// Создаем асинхронный thunk
+interface LoginArgs {
+  email: string;
+  password: string;
+}
 
-export const loginApi = createAsyncThunk(
+interface LoginResponse {
+  accessToken: string;
+  refreshToken: string;
+}
+
+export const loginApi = createAsyncThunk<LoginResponse, LoginArgs>(
   'login/loginApi',
   async ({ email, password }, { dispatch }) => {
     const response = await fetch(`${BASE_URL}/auth/login`, {
@@ -24,7 +32,7 @@ export const loginApi = createAsyncThunk(
     const data = await checkResponse(response);
     if (data.success) {
       const { accessToken, refreshToken } = data;
-      setCookie('accessToken', accessToken, 1200);
+      setCookie('accessToken', accessToken, { 'max-age': 1200 });
       setCookie('refreshToken', refreshToken);
       dispatch(isAuthChecked(true));
       dispatch(getUserDetails());

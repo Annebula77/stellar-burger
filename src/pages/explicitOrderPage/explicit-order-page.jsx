@@ -1,6 +1,6 @@
 
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../utils/hooks';
 import { useEffect } from 'react';
 import OrderExplication from '../../components/order-explication/order-explication';
 import Modal from '../../components/modal/modal';
@@ -10,13 +10,13 @@ import { getCookie } from '../../utils/cookies';
 
 export const ExplicitOrderPage = () => {
   const location = useLocation();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const background = location.state?.background;
   const { id } = useParams();
   const accessToken = getCookie('accessToken');
-  const userOrders = useSelector(state => state.wsUser.orders);
-  const orders = useSelector(state => state.ws.orders);
+  const userOrders = useAppSelector(state => state.wsUser.orders);
+  const orders = useAppSelector(state => state.ws.orders);
 
   const ordersList = location.pathname.includes('feed') ? orders : userOrders;
   const order = ordersList?.find(order => order._id === id);

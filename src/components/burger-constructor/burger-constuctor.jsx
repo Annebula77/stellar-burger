@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import styles from './burger-constructor.module.css';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../utils/hooks';
 import { sendOrder } from '../../services/thunks/order-thunk';
 import { clearOrderState } from '../../services/slices/order-slice';
 import { addIngredientItem, addBunItem, clearContainer } from '../../services/slices/burger-constructor-slice';
@@ -15,13 +15,13 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 
 function BurgerConstructor() {
-  const { bun, ingredients } = useSelector((state) => state.burgerOrderList);
-  const { modalType, modalContent } = useSelector((state) => state.modal);
-  const dispatch = useDispatch();
+  const { bun, ingredients } = useAppSelector((state) => state.burgerOrderList);
+  const { modalType, modalContent } = useAppSelector((state) => state.modal);
+  const dispatch = useAppDispatch();
   const [totalPrice, setTotalPrice] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
-  const isAuthenticated = useSelector((state) => state.user.isAuthChecked);
+  const isAuthenticated = useAppSelector((state) => state.user.isAuthChecked);
 
 
 

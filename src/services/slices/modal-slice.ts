@@ -1,6 +1,15 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction  } from '@reduxjs/toolkit';
 
-const initialState = {
+type ModalContent = string | number | { [key: string]: any };
+
+interface ModalState {
+  modalType: string | null;
+  modalContent: ModalContent | null;
+}
+
+
+
+const initialState: ModalState  = {
   modalType: null,
   modalContent: null,
 };
@@ -9,7 +18,7 @@ const modalSlice = createSlice({
   name: 'modal',
   initialState,
   reducers: {
-    setModalContent: (state, action) => {
+    setModalContent: (state, action:PayloadAction<{modalType: string, modalContent: ModalContent}>) => {
       state.modalType = action.payload.modalType;
       state.modalContent = action.payload.modalContent;
     },

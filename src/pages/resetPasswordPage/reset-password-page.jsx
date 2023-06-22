@@ -1,13 +1,13 @@
 import { Button, PasswordInput, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './reset-password-page.module.css';
 import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppSelector, useAppDispatch } from '../../utils/hooks';
 import { useNavigate, Link } from 'react-router-dom';
 import { resetPasswordApi } from '../../services/thunks/reset-password-thunk.jsx';
 
 const ResetPasswordPage = () => {
-  const dispatch = useDispatch();
-  const resetPassword = useSelector((state) => state.resetPassword);
+  const dispatch = useAppDispatch();
+  const resetPassword = useAppSelector((state) => state.resetPassword);
   const navigate = useNavigate();
   const [value, setValue] = useState({
     password: '',

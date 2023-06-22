@@ -3,15 +3,15 @@ import styles from './login-page.module.css';
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { loginApi } from '../../services/thunks/login-thunk'
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../utils/hooks';
 
 
 const LoginPage = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
-  const loginDetails = useSelector((store) => store.login);
-  const isLoggedIn = useSelector((store) => store.user.user !== null);
+  const loginDetails = useAppSelector((store) => store.login);
+  const isLoggedIn = useAppSelector((store) => store.user.user !== null);
 
 
   const [formValues, setFormValues] = useState({

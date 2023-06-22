@@ -2,14 +2,14 @@ import styles from './burger-ingredients.module.css';
 import Tabs from '../tabs/tabs';
 import IngredientsCategory from '../ingredients-category/ingredients-category';
 import { useState, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../utils/hooks';
 import { TabItems } from '../../utils/consts';
 
 
 
 
 const BurgerIngredients = () => {
-  const ingredientList = useSelector((state) => state.ingredients);
+  const ingredientList = useAppSelector((state) => state.ingredients);
   const containerRef = useRef(null);
   const bunRef = useRef(null);
   const sauceRef = useRef(null);
