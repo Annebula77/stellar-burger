@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../utils/hooks';
 import { fetchIngredients } from '../../services/thunks/ingredients-thunks';
 import AppHeader from '../app-header/app-header';
 import styles from './app.module.css';
@@ -24,8 +24,8 @@ import { ExplicitOrderPage } from '../../pages/explicitOrderPage/explicit-order-
 
 
 function App() {
-  const dispatch = useDispatch();
-  const { loadingIngredients, errorIngredients, dataRequest } = useSelector(
+  const dispatch = useAppDispatch();
+  const { loadingIngredients, errorIngredients, dataRequest } = useAppSelector(
     (store) => store.ingredients);
 
   useEffect(() => {
@@ -41,8 +41,8 @@ function App() {
   }, [dispatch]);
 
   useEffect(() => {
-    const accessToken = getCookie('accessToken');
-    if (accessToken) {
+    const refreshToken = getCookie('refreshToken');
+    if (refreshToken) {
       dispatch(getUserDetails());
     }
   }, [dispatch]);

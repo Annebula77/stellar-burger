@@ -1,11 +1,11 @@
 import styles from './feed-order-status-info.module.css'
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../utils/hooks';
 import { useEffect, useState } from 'react';
 import { startConnection, wsConnectionClosed } from '../../services/slices/webSocket-slice';
 
 const FeedOrderStatusInfo = () => {
-  const dispatch = useDispatch();
-  const orders = useSelector((store) => store.ws);
+  const dispatch = useAppDispatch();
+  const orders = useAppSelector((store) => store.ws);
   const total = orders ? orders.total : null;
   const totalToday = orders ? orders.totalToday : null;
   const [newOrdersReady, setNewOrdersReady] = useState([]);

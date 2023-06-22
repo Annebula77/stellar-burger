@@ -1,9 +1,9 @@
 import styles from './ingredient-details.module.css'
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../utils/hooks';
 import PropTypes from 'prop-types';
 
 function IngredientDetails({ ingredientId, extraClass }) {
-  const ingredient = useSelector((state) => state.ingredients.ingredients.find(item => item._id === ingredientId));
+  const ingredient = useAppSelector((state) => state.ingredients.ingredients.find(item => item._id === ingredientId));
 
 
   return (

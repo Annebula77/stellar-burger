@@ -1,14 +1,14 @@
 import styles from './order-feed.module.css';
 import OrderOverviewShield from '../../components/order-overview-shield/order-overview-shield';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../utils/hooks';
 import { useEffect } from 'react';
 import { startConnection, wsConnectionClosed } from '../../services/slices/webSocket-slice';
 
 
 
 const OrderFeed = () => {
-  const dispatch = useDispatch();
-  const orders = useSelector((state) => state.ws.orders);
+  const dispatch = useAppDispatch();
+  const orders = useAppSelector((state) => state.ws.orders);
 
   useEffect(() => {
     dispatch(startConnection());

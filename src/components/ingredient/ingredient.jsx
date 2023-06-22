@@ -3,7 +3,7 @@ import { ingredientType } from '../../utils/prop-types';
 import styles from './ingredient.module.css';
 import { useDrag } from 'react-dnd';
 import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../utils/hooks';
 import { useNavigate, useMatch, useLocation } from 'react-router-dom';
 import React from 'react';
 
@@ -14,7 +14,7 @@ const Ingredient = React.memo(({ ingredient }) => {
   const match = useMatch('/ingredients/:id');
   const { id } = match?.params || {};
   const { _id, image, price, name } = ingredient;
-  const { bun, ingredients } = useSelector((state) => state.burgerOrderList);
+  const { bun, ingredients } = useAppSelector((state) => state.burgerOrderList);
 
   const [{ opacity }, dragRef] = useDrag({
     type: 'ingredients',

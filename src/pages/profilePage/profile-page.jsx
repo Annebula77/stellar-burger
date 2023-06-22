@@ -1,6 +1,6 @@
 import { Input, EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './profile-page.module.css';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../utils/hooks';
 import { useState, useEffect } from 'react';
 import { UserOrdersPage } from '../userOrdersPage/user-orders-page';
 import { CustomNavLink } from '../../utils/hoc';
@@ -17,8 +17,8 @@ import { isAuthChecked } from '../../services/slices/user-slice';
 
 
 const ProfilePage = () => {
-  const dispatch = useDispatch();
-  const { isLoading, user } = useSelector((state) => state.user);
+  const dispatch = useAppDispatch();
+  const { isLoading, user } = useAppSelector((state) => state.user);
 
 
 

@@ -1,10 +1,10 @@
 import { Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../utils/hooks';
 import PropTypes from 'prop-types';
 
 const ProtectedRouteElement = ({ element }) => {
-  const isLoggedIn = useSelector((store) => store.user.user !== null);
-  const authError = useSelector((store) => store.user.authError);
+  const isLoggedIn = useAppSelector((store) => store.user.user !== null);
+  const authError = useAppSelector((store) => store.user.authError);
 
   if (!isLoggedIn || authError?.message === 'You should be authorized') {
     return <Navigate to='/login' replace={true} />;

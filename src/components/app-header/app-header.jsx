@@ -1,14 +1,14 @@
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './app-header.module.css';
 import { useLocation, Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../utils/hooks';
 import { useEffect, useState } from 'react';
 
 
 function AppHeader() {
   const location = useLocation();
-  const isLoggedIn = useSelector((store) => store.user.user !== null);
-  const { user } = useSelector((state) => state.user);
+  const isLoggedIn = useAppSelector((store) => store.user.user !== null);
+  const { user } = useAppSelector((state) => state.user);
 
 
   const [userName, setUserName] = useState("");
