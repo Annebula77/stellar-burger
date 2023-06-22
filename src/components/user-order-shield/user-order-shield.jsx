@@ -15,36 +15,54 @@ const UserOrderShield = React.memo(({ order }) => {
   const match = useMatch('/feed/:id');
   const { id } = match?.params || {};
 
-  let totalPrice = 0;
-
   const ingredients = order.ingredients;
-  const ingredientCounts = {};
 
-  ingredients.forEach((ingredientId) => {
-    if (ingredientCounts[ingredientId]) {
-      ingredientCounts[ingredientId]++;
-    } else {
-      ingredientCounts[ingredientId] = 1;
-    }
-  });
+  const MAX_DISPLAYED_INGREDIENTS = 6;
+
+  const totalPrice = useMemo(() => {
+    return ingredients.reduce((sum, ingredientId) => {
+      const ingredient = ingredientList.find((item) => item._id === ingredientId);
+      return ingredient ? sum + ingredient.price : sum;
+    }, 0);
+  }, [ingredients, ingredientList]);
 
   const ingredientsMarkup = useMemo(() => {
-    return Object.entries(ingredientCounts).map(([ingredientId, count]) => {
+    let remainingIngredientsCount = 0;
+
+    const ingredientsToDisplay = ingredients.slice(-MAX_DISPLAYED_INGREDIENTS);
+
+    if (ingredients.length > MAX_DISPLAYED_INGREDIENTS) {
+      remainingIngredientsCount = ingredients.length - MAX_DISPLAYED_INGREDIENTS;
+    }
+
+    return ingredientsToDisplay.map((ingredientId, index) => {
       const ingredient = ingredientList.find((item) => item._id === ingredientId);
       if (!ingredient) return null;
 
-      totalPrice += ingredient.price * count;
+      let extraCount = "";
+      let extraCountClass = "";
+      let applyExtraStyles = false;
+
+      if (remainingIngredientsCount > 0 && index === MAX_DISPLAYED_INGREDIENTS - 6) {
+        extraCount = `+${remainingIngredientsCount}`;
+        extraCountClass = styles.extraCount;
+        applyExtraStyles = true;
+      }
+
 
       return (
         <OrderImage
-          key={ingredientId}
+          key={index}
           alt={ingredient.name}
           image={ingredient.image}
-          count={count > 1 ? `+${count}` : ''}
+          count={extraCount}
+          extraCountClass={extraCountClass}
+          applyExtraStyles={applyExtraStyles}
         />
       );
-    })
-  })
+    });
+  }, [ingredients, ingredientList]);
+
   let statusText = '';
   let statusStyle = '';
 
@@ -58,6 +76,7 @@ const UserOrderShield = React.memo(({ order }) => {
     statusText = 'Создан';
     statusStyle = styles.created;
   }
+
   const handleClick = () => {
     if (id !== order._id) {
       navigate(`/orders/${order._id}`, { state: { modal: true, background: location } });

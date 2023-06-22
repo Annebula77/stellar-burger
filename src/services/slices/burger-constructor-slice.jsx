@@ -16,28 +16,21 @@ const burgerConstructorSlice = createSlice({
       state.ingredients.push(ingredient);
     },
     addBunItem: (state, action) => {
-      const bun = { ...action.payload, type: 'bun' };
+      const key = uniqid();
+      const bun = { ...action.payload, key, type: 'bun' };
       state.bun = bun;
     },
     moveIngredientInContainer: (state, action) => {
       const { dragElIndex, hoverElIndex } = action.payload;
-      const dragConstructor = [...state.ingredients];
-      dragConstructor.splice(
-        dragElIndex,
-        0,
-        dragConstructor.splice(hoverElIndex, 1)[0]
-      );
-      state.ingredients = dragConstructor;
+      const dragItem = state.ingredients[dragElIndex];
+      state.ingredients.splice(dragElIndex, 1);
+      state.ingredients.splice(hoverElIndex, 0, dragItem);
     },
+
     deleteIngredientFromConstructor: (state, action) => {
-      const orderList = [...state.ingredients];
-      orderList.splice(action.payload.index, 1);
-      state.ingredients = orderList;
+      state.ingredients.splice(action.payload, 1);
     },
-    clearContainer: (state) => {
-      state.bun = null;
-      state.ingredients = [];
-    },
+    clearContainer: state => initialState,
   },
 });
 

@@ -13,8 +13,8 @@ const OrderExplication = React.memo(({ inModal }) => {
   const ingredientList = useSelector((state) => state.ingredients.ingredients);
   const { id } = useParams();
   const location = useLocation();
-  const userOrders = useSelector(state => state.wsUser.data?.orders);
-  const orders = useSelector(state => state.ws.data?.orders);
+  const userOrders = useSelector(state => state.wsUser.orders);
+  const orders = useSelector(state => state.ws.orders);
 
   const ordersList = location.pathname.includes('feed') ? orders : userOrders;
   const order = ordersList?.find(order => order._id === id);
@@ -51,7 +51,6 @@ const OrderExplication = React.memo(({ inModal }) => {
           <OrderImage
             alt={ingredient.name}
             image={ingredient.image}
-            count={count > 1 ? `+${count}` : ''}
             extraCountClass={styles.explicit}
           />
           <span className={`${styles.name} text text_type_main-small`}>{ingredient.name}</span>

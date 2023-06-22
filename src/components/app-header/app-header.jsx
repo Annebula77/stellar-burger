@@ -22,20 +22,17 @@ function AppHeader() {
   }, [isLoggedIn, user]);
 
   const activeTypology = (path) => {
-    return location.pathname === path
-      ? 'text text_type_main-default'
-      : 'text text_type_main-default text_color_inactive';
+    return location.pathname.startsWith(path) ? 'text text_type_main-default' : 'text text_type_main-default text_color_inactive';
   };
-
 
   return (
     <header className={styles.header}>
       <nav className={styles.container}>
         <div className={styles.container__left}>
-          <Link to='/' className={styles.link}>
-            <button type='button' className={styles.header__cell}>
-              <BurgerIcon type={location.pathname === '/' ? 'primary' : 'secondary'} />
-              <p className={activeTypology('/')}>Конструктор</p>
+          <Link to="/" className={styles.link}>
+            <button type="button" className={styles.header__cell}>
+              <BurgerIcon type={location.pathname.length === 1 ? 'primary' : 'secondary'} />
+              <p className={location.pathname.length === 1 ? activeTypology('/') : activeTypology('/*')}>Конструктор</p>
             </button>
           </Link>
           <Link to='/feed' className={styles.link}>
@@ -48,10 +45,10 @@ function AppHeader() {
         <div className={styles.logo}>
           <Logo />
         </div>
-        <Link to='/profile' className={styles.link}>
-          <button type='button' className={styles.header__cell}>
-            <ProfileIcon type={location.pathname === '/profile' ? 'primary' : 'secondary'} />
-            <p className={activeTypology('/profile')}>{userName}</p>
+        <Link to="/profile/orders" className={styles.link}>
+          <button type="button" className={styles.header__cell}>
+            <ProfileIcon type={location.pathname.startsWith("/profile") ? "primary" : "secondary"} />
+            <p className={location.pathname.startsWith("/profile") ? activeTypology('/profile') : activeTypology('/profile/orders')}>{userName}</p>
           </button>
         </Link>
       </nav>

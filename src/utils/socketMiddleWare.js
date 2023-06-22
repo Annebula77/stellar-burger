@@ -59,18 +59,21 @@ export const socketMiddleware = (wsUrl, wsUserUrl, wsSliceActions, wsUserSliceAc
       const { data } = event;
       const parsedData = JSON.parse(data);
     
-      if (parsedData.message === 'Invalid token') {
+      if (parsedData.message === 'jwt expired') {
         try {
           // Вызовите функцию refreshTokenApi и ждите её выполнения
           const newTokenData = await dispatch(refreshTokenApi());
-          userSocket.close();
-          // Создайте новый WebSocket с обновленным токеном
-          userSocket = new WebSocket(`${wsUserUrl}?token=${newTokenData.accessToken}`);
-          // Подключите обработчики событий к новому WebSocket
-          userSocket.onopen = event => dispatch(wsUserConnectionSuccess(event));
-          userSocket.onmessage = event => dispatch(wsUserData(JSON.parse(event.data)));
-          userSocket.onerror = event => dispatch(wsUserConnectionError(event));
-          userSocket.onclose = () => dispatch(wsUserConnectionClosed());
+          
+          if (newTokenData.payload) {
+            userSocket = new WebSocket(`${wsUserUrl}?token=${newTokenData.payload.accessToken}`);
+            // Подключите обработчики событий к новому WebSocket
+            userSocket.onopen = event => dispatch(wsUserConnectionSuccess(event));
+            userSocket.onmessage = event => dispatch(wsUserData(JSON.parse(event.data)));
+            userSocket.onerror = event => dispatch(wsUserConnectionError(event));
+            userSocket.onclose = () => dispatch(wsUserConnectionClosed());
+          } else {
+            console.error('Failed to refresh token: No payload received');
+          }
         } catch (err) {
           console.error('Failed to refresh token:', err);
         }

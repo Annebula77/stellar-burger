@@ -7,77 +7,102 @@ import {
   isAuthChecked,
 } from '../slices/user-slice';
 
+const sendRequestWithRefreshToken = async (
+  endpoint, 
+  options, 
+  dispatch, 
+  rejectWithValue, 
+  callbackOnSuccess
+) => {
+  try {
+    const accessToken = getCookie('accessToken');
+    if (!accessToken) {
+      throw new Error('Access token not found');
+    }
+
+    options.headers.Authorization = accessToken;
+    const response = await fetch(`${BASE_URL}${endpoint}`, options);
+    
+     if (!response.ok) {
+      const errorResponse = await response.json();
+      throw new Error(errorResponse.message);  // Убедитесь, что сервер возвращает "message" в теле ответа
+    }
+
+    const data = await response.json();
+
+    if(callbackOnSuccess) {
+      return callbackOnSuccess(data);
+    }
+  } catch (err) {
+    if (err.message === "jwt expired") {
+      return dispatch(refreshTokenApi())
+          .then(() => {
+            // повторный запрос с новым токеном
+            options.headers.Authorization = getCookie('accessToken');
+            return fetch(`${BASE_URL}${endpoint}`, options);
+          })
+          .then((response) => {
+            if (!response.ok) {
+              const errorResponse = response.json();
+              return rejectWithValue(new Error(errorResponse.message));
+            }
+            return response.json();
+          })
+          .then((data) => {
+            if(callbackOnSuccess) {
+              return callbackOnSuccess(data);
+            }
+          })
+          .catch((refreshError) => {
+              console.log(refreshError);
+              return rejectWithValue(refreshError);
+          });
+    } else {
+      return rejectWithValue(err.message);
+    }
+  }
+};
+
+
 export const getUserDetails = createAsyncThunk(
   'user/getUserDetails',
   async (_, { dispatch, rejectWithValue }) => {
-    try {
-      const accessToken = getCookie('accessToken');
-      if (!accessToken) {
-        throw new Error('Access token not found');
+    const options = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    return sendRequestWithRefreshToken(
+      '/auth/user',
+      options,
+      dispatch,
+      rejectWithValue,
+      (data) => {
+        return data.user;
       }
-      const options = {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `${accessToken}`,
-        },
-      };
-      const response = await fetch(`${BASE_URL}/auth/user`, options);
-      const data = await checkResponse(response);
-      return data.user; // Return the user object as the fulfilled value
-    } catch (err) {
-      if (err.message === 'jwt expired') {
-        // Обработка ошибки и вызов refreshTokenApi
-        return dispatch(refreshTokenApi())
-          .then(() => dispatch(getUserDetails()))
-          .catch((refreshError) => {
-            console.log(refreshError);
-            // Возвращение значения в случае ошибки обновления токена и получения деталей пользователя
-            return rejectWithValue(refreshError);
-          });
-      } else {
-        // Обработка других ошибок
-        return rejectWithValue(err);
-      }
-    }
-  }
-);
+    )
+  });
 
 export const updateUserDetails = createAsyncThunk(
   'user/updateUserDetails',
-  async ({ name, email, password }, { rejectWithValue, dispatch }) => {
-    try {
-      const accessToken = getCookie('accessToken');
-      if (!accessToken) {
-        throw new Error('Access token not found');
-      }
-      const options = {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `${accessToken}`,
-        },
-        body: JSON.stringify({ name, email, password }),
-      };
+  async ({ name, email, password }, { dispatch, rejectWithValue }) => {
+    const options = {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name, email, password }),
+    };
 
-      const response = await fetch(`${BASE_URL}/auth/user`, options);
-      await checkResponse(response);
-      dispatch(getUserDetails());
-    } catch (err) {
-      if (err.message === 'jwt expired') {
-        // Обработка ошибки и вызов refreshTokenApi
-        return dispatch(refreshTokenApi())
-          .then(() => dispatch(getUserDetails()))
-          .catch((refreshError) => {
-            console.log(refreshError);
-            // Возвращение значения в случае ошибки обновления токена и получения деталей пользователя
-            return rejectWithValue(refreshError);
-          });
-      } else {
-        // Обработка других ошибок
-        return rejectWithValue(err);
-      }
-    }
+    return sendRequestWithRefreshToken(
+      '/auth/user',
+      options,
+      dispatch,
+      rejectWithValue,
+      () => dispatch(getUserDetails())
+    );
   }
 );
 
