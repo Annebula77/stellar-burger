@@ -12,8 +12,8 @@ const ConstructorEl = ({ index, item }) => {
   const { image, _id, price, name } = item;
   const ref = useRef(null);
 
-  const handleDelete = (index, item) => {
-    dispatch(deleteIngredientFromConstructor(item, index));
+  const handleDelete = (index) => {
+    dispatch(deleteIngredientFromConstructor(index));
   }
   const [, drop] = useDrop({
     accept: 'item',
@@ -23,12 +23,11 @@ const ConstructorEl = ({ index, item }) => {
       }
       const dragElIndex = item.index;
       const hoverElIndex = index;
-      dispatch(moveIngredientInContainer(dragElIndex, hoverElIndex));
+      dispatch(moveIngredientInContainer({ dragElIndex, hoverElIndex }));
       item.index = hoverElIndex;
     },
-
-
   });
+
 
   const [{ opacity }, drag] = useDrag({
     type: 'item',

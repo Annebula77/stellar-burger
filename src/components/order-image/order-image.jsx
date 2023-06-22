@@ -1,20 +1,22 @@
 import styles from './order-image.module.css';
 import PropTypes from 'prop-types';
 
-const OrderImage = ({ name, image, count, extraCountClass }) => {
+
+
+const OrderImage = ({ name, image, count, extraCountClass, applyExtraStyles }) => {
+  const imageClass = applyExtraStyles ? `${styles.image} ${extraCountClass}` : styles.image;
+
   return (
     <div className={`${styles.box}`}>
-      <img src={image} alt={name} className={styles.image}></img>
+      <img src={image} alt={name} className={imageClass}></img>
       {count > 1 &&
-        <span
-          className={`${styles.count} ${extraCountClass} text text_type_digits-default`}
-        >
+        <span className={`${styles.count} text text_type_digits-default`}>
           {`${count}`}
         </span>
       }
     </div>
-  )
-}
+  );
+};
 OrderImage.propTypes = {
   image: PropTypes.string.isRequired,
   extraCountClass: PropTypes.string,
