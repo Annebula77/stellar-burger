@@ -1,10 +1,9 @@
-import { BASE_URL, checkResponse } from '../../utils/consts';
+import { BASE_URL, checkResponse, UserResponse } from '../../utils/essentials';
 import { getCookie } from '../../utils/cookies';
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { setModalContent } from '../slices/modal-slice';
 
 
-// Создаём асинхронный thunk
 export const sendOrder = createAsyncThunk<number, string[]>(
   'order/sendOrder',
   async (data: string[], { dispatch, rejectWithValue }) => {
@@ -21,7 +20,7 @@ export const sendOrder = createAsyncThunk<number, string[]>(
           ingredients: data,
         }),
       });
-      const result = await checkResponse(response);
+      const result = await checkResponse<UserResponse>(response);
       if (!result.order || !result.order.number) {
         throw new Error('Invalid response format.');
       }
@@ -31,8 +30,8 @@ export const sendOrder = createAsyncThunk<number, string[]>(
         modalContent: result.order.number,
       }));
       return result.order.number;
-    } catch (error: unknown) {
-      return rejectWithValue(error);
+    } catch (error) {
+      return rejectWithValue(error as Error);
     }
   }
 );

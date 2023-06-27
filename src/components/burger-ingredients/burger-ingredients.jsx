@@ -3,7 +3,7 @@ import Tabs from '../tabs/tabs';
 import IngredientsCategory from '../ingredients-category/ingredients-category';
 import { useState, useRef } from 'react';
 import { useAppSelector } from '../../utils/hooks';
-import { TabItems } from '../../utils/consts';
+import { TabItems } from '../../utils/essentials';
 
 
 

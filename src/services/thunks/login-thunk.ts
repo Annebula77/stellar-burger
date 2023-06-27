@@ -1,21 +1,12 @@
-import { BASE_URL, checkResponse } from '../../utils/consts';
+import { BASE_URL, checkResponse, UserResponse } from '../../utils/essentials';
 import { setCookie } from '../../utils/cookies';
 import { getUserDetails } from './user-thunks';
 import { isAuthChecked } from '../slices/user-slice';
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { LoginArgs, TokenType} from '../../utils/essentials';
 
 
-interface LoginArgs {
-  email: string;
-  password: string;
-}
-
-interface LoginResponse {
-  accessToken: string;
-  refreshToken: string;
-}
-
-export const loginApi = createAsyncThunk<LoginResponse, LoginArgs>(
+export const loginApi = createAsyncThunk<TokenType, LoginArgs>(
   'login/loginApi',
   async ({ email, password }, { dispatch }) => {
     const response = await fetch(`${BASE_URL}/auth/login`, {
@@ -29,7 +20,7 @@ export const loginApi = createAsyncThunk<LoginResponse, LoginArgs>(
       }),
     });
 
-    const data = await checkResponse(response);
+    const data = await checkResponse<UserResponse>(response);
     if (data.success) {
       const { accessToken, refreshToken } = data;
       setCookie('accessToken', accessToken, { 'max-age': 1200 });

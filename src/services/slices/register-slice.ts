@@ -1,17 +1,21 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { registerUser } from '../thunks/register-thunk';
+import { RegisterState } from '../../utils/essentials';
+
+
+const initialState: RegisterState = {
+  name: '',
+  email: '',
+  password: '',
+  isAuthenticated: false,
+  isLoading: false,
+  error: '',
+}
 
 
 const registerUserSlice = createSlice({
   name: 'registerUser',
-  initialState: {
-    name: null,
-    email: null,
-    password: null,
-    isAuthenticated: false,
-    isLoading: false,
-    error: null,
-  },
+  initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
@@ -25,7 +29,7 @@ const registerUserSlice = createSlice({
           state.password = action.payload.password;
           state.isAuthenticated = true;
           state.isLoading = false;
-          state.error = null;
+          state.error = '';
         }
       })
       .addCase(registerUser.rejected, (state, action) => {

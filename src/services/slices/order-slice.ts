@@ -1,13 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, Slice } from "@reduxjs/toolkit";
 import { sendOrder } from "../thunks/order-thunk";
-
-interface OrderState {
-  loadingOrder: boolean;
-  errorOrder: null | string;
-  data: null | number; 
-}
-
-type OrderPayload = number; 
+import {OrderState, OrderPayload} from '../../utils/essentials';
 
 const initialState: OrderState = {
   loadingOrder: false,
@@ -15,7 +8,7 @@ const initialState: OrderState = {
   data: null,
 };
 
-const orderSlice = createSlice({
+const orderSlice: Slice<OrderState> = createSlice({
   name: 'order',
   initialState,
   reducers: {

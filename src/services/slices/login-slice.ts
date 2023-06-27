@@ -1,11 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { loginApi } from "../thunks/login-thunk";
+import { LoginState } from '../../utils/essentials'
 
-interface LoginState {
-  status: boolean;
-  accessToken: string;
-  refreshToken: string
-}
+
 const initialState: LoginState = {
   status: false,
   accessToken: '',

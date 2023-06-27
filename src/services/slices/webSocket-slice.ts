@@ -1,25 +1,28 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { ThunkError, WsOrder, WsDataPayload, WsState  } from '../../utils/essentials';
 
+
+const initialState: WsState = {
+  wsConnected: false,
+  orders: null,
+  total: 0,
+  totalToday: 0,
+  error: null,
+}
 
 export const wsSlice = createSlice({
   name: 'ws',
-  initialState: {
-    wsConnected: false,
-    orders: [],
-    total: 0,
-    totalToday: 0,
-    error: null,
-  },
+  initialState,
   reducers: {
     wsConnectionSuccess: (state) => {
       state.wsConnected = true;
       state.error = null;
     },
-    wsConnectionError: (state, action) => {
+    wsConnectionError: (state, action: PayloadAction<ThunkError>) => {
       state.wsConnected = false;
       state.error = action.payload;
     },
-    wsGetData: (state, action) => {
+    wsGetData: (state, action: PayloadAction<WsDataPayload>) => {
       state.orders = action.payload.orders;
       state.total = action.payload.total;
       state.totalToday = action.payload.totalToday;
@@ -40,23 +43,17 @@ export const wsSlice = createSlice({
 
 export const wsUserSlice = createSlice({
   name: 'wsUser',
-  initialState: {
-    wsConnected: false,
-    orders: [],
-    total: 0,
-    totalToday: 0,
-    error: null,
-  },
+  initialState,
   reducers: {
     wsUserConnectionSuccess: (state) => {
       state.wsConnected = true;
       state.error = null;
     },
-    wsUserConnectionError: (state, action) => {
+    wsUserConnectionError: (state, action: PayloadAction<ThunkError>) => {
       state.wsConnected = false;
       state.error = action.payload;
     },
-    wsUserData: (state, action) => {
+    wsUserData: (state,  action: PayloadAction<WsDataPayload>) => {
       state.orders = action.payload.orders;
       state.total = action.payload.total;
       state.totalToday = action.payload.totalToday;
