@@ -1,8 +1,8 @@
-import { BASE_URL, checkResponse } from '../../utils/consts';
+import { BASE_URL, checkResponse, PasswordResetResponse} from '../../utils/essentials';
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-// Асинхронный thunk
-export const forgotPasswordApi = createAsyncThunk(
+
+export const forgotPasswordApi = createAsyncThunk<PasswordResetResponse, string, { rejectValue: string }>(
   'forgotPasswordApi',
   async (email, { rejectWithValue }) => {
     try {
@@ -14,7 +14,7 @@ export const forgotPasswordApi = createAsyncThunk(
         body: JSON.stringify({ email }),
       });
 
-      const data = await checkResponse(response);
+      const data = await checkResponse<PasswordResetResponse>(response);
 
       if (data.success) {
         return data;
@@ -22,7 +22,7 @@ export const forgotPasswordApi = createAsyncThunk(
         return rejectWithValue('Something went wrong... try again, or contact us');
       }
     } catch (err) {
-      return rejectWithValue(err.message);
+      return rejectWithValue((err as Error).message);
     }
   }
 );

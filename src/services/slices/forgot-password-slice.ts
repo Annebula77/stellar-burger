@@ -1,10 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { forgotPasswordApi } from "../thunks/forgot-password-thunk";
+import { ForgotPasswordState } from '../../utils/essentials'
 
-// Слайс
+
+const initialState: ForgotPasswordState = { status: false };
+
 const forgotPasswordSlice = createSlice({
   name: 'forgotPassword',
-  initialState: { status: false },
+  initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
@@ -17,5 +20,4 @@ const forgotPasswordSlice = createSlice({
   },
 });
 
-// Экспорт редьюсера
 export default forgotPasswordSlice.reducer;

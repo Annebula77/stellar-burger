@@ -1,7 +1,7 @@
 import styles from './tabs.module.css';
 import { forwardRef } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import { TabItems } from '../../utils/consts'
+import { TabItems } from '../../utils/essentials'
 import PropTypes from 'prop-types';
 
 

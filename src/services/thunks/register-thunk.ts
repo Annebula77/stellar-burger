@@ -1,9 +1,11 @@
-import { BASE_URL } from '../../utils/consts';
+import { BASE_URL } from '../../utils/essentials';
 import { setCookie } from '../../utils/cookies';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { UserDataType } from '../../utils/essentials';
 
 
-export const registerUser = createAsyncThunk(
+
+export const registerUser = createAsyncThunk<UserDataType, UserDataType, { rejectValue: string }>(
   'registerUser',
   async ({ name, email, password }, { rejectWithValue }) => {
     try {
@@ -37,7 +39,7 @@ export const registerUser = createAsyncThunk(
         return rejectWithValue('Something went wrong! Try again...');
       }
     } catch (err) {
-      return rejectWithValue(err);
+      return rejectWithValue((err as Error).message);
     }
   }
 );

@@ -1,12 +1,5 @@
 import { createSlice, PayloadAction  } from '@reduxjs/toolkit';
-
-type ModalContent = string | number | { [key: string]: any };
-
-interface ModalState {
-  modalType: string | null;
-  modalContent: ModalContent | null;
-}
-
+import { ModalContent, ModalState } from '../../utils/essentials';
 
 
 const initialState: ModalState  = {

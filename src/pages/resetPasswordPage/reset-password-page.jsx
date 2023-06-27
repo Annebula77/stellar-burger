@@ -3,7 +3,7 @@ import styles from './reset-password-page.module.css';
 import { useState, useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '../../utils/hooks';
 import { useNavigate, Link } from 'react-router-dom';
-import { resetPasswordApi } from '../../services/thunks/reset-password-thunk.jsx';
+import { resetPasswordApi } from '../../services/thunks/reset-password-thunk';
 
 const ResetPasswordPage = () => {
   const dispatch = useAppDispatch();
@@ -15,7 +15,7 @@ const ResetPasswordPage = () => {
   });
 
   useEffect(() => {
-    if (resetPassword.status === 'success') {
+    if (resetPassword.success === true) {
       navigate('/login');
       setValue({
         password: '',

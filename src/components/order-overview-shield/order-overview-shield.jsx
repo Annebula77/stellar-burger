@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAppSelector } from '../../utils/hooks';
 import { useMemo } from 'react';
-import { formatDate } from '../../utils/consts';
+import { formatDate } from '../../utils/essentials';
 import OrderImage from '../order-image/order-image';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './order-overview-shield.module.css';
