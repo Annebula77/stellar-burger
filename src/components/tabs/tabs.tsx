@@ -1,5 +1,5 @@
 import styles from './tabs.module.css';
-import {  Ref, forwardRef, ForwardedRef } from 'react';
+import { Ref, forwardRef, ForwardedRef } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { TabItems } from '../../utils/essentials';
 
@@ -21,7 +21,7 @@ const Tabs = forwardRef<HTMLDivElement, TabsProps>((props, ref) => {
         const categoryTop = ref.current.offsetTop;
         const containerTop = container.getBoundingClientRect().top;
         const offsetTop = categoryTop - containerTop - container.scrollTop;
-  
+
         container.scroll({
           behavior: 'smooth',
           top: container.scrollTop + offsetTop

@@ -9,6 +9,7 @@ import orderSlice from './slices/order-slice';
 import loginSlice from './slices/login-slice';
 import forgotPasswordSlice from './slices/forgot-password-slice';
 import resetPasswordSlice from './slices/reset-password-slice';
+import { WSActions, WSUserActions } from '../utils/essentials';
 import {
   ws,
   wsUser,
@@ -28,9 +29,10 @@ import {
 
 
 
-const wsUrl = 'wss://norma.nomoreparties.space/orders/all';
-const wsUserUrl = 'wss://norma.nomoreparties.space/orders';
-const wsSliceActions = {
+const wsUrl: string = 'wss://norma.nomoreparties.space/orders/all';
+const wsUserUrl: string = 'wss://norma.nomoreparties.space/orders';
+
+const wsSliceActions: WSActions = {
   wsConnectionSuccess,
   wsConnectionError,
   wsGetData,
@@ -41,7 +43,7 @@ const wsSliceActions = {
 
 
 
-const wsUserSliceActions = {
+const wsUserSliceActions: WSUserActions = {
   wsUserConnectionSuccess,
   wsUserConnectionError,
   wsUserData,

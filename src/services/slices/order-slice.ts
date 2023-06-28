@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, Slice } from "@reduxjs/toolkit";
 import { sendOrder } from "../thunks/order-thunk";
-import {OrderState, OrderPayload} from '../../utils/essentials';
+import { OrderState, OrderPayload } from '../../utils/essentials';
 
 const initialState: OrderState = {
   loadingOrder: false,

@@ -1,6 +1,5 @@
 import styles from './ingredients-category.module.css';
 import Ingredient from '../ingredient/ingredient';
-import PropTypes from 'prop-types';
 import { forwardRef } from 'react';
 import { IIngredient } from '../../utils/essentials';
 

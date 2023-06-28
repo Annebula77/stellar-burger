@@ -3,7 +3,7 @@ import { setCookie } from '../../utils/cookies';
 import { getUserDetails } from './user-thunks';
 import { isAuthChecked } from '../slices/user-slice';
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { LoginArgs, TokenType} from '../../utils/essentials';
+import { LoginArgs, TokenType } from '../../utils/essentials';
 
 
 export const loginApi = createAsyncThunk<TokenType, LoginArgs>(

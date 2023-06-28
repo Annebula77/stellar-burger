@@ -2,21 +2,22 @@ import styles from './feed-order-status-info.module.css'
 import { useAppDispatch, useAppSelector } from '../../utils/hooks';
 import { useEffect, useState } from 'react';
 import { startConnection, wsConnectionClosed } from '../../services/slices/webSocket-slice';
+import { WsOrder } from '../../utils/essentials';
 
 const FeedOrderStatusInfo = () => {
   const dispatch = useAppDispatch();
   const orders = useAppSelector((store) => store.ws);
   const total = orders ? orders.total : null;
   const totalToday = orders ? orders.totalToday : null;
-  const [newOrdersReady, setNewOrdersReady] = useState([]);
-  const [newOrdersInProgress, setNewOrdersInProgress] = useState([]);
+  const [newOrdersReady, setNewOrdersReady] = useState<WsOrder[]>([]);
+  const [newOrdersInProgress, setNewOrdersInProgress] = useState<WsOrder[]>([]);
 
   useEffect(() => {
     dispatch(startConnection());
     return () => {
       dispatch(wsConnectionClosed());
     };
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (orders && orders.orders) {
@@ -36,7 +37,7 @@ const FeedOrderStatusInfo = () => {
     }
   }, [orders]);
 
-  function chunkArray(array, size) {
+  function chunkArray(array: WsOrder[], size: number) {
     const result = [];
     for (let i = 0; i < array.length; i += size) {
       result.push(array.slice(i, i + size));

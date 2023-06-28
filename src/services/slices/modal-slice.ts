@@ -1,8 +1,8 @@
-import { createSlice, PayloadAction  } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ModalContent, ModalState } from '../../utils/essentials';
 
 
-const initialState: ModalState  = {
+const initialState: ModalState = {
   modalType: null,
   modalContent: null,
 };
@@ -11,7 +11,7 @@ const modalSlice = createSlice({
   name: 'modal',
   initialState,
   reducers: {
-    setModalContent: (state, action:PayloadAction<{modalType: string, modalContent: ModalContent}>) => {
+    setModalContent: (state, action: PayloadAction<{ modalType: string, modalContent: ModalContent }>) => {
       state.modalType = action.payload.modalType;
       state.modalContent = action.payload.modalContent;
     },

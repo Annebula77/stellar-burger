@@ -1,3 +1,3 @@
 declare module 'uniqid' {
-  export default function(): string;
+  export default function (): string;
 }

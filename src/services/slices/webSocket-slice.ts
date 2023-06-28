@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ThunkError, WsDataPayload, WsState  } from '../../utils/essentials';
+import { WsDataPayload, WsState } from '../../utils/essentials';
+
 
 
 const initialState: WsState = {
@@ -18,7 +19,7 @@ export const wsSlice = createSlice({
       state.wsConnected = true;
       state.error = null;
     },
-    wsConnectionError: (state, action: PayloadAction<ThunkError>) => {
+    wsConnectionError: (state, action: PayloadAction<Event>) => {
       state.wsConnected = false;
       state.error = action.payload;
     },
@@ -49,11 +50,11 @@ export const wsUserSlice = createSlice({
       state.wsConnected = true;
       state.error = null;
     },
-    wsUserConnectionError: (state, action: PayloadAction<ThunkError>) => {
+    wsUserConnectionError: (state, action: PayloadAction<Event>) => {
       state.wsConnected = false;
       state.error = action.payload;
     },
-    wsUserData: (state,  action: PayloadAction<WsDataPayload>) => {
+    wsUserData: (state, action: PayloadAction<WsDataPayload>) => {
       state.orders = action.payload.orders;
       state.total = action.payload.total;
       state.totalToday = action.payload.totalToday;

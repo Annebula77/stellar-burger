@@ -34,7 +34,7 @@ function App() {
     const refreshToken = getCookie('refreshToken');
 
     if (accessToken && refreshToken) {
-      dispatch(initializeLoginFromCookies(accessToken, refreshToken));
+      dispatch(initializeLoginFromCookies({ accessToken, refreshToken }));
       dispatch(isAuthChecked(true));
     }
 
