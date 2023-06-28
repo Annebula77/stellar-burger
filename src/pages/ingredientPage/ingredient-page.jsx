@@ -8,7 +8,7 @@ export const IngredientPage = () => {
   const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
-  const background = location.state?.background;
+  const background = location.state.background;
 
   const closeModal = () => {
     navigate(-1);

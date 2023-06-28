@@ -53,9 +53,9 @@ function BurgerConstructor() {
       const ingredientIds = ingredients.map((item) => item._id);
       const bunId = bun?._id;
       if (bunId) {
-        const orderItems = [bunId, ...ingredientIds, bunId] as string[]; 
+        const orderItems = [bunId, ...ingredientIds, bunId] as string[];
         dispatch(sendOrder(orderItems));
-      } 
+      }
     } else {
       navigate('/login', {
         replace: true,
@@ -65,11 +65,11 @@ function BurgerConstructor() {
   }, [isAuthenticated, ingredients, bun, dispatch, navigate, location.pathname]);
 
   const closeModal = useCallback(() => {
-  //@ts-ignore
+    //@ts-ignore
     dispatch(clearOrderState());
     dispatch(clearContainer());
     dispatch(clearModalContent());
-  }, []);
+  }, [dispatch]);
 
 
   return (
@@ -130,10 +130,10 @@ function BurgerConstructor() {
         </Button>
       </div>
       {
-        modalContent && typeof modalContent !== 'object' &&(
-        <Modal onClose={closeModal}>
-          {modalType === 'orderDetails' && <OrderDetails orderNumber={modalContent} />}
-        </Modal>
+        modalContent && typeof modalContent !== 'object' && (
+          <Modal onClose={closeModal}>
+            {modalType === 'orderDetails' && <OrderDetails orderNumber={modalContent} />}
+          </Modal>
         )
       }
     </section>

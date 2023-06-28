@@ -1,10 +1,15 @@
+import { Middleware } from "redux";
 import { refreshTokenApi } from "../services/thunks/user-thunks";
-let socket = null;
-let userSocket = null;
-export const socketMiddleware = (wsUrl, wsUserUrl, wsSliceActions, wsUserSliceActions) => store => next => action => {
- 
+import { TokenType, WSActions, WSUserActions } from "./essentials";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { AppDispatch } from '../services/store';
 
-  const { dispatch } = store;
+let socket: WebSocket | null = null;
+let userSocket: WebSocket | null = null;
+
+export const socketMiddleware = (wsUrl: string, wsUserUrl: string, wsSliceActions: WSActions, wsUserSliceActions: WSUserActions): Middleware => store => next => action => {
+  const dispatch: AppDispatch = store.dispatch;
+
 
   const wsActions = {
     ...wsSliceActions,
@@ -31,7 +36,7 @@ export const socketMiddleware = (wsUrl, wsUserUrl, wsSliceActions, wsUserSliceAc
       dispatch(wsConnectionSuccess());
     };
 
-    socket.onerror = event => {
+    socket.onerror = (event) => {
       dispatch(wsConnectionError(event));
     };
 
@@ -58,24 +63,23 @@ export const socketMiddleware = (wsUrl, wsUserUrl, wsSliceActions, wsUserSliceAc
     userSocket.onmessage = async event => {
       const { data } = event;
       const parsedData = JSON.parse(data);
-    
+
       if (parsedData.message === 'jwt expired') {
         try {
-          // Вызовите функцию refreshTokenApi и ждите её выполнения
-          const newTokenData = await dispatch(refreshTokenApi());
-          
-          if (newTokenData.payload) {
-            userSocket = new WebSocket(`${wsUserUrl}?token=${newTokenData.payload.accessToken}`);
-            // Подключите обработчики событий к новому WebSocket
-            userSocket.onopen = event => dispatch(wsUserConnectionSuccess(event));
-            userSocket.onmessage = event => dispatch(wsUserData(JSON.parse(event.data)));
-            userSocket.onerror = event => dispatch(wsUserConnectionError(event));
+          const newTokenDataAction = await dispatch(refreshTokenApi());
+          const newTokenData: TokenType = unwrapResult(newTokenDataAction);
+
+          if (newTokenData) {
+            userSocket = new WebSocket(`${wsUserUrl}?token=${newTokenData.accessToken}`);
+            userSocket.onopen = () => dispatch(wsUserConnectionSuccess());
+            userSocket.onmessage = (event) => dispatch(wsUserData(JSON.parse(event.data)));
+            userSocket.onerror = (event) => dispatch(wsUserConnectionError(event));
             userSocket.onclose = () => dispatch(wsUserConnectionClosed());
           } else {
             console.error('Failed to refresh token: No payload received');
           }
-        } catch (err) {
-          console.error('Failed to refresh token:', err);
+        } catch (error) {
+          console.error('Failed to refresh token: ', error);
         }
       } else {
         dispatch(wsUserData(parsedData));

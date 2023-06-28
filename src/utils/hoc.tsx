@@ -5,7 +5,7 @@ interface CustomNavLinkProps {
   to: string;
   activeClass: string;
   children: React.ReactNode;
-  }
+}
 
 export const CustomNavLink: React.FC<CustomNavLinkProps> = ({ to, activeClass, children, ...props }) => {
   const match = useMatch(to);

@@ -3,7 +3,7 @@ import { AnyAction } from 'redux';
 import { BASE_URL, checkResponse } from '../../utils/essentials';
 import { getCookie, setCookie, clearCookie } from '../../utils/cookies';
 import { UserDataType, LogoutType, TokenType, User, ThunkApiConfig } from '../../utils/essentials';
-import { 
+import {
   logoutSuccess,
   logoutFailed,
   isAuthChecked,
@@ -12,9 +12,9 @@ import {
 
 
 const sendRequestWithRefreshToken = async<T>(
-  endpoint: string, 
-  options: RequestInit, 
-  dispatch: ThunkDispatch<any, any, AnyAction>, 
+  endpoint: string,
+  options: RequestInit,
+  dispatch: ThunkDispatch<any, any, AnyAction>,
   callbackOnSuccess: (data: T) => void
 ): Promise<any> => {
   try {
@@ -25,44 +25,44 @@ const sendRequestWithRefreshToken = async<T>(
 
     (options.headers as Record<string, string>).Authorization = accessToken;
     const response = await fetch(`${BASE_URL}${endpoint}`, options);
-    
-     if (!response.ok) {
+
+    if (!response.ok) {
       const errorResponse = await response.json();
-      throw new Error(errorResponse.message);  
+      throw new Error(errorResponse.message);
     }
 
     const data = await response.json();
 
-    if(callbackOnSuccess) {
+    if (callbackOnSuccess) {
       return callbackOnSuccess(data);
     }
   } catch (err) {
     if (err instanceof Error && err.message === "jwt expired") {
       return dispatch(refreshTokenApi())
-          .then(() => {
-            const accessToken = getCookie('accessToken');
-            if (!accessToken) {
+        .then(() => {
+          const accessToken = getCookie('accessToken');
+          if (!accessToken) {
             throw new Error('Access token not found');
-              }
-            (options.headers as Record<string, string>).Authorization ='accessToken';
-            return fetch(`${BASE_URL}${endpoint}`, options);
-          })
-          .then((response) => {
-            if (!response.ok) {
-              return response.json().then(json => {
-                throw new Error(json.message);
+          }
+          (options.headers as Record<string, string>).Authorization = 'accessToken';
+          return fetch(`${BASE_URL}${endpoint}`, options);
+        })
+        .then((response) => {
+          if (!response.ok) {
+            return response.json().then(json => {
+              throw new Error(json.message);
             });
-            }
-            return response.json();
-          })
-          .then((data) => {
-            if(callbackOnSuccess) {
-              return callbackOnSuccess(data);
-            }
-          })
-          .catch((refreshError) => {
-            console.log(refreshError);
-            throw refreshError;
+          }
+          return response.json();
+        })
+        .then((data) => {
+          if (callbackOnSuccess) {
+            return callbackOnSuccess(data);
+          }
+        })
+        .catch((refreshError) => {
+          console.log(refreshError);
+          throw refreshError;
         });
     } else if (err instanceof Error) {
       throw err;
@@ -156,7 +156,7 @@ export const logoutApi = createAsyncThunk<void, void, ThunkApiConfig>(
 
 export const refreshTokenApi = createAsyncThunk<TokenType, void, ThunkApiConfig>(
   'user/refreshTokenApi',
-  async (_, { rejectWithValue }) => {
+  async (_, { rejectWithValue, dispatch }) => {
     const refreshToken = getCookie('refreshToken');
     if (!refreshToken) {
       return rejectWithValue({
@@ -179,36 +179,36 @@ export const refreshTokenApi = createAsyncThunk<TokenType, void, ThunkApiConfig>
 
     const response = await fetch(`${BASE_URL}/auth/token`, requestOptions);
     const data = await response.json();
-      if (!response.ok) {
-        throw rejectWithValue({
-          message: data.message || 'Failed to refresh token.',
-          statusCode: data.statusCode || 500,
-          errorType: data.error || 'UnknownError'
-        });
-      }
-       
-      if (!data.success) {
-        throw rejectWithValue({
-          message: data.message || 'Failed to refresh token.',
-          statusCode: data.statusCode || 500,
-          errorType: data.error || 'UnknownError'
-        });
-      }
-  
-      const { accessToken, refreshToken: newRefreshToken } = data;
-      setCookie('accessToken', accessToken);
-      setCookie('refreshToken', newRefreshToken);
-      return { accessToken, refreshToken: newRefreshToken };
+    if (!response.ok) {
+      throw rejectWithValue({
+        message: data.message || 'Failed to refresh token.',
+        statusCode: data.statusCode || 500,
+        errorType: data.error || 'UnknownError'
+      });
     }
-  );
 
-  export const checkUserAuth = createAsyncThunk<void, void, {}>(
-    'user/checkUserAuth', 
-    (_, { dispatch }) => {
-      if (getCookie('accessToken')) {
-        dispatch(isAuthChecked(true));
-      } else {
-        dispatch(isAuthChecked(false));
-      }
+    if (!data.success) {
+      throw rejectWithValue({
+        message: data.message || 'Failed to refresh token.',
+        statusCode: data.statusCode || 500,
+        errorType: data.error || 'UnknownError'
+      });
     }
-  );
+
+    const { accessToken, refreshToken: newRefreshToken } = data;
+    setCookie('accessToken', accessToken);
+    setCookie('refreshToken', newRefreshToken);
+    return { accessToken, refreshToken: newRefreshToken };
+  }
+);
+
+export const checkUserAuth = createAsyncThunk<void, void, {}>(
+  'user/checkUserAuth',
+  (_, { dispatch }) => {
+    if (getCookie('accessToken')) {
+      dispatch(isAuthChecked(true));
+    } else {
+      dispatch(isAuthChecked(false));
+    }
+  }
+);

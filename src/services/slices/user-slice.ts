@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ThunkError, UserSliceType, IsAuthCheckedType, authErrorType, userPayloadType} from '../../utils/essentials';
+import { ThunkError, UserSliceType, IsAuthCheckedType, authErrorType, userPayloadType } from '../../utils/essentials';
 import {
   getUserDetails,
   updateUserDetails,
@@ -9,7 +9,7 @@ import {
 } from '../thunks/user-thunks';
 
 
-const initialState: UserSliceType ={
+const initialState: UserSliceType = {
   success: false,
   user: null,
   isAuthChecked: false,
@@ -63,7 +63,7 @@ const userSlice = createSlice({
         state.user = null;
         state.authError = action.payload as ThunkError;
         state.isLoading = false;
-    })
+      })
       .addCase(updateUserDetails.pending, (state) => {
         state.isLoading = true;
       })
@@ -110,6 +110,6 @@ export const {
   isAuthFailed,
   logoutSuccess,
   logoutFailed,
-  } = userSlice.actions;
+} = userSlice.actions;
 
 export default userSlice.reducer;

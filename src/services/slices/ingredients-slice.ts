@@ -4,7 +4,7 @@ import { IngredientState, IngredientPayload } from "../../utils/essentials";
 
 
 
-const initialState : IngredientState = {
+const initialState: IngredientState = {
   ingredients: [],
   loadingIngredients: false,
   errorIngredients: false,
@@ -12,9 +12,9 @@ const initialState : IngredientState = {
 };
 
 const ingredientsSlice = createSlice({
-  name: "ingredients", 
+  name: "ingredients",
   initialState,
-  reducers: {}, 
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchIngredients.pending, (state) => {
@@ -33,7 +33,7 @@ const ingredientsSlice = createSlice({
       .addCase(fetchIngredients.rejected, (state, action) => {
         state.loadingIngredients = false;
         state.errorIngredients = true;
-        console.log(action.payload); 
+        console.log(action.payload);
       });
   },
 });

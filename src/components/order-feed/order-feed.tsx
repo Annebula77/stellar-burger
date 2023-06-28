@@ -1,9 +1,8 @@
 import styles from './order-feed.module.css';
-import OrderOverviewShield from '../../components/order-overview-shield/order-overview-shield';
+import OrderOverviewShield from '../order-overview-shield/order-overview-shield';
 import { useAppDispatch, useAppSelector } from '../../utils/hooks';
 import { useEffect } from 'react';
 import { startConnection, wsConnectionClosed } from '../../services/slices/webSocket-slice';
-
 
 
 const OrderFeed = () => {
@@ -16,7 +15,7 @@ const OrderFeed = () => {
       dispatch(wsConnectionClosed());
     };
 
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className={styles.container}>

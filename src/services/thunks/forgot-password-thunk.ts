@@ -1,4 +1,4 @@
-import { BASE_URL, checkResponse, PasswordResetResponse} from '../../utils/essentials';
+import { BASE_URL, checkResponse, PasswordResetResponse } from '../../utils/essentials';
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 

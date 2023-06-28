@@ -7,7 +7,6 @@ import { TabItems, IngredientListType } from '../../utils/essentials';
 
 
 
-
 const BurgerIngredients = () => {
   const ingredientList: IngredientListType = useAppSelector((state) => state.ingredients);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -38,7 +37,7 @@ const BurgerIngredients = () => {
       <h2 className={`text text_type_main-large ${styles.title}`}>Собери бургер</h2>
       <Tabs bunRef={bunRef} sauceRef={sauceRef} mainRef={mainRef} current={current} />
       <section className={styles.container} ref={containerRef} onScroll={handleScroll} >
-        <IngredientsCategory title ='Булки' data={buns} ref={bunRef} />
+        <IngredientsCategory title='Булки' data={buns} ref={bunRef} />
         <IngredientsCategory title='Соусы' data={sauce} ref={sauceRef} />
         <IngredientsCategory title='Начинки' data={main} ref={mainRef} />
       </section>

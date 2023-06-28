@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { useAppSelector } from '../../utils/hooks';
 import { useMemo } from 'react';
 import { formatDate } from '../../utils/essentials';
@@ -6,9 +6,13 @@ import OrderImage from '../order-image/order-image';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './order-overview-shield.module.css';
 import { useNavigate, useMatch, useLocation } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import { WsOrder } from '../../utils/essentials';
 
-const OrderOverviewShield = React.memo(({ order }) => {
+interface OrderOverviewShieldProps {
+  order: WsOrder,
+}
+
+const OrderOverviewShield: FC<OrderOverviewShieldProps> = React.memo(({ order }) => {
   const ingredientList = useAppSelector((state) => state.ingredients.ingredients);
   const navigate = useNavigate();
   const location = useLocation();
@@ -88,8 +92,5 @@ const OrderOverviewShield = React.memo(({ order }) => {
   );
 });
 
-OrderOverviewShield.propTypes = {
-  order: PropTypes.object.isRequired,
-};
 
 export default OrderOverviewShield;

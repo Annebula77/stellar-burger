@@ -9,14 +9,14 @@ type Order = {
 export interface OrderState {
   loadingOrder: boolean;
   errorOrder: null | string;
-  data: null | number; 
+  data: null | number;
 }
 
-export type OrderPayload = number; 
+export type OrderPayload = number;
 
 //Ingredient types interfaces
 
- export interface IIngredient {
+export interface IIngredient {
   _id: string;
   name: string;
   type: string;
@@ -34,7 +34,7 @@ export type OrderPayload = number;
 
 export type IngredientListType = {
   ingredients: IIngredient[];
-  }
+}
 
 export type IngredientState = {
   ingredients: IIngredient[],
@@ -57,7 +57,7 @@ export type IngredientPayload = IIngredient[];
 
 export type BurgerIngredientsState = {
   bun: IIngredient | null,
-  ingredients: IIngredient[],  
+  ingredients: IIngredient[],
 }
 
 export type AddIngredientPayload = IIngredient;
@@ -82,7 +82,7 @@ export type UserResponse = {
   refreshToken: string;
   order?: Order;
   data?: IIngredient[];
-  };
+};
 
 export type UserDataType = {
   name: string,
@@ -102,7 +102,7 @@ export interface UserSliceType {
 
 export type IsAuthCheckedType = UserSliceType['isAuthChecked'];
 export type authErrorType = UserSliceType['authError'];
-export type  userPayloadType = UserSliceType['user'];
+export type userPayloadType = UserSliceType['user'];
 
 export interface LoginArgs {
   email: string;
@@ -122,42 +122,44 @@ export interface LoginState {
 
 export type LogoutType = {
   success: boolean,
+};
+
+export interface User {
+  user: {
+    name: string;
+    email: string;
+    password: string;
   };
-  
-  export interface User {
-    user: {
-      name: string;
-      email: string;
-      password: string;
-    }; 
-  }
+}
 
-  export type PasswordResetResponse = {
-    message: string;
-    success: boolean;
-  };
+export type PasswordResetResponse = {
+  message: string;
+  success: boolean;
+};
 
-  export type resetPasswordData = {
-    password: string,
-    token: string,
-    success: boolean
-  }
+export type resetPasswordData = {
+  password: string,
+  token: string,
+  success: boolean
+}
 
-  export type ForgotPasswordState = {
-    status: boolean;
-  }
+export type ForgotPasswordState = {
+  status: boolean;
+}
 
-  export type resetPasswordState = {
-    success: boolean,
-  }
-  
+export type resetPasswordState = {
+  success: boolean,
+}
 
-  // error handling interfaces and types
+
+// error handling interfaces and types
 export interface ThunkError {
   message: string;
   statusCode: number;
   errorType: string;
 }
+
+export interface WebSocketError extends Event, ThunkError { }
 
 export type ThunkApiConfig = {
   rejectValue: ThunkError;
@@ -196,7 +198,29 @@ export interface WsState {
   orders: WsOrder[] | null,
   total: number,
   totalToday: number,
-  error: ThunkError | null,
+  error: Event | null,
+}
+export interface IAction {
+  type: string;
+  payload?: WsDataPayload;
+}
+
+export interface WSActions {
+  wsConnectionSuccess: () => IAction;
+  wsConnectionError: (event: Event) => { type: string; payload: Event };
+  wsGetData: (data: WsDataPayload) => IAction;
+  wsConnectionClosed: () => IAction;
+  clearWsData: () => IAction;
+  startConnection: () => { type: string };
+
+}
+export interface WSUserActions {
+  wsUserConnectionSuccess: () => IAction;
+  wsUserConnectionError: (event: Event) => { type: string; payload: Event };
+  wsUserData: (data: WsDataPayload) => IAction;
+  wsUserConnectionClosed: () => IAction;
+  clearWsUserData: () => IAction;
+  startUserConnection: (token?: string) => { type: string; payload?: string };
 }
 
 //Component props
@@ -239,8 +263,8 @@ export const formatDate = (isoString: string) => {
   const formattedTime = format(date, 'HH:mm');
   let timeZone = format(date, 'xxx');
 
-   // Убираем двоеточие и нолики
-   timeZone = timeZone.replace(/:00/g, '').replace(/\+0/g, '+');
+  // Убираем двоеточие и нолики
+  timeZone = timeZone.replace(/:00/g, '').replace(/\+0/g, '+');
 
-   return `${formattedDate}, ${formattedTime} i-GMT${timeZone}`;
+  return `${formattedDate}, ${formattedTime} i-GMT${timeZone}`;
 };

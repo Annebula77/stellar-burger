@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { useAppSelector } from '../../utils/hooks';
 import { useMemo } from 'react';
 import { formatDate } from '../../utils/essentials';
@@ -6,10 +6,14 @@ import OrderImage from '../order-image/order-image';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './order-explication.module.css';
 import { useParams, useLocation } from 'react-router-dom';
-import PropTypes from 'prop-types';
+
+interface OrderExplicationProps {
+  inModal: boolean;
+}
 
 
-const OrderExplication = React.memo(({ inModal }) => {
+
+const OrderExplication: FC<OrderExplicationProps> = React.memo(({ inModal }) => {
   const ingredientList = useAppSelector((state) => state.ingredients.ingredients);
   const { id } = useParams();
   const location = useLocation();
@@ -22,10 +26,9 @@ const OrderExplication = React.memo(({ inModal }) => {
   let containerStyles = inModal ? styles.container : `${styles.container} ${styles.page}`
 
 
-  let totalPrice = 0;
 
   const ingredients = order?.ingredients;
-  const ingredientCounts = {};
+  const ingredientCounts: Record<string, number> = {};
 
   if (ingredients) {
     ingredients.forEach((ingredientId) => {
@@ -38,6 +41,8 @@ const OrderExplication = React.memo(({ inModal }) => {
   } else {
     console.warn("Order ingredients are undefined");
   }
+
+  let totalPrice = 0;
 
   const ingredientsMarkup = useMemo(() => {
     return Object.entries(ingredientCounts).map(([ingredientId, count]) => {
@@ -58,17 +63,18 @@ const OrderExplication = React.memo(({ inModal }) => {
         </li>
       );
     })
-  })
+  }, [ingredientCounts, ingredientList, totalPrice]);
+
   let statusText = '';
   let statusStyle = '';
 
-  if (order.status === 'done') {
+  if (order?.status === 'done') {
     statusText = 'Выполнен';
     statusStyle = styles.done;
-  } else if (order.status === 'pending') {
+  } else if (order?.status === 'pending') {
     statusText = 'Готовится';
     statusStyle = styles.pending;
-  } else if (order.status === 'created') {
+  } else if (order?.status === 'created') {
     statusText = 'Создан';
     statusStyle = styles.created;
   }
@@ -77,9 +83,9 @@ const OrderExplication = React.memo(({ inModal }) => {
   return (
     <div className={containerStyles}>
       <div className={styles.upper__box}>
-        <p className="text text_type_digits-default mb-15">{`#${order.number}`}</p>
+        <p className="text text_type_digits-default mb-15">{`#${order?.number}`}</p>
       </div>
-      <h2 className="text text_type_main-medium mb-6 mt-2">{order.name}</h2>
+      <h2 className="text text_type_main-medium mb-6 mt-2">{order?.name}</h2>
       <p className={`text text_type_main-small mb-15 ${statusStyle}`}>{statusText}</p>
       <h3 className="text text_type_main-medium mb-6">Состав: </h3>
       <div className={styles.ingredients__container}>
@@ -88,7 +94,7 @@ const OrderExplication = React.memo(({ inModal }) => {
         </div>
       </div>
       <div className={styles.price__container}>
-        <p className="text text_type_main-small text_color_inactive">{formatDate(order.updatedAt)}</p>
+        <p className="text text_type_main-small text_color_inactive">{formatDate(order?.updatedAt ?? '')}</p>
         <p className={`${styles.price} text text_type_digits-default`}>{totalPrice}
           <CurrencyIcon type="primary" />
         </p>
@@ -97,7 +103,5 @@ const OrderExplication = React.memo(({ inModal }) => {
   );
 });
 
-OrderExplication.propTypes = {
-  inModal: PropTypes.bool.isRequired,
-};
+
 export default OrderExplication;

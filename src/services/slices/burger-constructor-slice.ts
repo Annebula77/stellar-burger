@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AddIngredientPayload, AddBunPayload, MoveIngredientPayload, DeleteIngredientPayload, BurgerIngredientsState} from '../../utils/essentials';
+import { AddIngredientPayload, AddBunPayload, MoveIngredientPayload, DeleteIngredientPayload, BurgerIngredientsState } from '../../utils/essentials';
 import uniqid from 'uniqid';
 
 
@@ -30,7 +30,7 @@ const burgerConstructorSlice = createSlice({
       state.ingredients.splice(hoverElIndex, 0, dragItem);
     },
 
-    deleteIngredientFromConstructor: (state, action: PayloadAction<DeleteIngredientPayload> ) => {
+    deleteIngredientFromConstructor: (state, action: PayloadAction<DeleteIngredientPayload>) => {
       state.ingredients.splice(action.payload, 1);
     },
     clearContainer: state => initialState,
