@@ -1,23 +1,28 @@
 import styles from './constructor-element.module.css';
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { ingredientType } from '../../utils/prop-types';
 import { useDispatch } from 'react-redux';
 import { useDrag, useDrop } from 'react-dnd';
-import { useRef } from 'react';
+import { useRef, FC } from 'react';
 import { moveIngredientInContainer, deleteIngredientFromConstructor } from '../../services/slices/burger-constructor-slice';
-import PropTypes from 'prop-types';
+import { IIngredient, DragItemHover } from '../../utils/essentials';
 
-const ConstructorEl = ({ index, item }) => {
+type ConstructorElProps = {
+  index: number,
+  item: IIngredient,
+}
+
+
+const ConstructorEl: FC<ConstructorElProps> = ({ index, item }) => {
   const dispatch = useDispatch();
   const { image, _id, price, name } = item;
   const ref = useRef(null);
 
-  const handleDelete = (index) => {
+  const handleDelete = (index: number) => {
     dispatch(deleteIngredientFromConstructor(index));
   }
   const [, drop] = useDrop({
     accept: 'item',
-    hover(item) {
+    hover(item: DragItemHover) {
       if (!ref.current) {
         return;
       }
@@ -47,22 +52,17 @@ const ConstructorEl = ({ index, item }) => {
       style={{ opacity }}
       ref={ref}
     >
-      <DragIcon type='primary' className={styles.dragButton} />
+      <DragIcon type='primary' />
       <ConstructorElement
         text={name}
         price={price}
         thumbnail={image}
-        handleClose={() => handleDelete(index, item)}
+        handleClose={() => handleDelete(index)}
       />
     </div>
   );
 };
 
-ConstructorEl.propTypes = {
-  item: ingredientType,
-  index: PropTypes.number.isRequired,
-
-};
 export default ConstructorEl;
 
 

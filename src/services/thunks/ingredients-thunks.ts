@@ -1,9 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { BASE_URL, checkResponse, UserResponse } from "../../utils/essentials";
-import { Ingredient } from "../../utils/essentials";
+import { IIngredient } from "../../utils/essentials";
 
 
-export const fetchIngredients = createAsyncThunk<Ingredient[], void, { rejectValue: string }>(
+export const fetchIngredients = createAsyncThunk<IIngredient[], void, { rejectValue: string }>(
   "ingredients/fetchIngredients",
   async (_, thunkAPI) => { 
     try {

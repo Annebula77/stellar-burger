@@ -2,9 +2,14 @@ import styles from './ingredients-category.module.css';
 import Ingredient from '../ingredient/ingredient';
 import PropTypes from 'prop-types';
 import { forwardRef } from 'react';
+import { IIngredient } from '../../utils/essentials';
 
+type IngredientsCategoryProps = {
+  title: string,
+  data: IIngredient[],
+}
 
-const IngredientsCategory = forwardRef((props, ref) => {
+const IngredientsCategory = forwardRef<HTMLDivElement, IngredientsCategoryProps>((props, ref) => {
   const { title, data } = props;
   return (
     <div ref={ref}>
@@ -24,8 +29,5 @@ const IngredientsCategory = forwardRef((props, ref) => {
 });
 
 
-IngredientsCategory.propTypes = {
-  title: PropTypes.string.isRequired,
-};
 
 export default IngredientsCategory;
