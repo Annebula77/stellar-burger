@@ -21,7 +21,7 @@ function AppHeader() {
     }
   }, [isLoggedIn, user]);
 
-  const activeTypology = (path) => {
+  const activeTypology = (path: string) => {
     return location.pathname.startsWith(path) ? 'text text_type_main-default' : 'text text_type_main-default text_color_inactive';
   };
 

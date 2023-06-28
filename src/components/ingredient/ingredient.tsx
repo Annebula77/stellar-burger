@@ -1,14 +1,18 @@
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
-import { ingredientType } from '../../utils/prop-types';
 import styles from './ingredient.module.css';
 import { useDrag } from 'react-dnd';
 import { useMemo } from 'react';
 import { useAppSelector } from '../../utils/hooks';
 import { useNavigate, useMatch, useLocation } from 'react-router-dom';
 import React from 'react';
+import { IIngredient } from '../../utils/essentials';
+
+type IngredientProps = {
+  ingredient: IIngredient,
+}
 
 
-const Ingredient = React.memo(({ ingredient }) => {
+const Ingredient = React.memo<IngredientProps>(({ ingredient }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const match = useMatch('/ingredients/:id');
@@ -50,9 +54,5 @@ const Ingredient = React.memo(({ ingredient }) => {
   )
 })
 
-Ingredient.propTypes = {
-  ingredient: ingredientType,
-
-};
 
 export default Ingredient;

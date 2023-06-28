@@ -3,17 +3,17 @@ import Tabs from '../tabs/tabs';
 import IngredientsCategory from '../ingredients-category/ingredients-category';
 import { useState, useRef } from 'react';
 import { useAppSelector } from '../../utils/hooks';
-import { TabItems } from '../../utils/essentials';
+import { TabItems, IngredientListType } from '../../utils/essentials';
 
 
 
 
 const BurgerIngredients = () => {
-  const ingredientList = useAppSelector((state) => state.ingredients);
-  const containerRef = useRef(null);
-  const bunRef = useRef(null);
-  const sauceRef = useRef(null);
-  const mainRef = useRef(null);
+  const ingredientList: IngredientListType = useAppSelector((state) => state.ingredients);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const bunRef = useRef<HTMLDivElement>(null);
+  const sauceRef = useRef<HTMLDivElement>(null);
+  const mainRef = useRef<HTMLDivElement>(null);
   const [current, setCurrent] = useState(TabItems.BUN);
 
 
@@ -22,13 +22,13 @@ const BurgerIngredients = () => {
   const main = ingredientList.ingredients.filter((item) => item.type === 'main');
 
   const handleScroll = () => {
-    if (containerRef.current.getBoundingClientRect().top > bunRef.current.getBoundingClientRect().top) {
+    if (containerRef.current && bunRef.current && containerRef.current.getBoundingClientRect().top > bunRef.current.getBoundingClientRect().top) {
       setCurrent(TabItems.BUN);
     }
-    if (containerRef.current.getBoundingClientRect().top > sauceRef.current.getBoundingClientRect().top) {
+    if (containerRef.current && sauceRef.current && containerRef.current.getBoundingClientRect().top > sauceRef.current.getBoundingClientRect().top) {
       setCurrent(TabItems.SAUCE);
     }
-    if (containerRef.current.getBoundingClientRect().top > mainRef.current.getBoundingClientRect().top) {
+    if (containerRef.current && mainRef.current && containerRef.current.getBoundingClientRect().top > mainRef.current.getBoundingClientRect().top) {
       setCurrent(TabItems.MAIN);
     }
   };
@@ -38,7 +38,7 @@ const BurgerIngredients = () => {
       <h2 className={`text text_type_main-large ${styles.title}`}>Собери бургер</h2>
       <Tabs bunRef={bunRef} sauceRef={sauceRef} mainRef={mainRef} current={current} />
       <section className={styles.container} ref={containerRef} onScroll={handleScroll} >
-        <IngredientsCategory title='Булки' data={buns} ref={bunRef} />
+        <IngredientsCategory title ='Булки' data={buns} ref={bunRef} />
         <IngredientsCategory title='Соусы' data={sauce} ref={sauceRef} />
         <IngredientsCategory title='Начинки' data={main} ref={mainRef} />
       </section>

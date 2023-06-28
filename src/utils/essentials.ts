@@ -16,7 +16,7 @@ export type OrderPayload = number;
 
 //Ingredient types interfaces
 
- export interface Ingredient {
+ export interface IIngredient {
   _id: string;
   name: string;
   type: string;
@@ -29,25 +29,39 @@ export type OrderPayload = number;
   image_mobile: string;
   image_large: string;
   __v: number;
+  key?: string;
 }
 
+export type IngredientListType = {
+  ingredients: IIngredient[];
+  }
+
 export type IngredientState = {
-  ingredients: Ingredient[],
+  ingredients: IIngredient[],
   loadingIngredients: boolean,
   dataRequest: boolean,
   errorIngredients: boolean,
 }
 
-export type IngredientPayload = Ingredient[];
+export type DragItem = {
+  ingredient: IIngredient;
+};
+
+export type DragItemHover = {
+  _id: string;
+  index: number;
+};
+
+export type IngredientPayload = IIngredient[];
 
 
 export type BurgerIngredientsState = {
-  bun: Ingredient | null,
-  ingredients: Ingredient[],  
+  bun: IIngredient | null,
+  ingredients: IIngredient[],  
 }
 
-export type AddIngredientPayload = Ingredient;
-export type AddBunPayload = Ingredient;
+export type AddIngredientPayload = IIngredient;
+export type AddBunPayload = IIngredient;
 export type MoveIngredientPayload = { dragElIndex: number, hoverElIndex: number };
 export type DeleteIngredientPayload = number;
 
@@ -67,7 +81,7 @@ export type UserResponse = {
   accessToken: string;
   refreshToken: string;
   order?: Order;
-  data?: Ingredient[];
+  data?: IIngredient[];
   };
 
 export type UserDataType = {
@@ -78,7 +92,7 @@ export type UserDataType = {
 
 export interface UserSliceType {
   success: boolean,
-  user: User | null,
+  user: UserDataType | null,
   isAuthChecked: boolean,
   accessToken: string,
   refreshToken: string,
@@ -184,6 +198,11 @@ export interface WsState {
   totalToday: number,
   error: ThunkError | null,
 }
+
+//Component props
+
+
+
 
 
 

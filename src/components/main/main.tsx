@@ -1,7 +1,11 @@
-import PropTypes from 'prop-types';
+import React, { ReactNode } from 'react';
 import styles from './main.module.css'
 
-function Main(props) {
+interface MainProps {
+  children: ReactNode;
+}
+
+const Main: React.FC<MainProps> = (props) => {
   return (
     <main className={styles.main}>
       {props.children}
@@ -9,7 +13,4 @@ function Main(props) {
   )
 }
 
-Main.propTypes = {
-  children: PropTypes.node.isRequired,
-};
 export default Main;

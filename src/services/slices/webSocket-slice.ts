@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ThunkError, WsOrder, WsDataPayload, WsState  } from '../../utils/essentials';
+import { ThunkError, WsDataPayload, WsState  } from '../../utils/essentials';
 
 
 const initialState: WsState = {

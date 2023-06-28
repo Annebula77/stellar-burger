@@ -72,7 +72,7 @@ const sendRequestWithRefreshToken = async<T>(
   }
 };
 
-export const getUserDetails = createAsyncThunk<User, void, ThunkApiConfig>(
+export const getUserDetails = createAsyncThunk<UserDataType, void, ThunkApiConfig>(
   'user/getUserDetails',
   async (_, { dispatch }) => {
     const options: RequestInit = {

@@ -11,6 +11,7 @@ import { useDrop } from 'react-dnd';
 import { clearModalContent } from '../../services/slices/modal-slice';
 import ConstructorEl from '../сonstructor-element/constructor-element';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { DragItem } from '../../utils/essentials';
 
 
 
@@ -18,7 +19,7 @@ function BurgerConstructor() {
   const { bun, ingredients } = useAppSelector((state) => state.burgerOrderList);
   const { modalType, modalContent } = useAppSelector((state) => state.modal);
   const dispatch = useAppDispatch();
-  const [totalPrice, setTotalPrice] = useState(null);
+  const [totalPrice, setTotalPrice] = useState<number | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
   const isAuthenticated = useAppSelector((state) => state.user.isAuthChecked);
@@ -27,7 +28,7 @@ function BurgerConstructor() {
 
   const [, dropTarget] = useDrop({
     accept: 'ingredients',
-    drop(item) {
+    drop(item: DragItem) {
       if (item.ingredient.type === 'bun') {
         dispatch(addBunItem(item.ingredient));
       } else {
@@ -50,22 +51,25 @@ function BurgerConstructor() {
   const openModal = useCallback(() => {
     if (isAuthenticated) {
       const ingredientIds = ingredients.map((item) => item._id);
-      const bunId = bun._id;
-      const orderItems = [bunId, ...ingredientIds, bunId];
-      dispatch(sendOrder(orderItems));
+      const bunId = bun?._id;
+      if (bunId) {
+        const orderItems = [bunId, ...ingredientIds, bunId] as string[]; 
+        dispatch(sendOrder(orderItems));
+      } 
     } else {
       navigate('/login', {
         replace: true,
         state: { from: location.pathname }
       });
     }
-  });
+  }, [isAuthenticated, ingredients, bun, dispatch, navigate, location.pathname]);
 
   const closeModal = useCallback(() => {
+  //@ts-ignore
     dispatch(clearOrderState());
     dispatch(clearContainer());
     dispatch(clearModalContent());
-  });
+  }, []);
 
 
   return (
@@ -78,7 +82,7 @@ function BurgerConstructor() {
                 type='top'
                 isLocked={true}
                 text={`${bun.name} (верх)`}
-                price={`${bun.price}`}
+                price={bun.price}
                 thumbnail={`${bun.image}`}
               />
             </li>
@@ -103,7 +107,7 @@ function BurgerConstructor() {
                 type='bottom'
                 isLocked={true}
                 text={`${bun.name} (низ)`}
-                price={`${bun.price}`}
+                price={bun.price}
                 thumbnail={`${bun.image}`}
               />
             </li>
@@ -126,10 +130,10 @@ function BurgerConstructor() {
         </Button>
       </div>
       {
-        modalContent && (
-          <Modal onClose={closeModal}>
-            {modalType === 'orderDetails' && <OrderDetails orderNumber={modalContent} />}
-          </Modal>
+        modalContent && typeof modalContent !== 'object' &&(
+        <Modal onClose={closeModal}>
+          {modalType === 'orderDetails' && <OrderDetails orderNumber={modalContent} />}
+        </Modal>
         )
       }
     </section>

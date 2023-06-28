@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Ingredient, AddIngredientPayload, AddBunPayload, MoveIngredientPayload, DeleteIngredientPayload, BurgerIngredientsState} from '../../utils/essentials';
+import { AddIngredientPayload, AddBunPayload, MoveIngredientPayload, DeleteIngredientPayload, BurgerIngredientsState} from '../../utils/essentials';
 import uniqid from 'uniqid';
 
 
