@@ -9,6 +9,7 @@ import { useParams, useLocation } from 'react-router-dom';
 
 interface OrderExplicationProps {
   inModal: boolean;
+  order: string | undefined;
 }
 
 
@@ -19,33 +20,30 @@ const OrderExplication: FC<OrderExplicationProps> = React.memo(({ inModal }) => 
   const location = useLocation();
   const userOrders = useAppSelector(state => state.wsUser.orders);
   const orders = useAppSelector(state => state.ws.orders);
-
   const ordersList = location.pathname.includes('feed') ? orders : userOrders;
   const order = ordersList?.find(order => order._id === id);
-
   let containerStyles = inModal ? styles.container : `${styles.container} ${styles.page}`
-
-
-
   const ingredients = order?.ingredients;
-  const ingredientCounts: Record<string, number> = {};
+  const ingredientCounts: Record<string, number> = useMemo(() => {
+    const counts: Record<string, number> = {};
 
-  if (ingredients) {
-    ingredients.forEach((ingredientId) => {
-      if (ingredientCounts[ingredientId]) {
-        ingredientCounts[ingredientId]++;
-      } else {
-        ingredientCounts[ingredientId] = 1;
-      }
-    });
-  } else {
-    console.warn("Order ingredients are undefined");
-  }
+    if (ingredients) {
+      ingredients.forEach((ingredientId) => {
+        if (counts[ingredientId]) {
+          counts[ingredientId]++;
+        } else {
+          counts[ingredientId] = 1;
+        }
+      });
+    } else {
+      console.warn("Order ingredients are undefined");
+    }
 
-  let totalPrice = 0;
-
-  const ingredientsMarkup = useMemo(() => {
-    return Object.entries(ingredientCounts).map(([ingredientId, count]) => {
+    return counts;
+  }, [ingredients]);
+  const { ingredientsMarkup, totalPrice } = useMemo(() => {
+    let totalPrice = 0;
+    const ingredientsMarkup = Object.entries(ingredientCounts).map(([ingredientId, count]) => {
       const ingredient = ingredientList.find((item) => item._id === ingredientId);
       if (!ingredient) return null;
 
@@ -62,8 +60,10 @@ const OrderExplication: FC<OrderExplicationProps> = React.memo(({ inModal }) => 
           <span className={`${styles.price} text text_type_digits-default`}>{`${count} x ${ingredient.price}`} <CurrencyIcon type="primary" /> </span>
         </li>
       );
-    })
-  }, [ingredientCounts, ingredientList, totalPrice]);
+    });
+
+    return { ingredientsMarkup, totalPrice };
+  }, [ingredientCounts, ingredientList]);
 
   let statusText = '';
   let statusStyle = '';

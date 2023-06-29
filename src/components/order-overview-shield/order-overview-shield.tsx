@@ -6,13 +6,11 @@ import OrderImage from '../order-image/order-image';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './order-overview-shield.module.css';
 import { useNavigate, useMatch, useLocation } from 'react-router-dom';
-import { WsOrder } from '../../utils/essentials';
+import { OrderShieldProps } from '../../utils/essentials';
 
-interface OrderOverviewShieldProps {
-  order: WsOrder,
-}
 
-const OrderOverviewShield: FC<OrderOverviewShieldProps> = React.memo(({ order }) => {
+
+const OrderOverviewShield: FC<OrderShieldProps> = React.memo(({ order }) => {
   const ingredientList = useAppSelector((state) => state.ingredients.ingredients);
   const navigate = useNavigate();
   const location = useLocation();
@@ -66,7 +64,8 @@ const OrderOverviewShield: FC<OrderOverviewShieldProps> = React.memo(({ order })
     });
   }, [ingredients, ingredientList]);
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
     if (id !== order._id) {
       navigate(`/feed/${order._id}`, { state: { modal: true, background: location } });
     }

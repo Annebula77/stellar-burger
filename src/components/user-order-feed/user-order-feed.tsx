@@ -1,9 +1,10 @@
 import styles from './user-order-feed.module.css';
-import UserOrderShield from '../../components/user-order-shield/user-order-shield'
+import UserOrderShield from '../user-order-shield/user-order-shield'
 import { useAppDispatch, useAppSelector } from '../../utils/hooks';
 import { useEffect } from 'react';
 import { getCookie } from '../../utils/cookies';
 import { startUserConnection, wsUserConnectionClosed } from '../../services/slices/webSocket-slice';
+
 
 
 const UserOrderFeed = () => {

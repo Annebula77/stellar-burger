@@ -5,6 +5,7 @@ interface CustomNavLinkProps {
   to: string;
   activeClass: string;
   children: React.ReactNode;
+  onClick?: () => void;
 }
 
 export const CustomNavLink: React.FC<CustomNavLinkProps> = ({ to, activeClass, children, ...props }) => {

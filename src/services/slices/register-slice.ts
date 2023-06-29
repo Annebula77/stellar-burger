@@ -10,6 +10,7 @@ const initialState: RegisterState = {
   isAuthenticated: false,
   isLoading: false,
   error: '',
+  status: '',
 }
 
 
@@ -30,11 +31,13 @@ const registerUserSlice = createSlice({
           state.isAuthenticated = true;
           state.isLoading = false;
           state.error = '';
+          state.status = 'fulfilled';
         }
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
+        state.status = 'rejected';
       });
   },
 });

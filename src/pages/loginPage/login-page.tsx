@@ -1,6 +1,6 @@
 import { Button, EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './login-page.module.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { loginApi } from '../../services/thunks/login-thunk'
 import { useAppDispatch, useAppSelector } from '../../utils/hooks';
@@ -21,12 +21,12 @@ const LoginPage = () => {
 
   const [fromPath, setFromPath] = useState('/');
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormValues((prevValues) => ({ ...prevValues, [name]: value }));
   };
 
-  function onSubmitFrom(e) {
+  function onSubmitFrom(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     dispatch(loginApi(formValues));
   }

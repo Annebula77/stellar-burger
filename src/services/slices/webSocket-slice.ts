@@ -37,7 +37,9 @@ export const wsSlice = createSlice({
       state.totalToday = 0;
       state.error = null;
     },
-    startConnection: () => { }
+    startConnection: (state, action: PayloadAction<string | undefined>) => {
+      // Это действие не изменяет состояние, но передает токен в action.payload
+    },
   },
 });
 
@@ -68,7 +70,7 @@ export const wsUserSlice = createSlice({
       state.totalToday = 0;
       state.error = null;
     },
-    startUserConnection: (state, action) => {
+    startUserConnection: (state, action: PayloadAction<string | undefined>) => {
       // Это действие не изменяет состояние, но передает токен в action.payload
     },
   },

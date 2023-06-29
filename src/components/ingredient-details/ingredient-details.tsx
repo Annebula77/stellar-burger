@@ -3,14 +3,16 @@ import { useAppSelector } from '../../utils/hooks';
 import { FC } from 'react';
 
 interface IngredientDetailsProps {
-  ingredientId: string,
+  ingredientId?: string,
   extraClass: string
 }
 
 const IngredientDetails: FC<IngredientDetailsProps> = ({ ingredientId, extraClass }) => {
   const ingredient = useAppSelector((state) => state.ingredients.ingredients.find(item => item._id === ingredientId));
 
-
+  if (!ingredient) {
+    return null;
+  }
   return (
     <div className={styles.container}>
       <h2 className={`'text text_type_main-large ml-10 mr-25' ${extraClass}`}>Детали ингредиента</h2>
