@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { useAppSelector } from '../../utils/hooks';
 import { useMemo } from 'react';
 import { formatDate } from '../../utils/essentials';
@@ -6,9 +6,10 @@ import OrderImage from '../order-image/order-image';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './user-order-shield.module.css';
 import { useNavigate, useMatch, useLocation } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import { OrderShieldProps } from '../../utils/essentials';
 
-const UserOrderShield = React.memo(({ order }) => {
+
+const UserOrderShield: FC<OrderShieldProps> = React.memo(({ order }) => {
   const ingredientList = useAppSelector((state) => state.ingredients.ingredients);
   const navigate = useNavigate();
   const location = useLocation();
@@ -77,7 +78,8 @@ const UserOrderShield = React.memo(({ order }) => {
     statusStyle = styles.created;
   }
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
     if (id !== order._id) {
       navigate(`/orders/${order._id}`, { state: { modal: true, background: location } });
     }
@@ -104,8 +106,5 @@ const UserOrderShield = React.memo(({ order }) => {
   );
 });
 
-UserOrderShield.propTypes = {
-  order: PropTypes.object.isRequired,
-};
 
 export default UserOrderShield;

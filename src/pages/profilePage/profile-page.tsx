@@ -1,7 +1,7 @@
 import { Input, EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './profile-page.module.css';
 import { useAppDispatch, useAppSelector } from '../../utils/hooks';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
 import { UserOrdersPage } from '../userOrdersPage/user-orders-page';
 import { CustomNavLink } from '../../utils/hoc';
 import { logoutStatus } from '../../services/slices/login-slice';
@@ -46,7 +46,7 @@ const ProfilePage = () => {
     }
   }, [user]);
 
-  const onSubmit = (e) => {
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(updateUserDetails(formValues));
   };

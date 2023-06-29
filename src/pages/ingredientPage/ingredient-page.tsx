@@ -8,7 +8,7 @@ export const IngredientPage = () => {
   const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
-  const background = location.state.background;
+  const background = location.state?.background;
 
   const closeModal = () => {
     navigate(-1);
@@ -18,7 +18,7 @@ export const IngredientPage = () => {
     <div className={styles.container}>
       {background ? (
         <Modal onClose={closeModal}>
-          <IngredientDetails ingredientId={id} />
+          <IngredientDetails ingredientId={id} extraClass="" />
         </Modal>
       ) : (
         <IngredientDetails ingredientId={id} extraClass={styles.ingredient} />

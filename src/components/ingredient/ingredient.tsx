@@ -35,7 +35,8 @@ const Ingredient = React.memo<IngredientProps>(({ ingredient }) => {
     return count;
   }, [bun, ingredient._id, ingredients]);
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
     if (id !== _id) {
       navigate(`/ingredients/${_id}`, { state: { modal: true, background: location } });
     }

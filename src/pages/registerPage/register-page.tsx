@@ -1,6 +1,6 @@
 import { Button, EmailInput, PasswordInput, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './register-page.module.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import { useAppDispatch, useAppSelector } from '../../utils/hooks';
 import { Link, useNavigate } from 'react-router-dom';
 import { registerUser } from '../../services/thunks/register-thunk';
@@ -18,12 +18,12 @@ const RegisterPage = () => {
     password: '',
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormValues((prevValues) => ({ ...prevValues, [name]: value }));
   };
 
-  const onFormSubmit = async (e) => {
+  const onFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const result = await dispatch(registerUser(formValues));
     if (result.meta.requestStatus === 'fulfilled') {

@@ -1,19 +1,17 @@
-import PropTypes from 'prop-types';
 import { Navigate } from 'react-router-dom';
 import { useAppSelector } from '../../utils/hooks';
+import { FC } from 'react';
+import { RouteElementProps } from '../../utils/essentials'
 
-const PublicRouteElement = ({ element }) => {
+const PublicRouteElement: FC<RouteElementProps> = ({ element }) => {
   const isLoggedIn = useAppSelector((store) => store.user.user !== null);
 
   if (isLoggedIn) {
     return <Navigate to="/" replace={true} />
   }
 
-  return element;
+  return <>{element}</>;
 }
 
-PublicRouteElement.propTypes = {
-  element: PropTypes.element.isRequired,
-};
 
 export default PublicRouteElement;

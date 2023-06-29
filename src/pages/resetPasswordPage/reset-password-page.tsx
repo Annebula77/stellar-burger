@@ -1,6 +1,6 @@
 import { Button, PasswordInput, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './reset-password-page.module.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
 import { useAppSelector, useAppDispatch } from '../../utils/hooks';
 import { useNavigate, Link } from 'react-router-dom';
 import { resetPasswordApi } from '../../services/thunks/reset-password-thunk';
@@ -24,7 +24,7 @@ const ResetPasswordPage = () => {
     }
   }, [resetPassword, navigate]);
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(resetPasswordApi(value));
   };

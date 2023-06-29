@@ -1,4 +1,5 @@
 import { format, isToday, isYesterday } from 'date-fns';
+import { ReactNode } from 'react';
 
 
 //Order types and interfaces
@@ -74,6 +75,7 @@ export type RegisterState = {
   isAuthenticated: boolean,
   isLoading: boolean,
   error: string | unknown,
+  status: string,
 }
 
 export type UserResponse = {
@@ -88,6 +90,7 @@ export type UserDataType = {
   name: string,
   email: string,
   password: string,
+  isLoading?: boolean,
 };
 
 export interface UserSliceType {
@@ -140,7 +143,7 @@ export type PasswordResetResponse = {
 export type resetPasswordData = {
   password: string,
   token: string,
-  success: boolean
+  success?: boolean
 }
 
 export type ForgotPasswordState = {
@@ -186,6 +189,10 @@ export interface WsOrder {
   number: number;
 }
 
+export interface OrderShieldProps {
+  order: WsOrder,
+}
+
 export interface WsDataPayload {
   success: boolean;
   orders: WsOrder[];
@@ -223,12 +230,9 @@ export interface WSUserActions {
   startUserConnection: (token?: string) => { type: string; payload?: string };
 }
 
-//Component props
-
-
-
-
-
+export interface RouteElementProps {
+  element: ReactNode,
+}
 
 
 
@@ -257,7 +261,7 @@ export const formatDate = (isoString: string) => {
   } else if (isYesterday(date)) {
     formattedDate = 'Вчера';
   } else {
-    formattedDate = format(date, 'dd.MM.yyyy'); // Используйте нужный вам формат даты
+    formattedDate = format(date, 'dd.MM.yyyy'); // Используем нужный вам формат даты
   }
 
   const formattedTime = format(date, 'HH:mm');

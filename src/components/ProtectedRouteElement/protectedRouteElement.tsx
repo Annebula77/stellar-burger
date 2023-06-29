@@ -1,8 +1,10 @@
 import { Navigate } from 'react-router-dom';
 import { useAppSelector } from '../../utils/hooks';
-import PropTypes from 'prop-types';
+import { FC } from 'react';
+import { RouteElementProps } from '../../utils/essentials'
 
-const ProtectedRouteElement = ({ element }) => {
+
+const ProtectedRouteElement: FC<RouteElementProps> = ({ element }) => {
   const isLoggedIn = useAppSelector((store) => store.user.user !== null);
   const authError = useAppSelector((store) => store.user.authError);
 
@@ -10,10 +12,8 @@ const ProtectedRouteElement = ({ element }) => {
     return <Navigate to='/login' replace={true} />;
   }
 
-  return element;
+  return <>{element}</>;
 };
-ProtectedRouteElement.propTypes = {
-  element: PropTypes.element.isRequired,
-}
+
 
 export default ProtectedRouteElement;
