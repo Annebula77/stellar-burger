@@ -15,7 +15,7 @@ function AppHeader() {
 
   useEffect(() => {
     if (isLoggedIn && user) {
-      setUserName(user.name);
+      setUserName(user.user.name);
     } else {
       setUserName('Личный кабинет');
     }

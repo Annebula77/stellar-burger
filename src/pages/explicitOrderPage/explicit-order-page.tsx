@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import OrderExplication from '../../components/order-explication/order-explication';
 import Modal from '../../components/modal/modal';
 import styles from './explicit-order-page.module.css';
-import { startConnection, wsConnectionClosed } from '../../services/slices/webSocket-slice';
+import { startConnection, startUserConnection, wsConnectionClosed } from '../../services/slices/webSocket-slice';
 import { getCookie } from '../../utils/cookies';
 
 export const ExplicitOrderPage = () => {
@@ -15,24 +15,29 @@ export const ExplicitOrderPage = () => {
   const background = location.state?.background;
   const { id } = useParams();
   const accessToken = getCookie('accessToken');
-  const userOrders = useAppSelector(state => state.wsUser.orders);
-  const orders = useAppSelector(state => state.ws.orders);
 
-  const ordersList = location.pathname.includes('feed') ? orders : userOrders;
-  const order = ordersList?.find(order => order._id === id);
+
 
   useEffect(() => {
-    if (location.pathname.includes('/orders')) {
-      dispatch(startConnection(accessToken));
-    } else {
-      dispatch(startConnection());
+
+    if (accessToken) {
+      if (location.pathname.includes('/orders')) {
+        dispatch(startUserConnection(accessToken));
+      } else {
+        dispatch(startConnection());
+      }
     }
+
     return () => {
       dispatch(wsConnectionClosed());
     };
   }, [dispatch, location, accessToken]);
 
-  if (!order) {
+
+  const isLoading = useAppSelector((state) => state.ws.isLoading || state.wsUser.isLoading);
+
+  // Если данные ещё загружаются, показываем индикатор загрузки
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 

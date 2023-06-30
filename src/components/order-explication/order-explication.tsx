@@ -23,24 +23,24 @@ const OrderExplication: FC<OrderExplicationProps> = React.memo(({ inModal }) => 
   const ordersList = location.pathname.includes('feed') ? orders : userOrders;
   const order = ordersList?.find(order => order._id === id);
   let containerStyles = inModal ? styles.container : `${styles.container} ${styles.page}`
-  const ingredients = order?.ingredients;
-  const ingredientCounts: Record<string, number> = useMemo(() => {
-    const counts: Record<string, number> = {};
+  const ingredients = order ? order.ingredients : [];
 
-    if (ingredients) {
-      ingredients.forEach((ingredientId) => {
-        if (counts[ingredientId]) {
-          counts[ingredientId]++;
-        } else {
-          counts[ingredientId] = 1;
-        }
-      });
-    } else {
-      console.warn("Order ingredients are undefined");
-    }
 
-    return counts;
-  }, [ingredients]);
+  const ingredientCounts: Record<string, number> = {};
+
+  if (ingredients) {
+    ingredients?.forEach((ingredientId) => {
+      if (ingredientCounts[ingredientId]) {
+        ingredientCounts[ingredientId]++;
+      } else {
+        ingredientCounts[ingredientId] = 1;
+      }
+    });
+  } else {
+    console.warn("Order ingredients are undefined");
+  }
+
+
   const { ingredientsMarkup, totalPrice } = useMemo(() => {
     let totalPrice = 0;
     const ingredientsMarkup = Object.entries(ingredientCounts).map(([ingredientId, count]) => {
@@ -94,7 +94,7 @@ const OrderExplication: FC<OrderExplicationProps> = React.memo(({ inModal }) => 
         </div>
       </div>
       <div className={styles.price__container}>
-        <p className="text text_type_main-small text_color_inactive">{formatDate(order?.updatedAt ?? '')}</p>
+        {order?.updatedAt && <p className="text text_type_main-small text_color_inactive">{formatDate(order.updatedAt)}</p>}
         <p className={`${styles.price} text text_type_digits-default`}>{totalPrice}
           <CurrencyIcon type="primary" />
         </p>

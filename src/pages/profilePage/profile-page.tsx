@@ -15,7 +15,6 @@ import { isAuthChecked } from '../../services/slices/user-slice';
 
 
 
-
 const ProfilePage = () => {
   const dispatch = useAppDispatch();
   const { isLoading, user } = useAppSelector((state) => state.user);
@@ -32,15 +31,15 @@ const ProfilePage = () => {
     if (!user || user.isLoading) {
       dispatch(getUserDetails());
     }
-  }, [dispatch, user?.isLoading]);
+  }, [dispatch, user]);
 
 
 
   useEffect(() => {
     if (user) {
       setFormValues({
-        name: user.name || '',
-        email: user.email || '',
+        name: user.user.name || '',
+        email: user.user.email || '',
         password: '',
       });
     }

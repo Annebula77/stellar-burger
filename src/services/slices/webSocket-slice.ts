@@ -9,6 +9,7 @@ const initialState: WsState = {
   total: 0,
   totalToday: 0,
   error: null,
+  isLoading: false,
 }
 
 export const wsSlice = createSlice({
@@ -27,18 +28,21 @@ export const wsSlice = createSlice({
       state.orders = action.payload.orders;
       state.total = action.payload.total;
       state.totalToday = action.payload.totalToday;
+      state.isLoading = false;
     },
     wsConnectionClosed: (state) => {
       state.wsConnected = false;
+      state.isLoading = false;
     },
     clearWsData: (state) => {
       state.orders = [];
       state.total = 0;
       state.totalToday = 0;
       state.error = null;
+      state.isLoading = false;
     },
     startConnection: (state, action: PayloadAction<string | undefined>) => {
-      // Это действие не изменяет состояние, но передает токен в action.payload
+      state.isLoading = true;
     },
   },
 });
@@ -60,18 +64,21 @@ export const wsUserSlice = createSlice({
       state.orders = action.payload.orders;
       state.total = action.payload.total;
       state.totalToday = action.payload.totalToday;
+      state.isLoading = false;
     },
     wsUserConnectionClosed: (state) => {
       state.wsConnected = false;
+      state.isLoading = false;
     },
     clearWsUserData: (state) => {
       state.orders = [];
       state.total = 0;
       state.totalToday = 0;
       state.error = null;
+      state.isLoading = false;
     },
     startUserConnection: (state, action: PayloadAction<string | undefined>) => {
-      // Это действие не изменяет состояние, но передает токен в action.payload
+      state.isLoading = true;
     },
   },
 });
