@@ -5,7 +5,7 @@ import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import { useAppDispatch, useAppSelector } from '../../utils/hooks';
 import { sendOrder } from '../../services/thunks/order-thunk';
-import { clearOrderState } from '../../services/slices/order-slice';
+import { deleteOrderState } from '../../services/slices/order-slice';
 import { addIngredientItem, addBunItem, clearContainer } from '../../services/slices/burger-constructor-slice';
 import { useDrop } from 'react-dnd';
 import { clearModalContent } from '../../services/slices/modal-slice';
@@ -66,7 +66,7 @@ function BurgerConstructor() {
 
   const closeModal = useCallback(() => {
     //@ts-ignore
-    dispatch(clearOrderState());
+    dispatch(deleteOrderState());// здесь не получается исправить ошибку, требует payload, хотя poayload быть не должно.
     dispatch(clearContainer());
     dispatch(clearModalContent());
   }, [dispatch]);

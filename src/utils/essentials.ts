@@ -85,11 +85,18 @@ export type UserResponse = {
   order?: Order;
   data?: IIngredient[];
 };
+export interface User {
+  name: string;
+  email: string;
+  password: string;
+}
 
 export type UserDataType = {
-  name: string,
-  email: string,
-  password: string,
+  user: {
+    name: string,
+    email: string,
+    password: string,
+  },
   isLoading?: boolean,
 };
 
@@ -127,13 +134,7 @@ export type LogoutType = {
   success: boolean,
 };
 
-export interface User {
-  user: {
-    name: string;
-    email: string;
-    password: string;
-  };
-}
+
 
 export type PasswordResetResponse = {
   message: string;
@@ -206,6 +207,7 @@ export interface WsState {
   total: number,
   totalToday: number,
   error: Event | null,
+  isLoading: boolean,
 }
 export interface IAction {
   type: string;

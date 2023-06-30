@@ -12,7 +12,7 @@ const orderSlice: Slice<OrderState> = createSlice({
   name: 'order',
   initialState,
   reducers: {
-    clearOrderState: (state) => {
+    deleteOrderState: (state) => {
       state.loadingOrder = false;
       state.errorOrder = null;
       state.data = null;
@@ -36,6 +36,6 @@ const orderSlice: Slice<OrderState> = createSlice({
   },
 });
 
-export const { clearOrderState } = orderSlice.actions;
+export const { deleteOrderState } = orderSlice.actions;
 
 export default orderSlice.reducer;

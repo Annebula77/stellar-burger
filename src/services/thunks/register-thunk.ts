@@ -1,11 +1,11 @@
 import { BASE_URL } from '../../utils/essentials';
 import { setCookie } from '../../utils/cookies';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { UserDataType } from '../../utils/essentials';
+import { User } from '../../utils/essentials';
 
 
 
-export const registerUser = createAsyncThunk<UserDataType, UserDataType, { rejectValue: string }>(
+export const registerUser = createAsyncThunk<User, User, { rejectValue: string }>(
   'registerUser',
   async ({ name, email, password }, { rejectWithValue }) => {
     try {

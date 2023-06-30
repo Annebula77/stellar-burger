@@ -1,10 +1,15 @@
 interface CookieProps {
   expires?: number | Date | string;
+  path?: string;
   [propName: string]: any;
 }
 
 export function setCookie(name: string, value: string, props?: CookieProps) {
-  props = props || {};
+  props = {
+    path: '/',
+    ...props,
+  };
+
   let exp = props.expires;
   if (typeof exp == 'number' && exp) {
     const d = new Date();
@@ -24,7 +29,6 @@ export function setCookie(name: string, value: string, props?: CookieProps) {
     }
   }
   document.cookie = updatedCookie;
-
 }
 
 export function getCookie(name: string): string | undefined {

@@ -2,7 +2,7 @@ import { createAsyncThunk, ThunkDispatch } from '@reduxjs/toolkit';
 import { AnyAction } from 'redux';
 import { BASE_URL, checkResponse } from '../../utils/essentials';
 import { getCookie, setCookie, clearCookie } from '../../utils/cookies';
-import { UserDataType, LogoutType, TokenType, User, ThunkApiConfig } from '../../utils/essentials';
+import { UserDataType, LogoutType, TokenType, ThunkApiConfig, User } from '../../utils/essentials';
 import {
   logoutSuccess,
   logoutFailed,
@@ -15,8 +15,8 @@ const sendRequestWithRefreshToken = async<T>(
   endpoint: string,
   options: RequestInit,
   dispatch: ThunkDispatch<any, any, AnyAction>,
-  callbackOnSuccess: (data: T) => void
-): Promise<any> => {
+  callbackOnSuccess: (data: T) => T
+): Promise<T> => {
   try {
     const accessToken = getCookie('accessToken');
     if (!accessToken) {
@@ -36,6 +36,8 @@ const sendRequestWithRefreshToken = async<T>(
     if (callbackOnSuccess) {
       return callbackOnSuccess(data);
     }
+
+    throw new Error('Callback is not provided.');
   } catch (err) {
     if (err instanceof Error && err.message === "jwt expired") {
       return dispatch(refreshTokenApi())
@@ -44,7 +46,7 @@ const sendRequestWithRefreshToken = async<T>(
           if (!accessToken) {
             throw new Error('Access token not found');
           }
-          (options.headers as Record<string, string>).Authorization = 'accessToken';
+          (options.headers as Record<string, string>).Authorization = accessToken;
           return fetch(`${BASE_URL}${endpoint}`, options);
         })
         .then((response) => {
@@ -53,16 +55,17 @@ const sendRequestWithRefreshToken = async<T>(
               throw new Error(json.message);
             });
           }
+
           return response.json();
         })
         .then((data) => {
           if (callbackOnSuccess) {
             return callbackOnSuccess(data);
           }
+          throw new Error('Callback is not provided.');
         })
         .catch((refreshError) => {
-          console.log(refreshError);
-          throw refreshError;
+          throw new Error(refreshError.message);
         });
     } else if (err instanceof Error) {
       throw err;
@@ -71,7 +74,6 @@ const sendRequestWithRefreshToken = async<T>(
     }
   }
 };
-
 export const getUserDetails = createAsyncThunk<UserDataType, void, ThunkApiConfig>(
   'user/getUserDetails',
   async (_, { dispatch }) => {
@@ -82,19 +84,19 @@ export const getUserDetails = createAsyncThunk<UserDataType, void, ThunkApiConfi
       },
     };
 
-    return sendRequestWithRefreshToken<User>(
+    return sendRequestWithRefreshToken<UserDataType>(
       '/auth/user',
       options,
       dispatch,
       (data) => {
-        return data.user;
+        return data;
       }
     )
   }
 );
 
 
-export const updateUserDetails = createAsyncThunk<UserDataType, UserDataType, ThunkApiConfig>(
+export const updateUserDetails = createAsyncThunk<UserDataType, User, ThunkApiConfig>(
   'user/updateUserDetails',
   async ({ name, email, password }, { dispatch }) => {
     const options = {
@@ -105,11 +107,14 @@ export const updateUserDetails = createAsyncThunk<UserDataType, UserDataType, Th
       body: JSON.stringify({ name, email, password }),
     };
 
-    return sendRequestWithRefreshToken(
+    return sendRequestWithRefreshToken<UserDataType>(
       '/auth/user',
       options,
       dispatch,
-      () => dispatch(getUserDetails())
+      (data) => {
+        dispatch(getUserDetails());
+        return data;
+      }
     );
   }
 );
@@ -170,7 +175,7 @@ export const refreshTokenApi = createAsyncThunk<TokenType, void, ThunkApiConfig>
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + refreshToken,
+
       },
       body: JSON.stringify({
         token: refreshToken,
@@ -180,7 +185,7 @@ export const refreshTokenApi = createAsyncThunk<TokenType, void, ThunkApiConfig>
     const response = await fetch(`${BASE_URL}/auth/token`, requestOptions);
     const data = await response.json();
     if (!response.ok) {
-      throw rejectWithValue({
+      return rejectWithValue({
         message: data.message || 'Failed to refresh token.',
         statusCode: data.statusCode || 500,
         errorType: data.error || 'UnknownError'
@@ -188,7 +193,7 @@ export const refreshTokenApi = createAsyncThunk<TokenType, void, ThunkApiConfig>
     }
 
     if (!data.success) {
-      throw rejectWithValue({
+      return rejectWithValue({
         message: data.message || 'Failed to refresh token.',
         statusCode: data.statusCode || 500,
         errorType: data.error || 'UnknownError'
