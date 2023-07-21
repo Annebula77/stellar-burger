@@ -24,6 +24,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  z-index: 1;
 
 }
 
@@ -39,4 +40,5 @@
   height: 20px;
   background-color: transparent;
   color: #ffffff;
+  z-index: 5;
 }

@@ -10,6 +10,7 @@
   padding: 24px 24px 24px;
 }
 
+
 .upper__box {
   box-sizing: border-box;
   width: 100%;
@@ -40,7 +41,9 @@
   width: 70%;
   margin: 0;
   padding: 0 0 0 15px;
+  z-index: 0;
 }
+
 
 .price__container {
   box-sizing: border-box;
@@ -68,4 +71,8 @@
 
 .created {
   color: rgb(255, 255, 255);
+}
+
+.extraCount {
+  opacity: 0.3;
 }
