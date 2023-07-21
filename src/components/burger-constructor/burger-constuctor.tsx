@@ -65,8 +65,8 @@ function BurgerConstructor() {
   }, [isAuthenticated, ingredients, bun, dispatch, navigate, location.pathname]);
 
   const closeModal = useCallback(() => {
-    //@ts-ignore
-    dispatch(deleteOrderState());// здесь не получается исправить ошибку, требует payload, хотя poayload быть не должно.
+
+    dispatch(deleteOrderState(null));// здесь не получается исправить ошибку, требует payload, хотя poayload быть не должно.Null спас ситуацию.
     dispatch(clearContainer());
     dispatch(clearModalContent());
   }, [dispatch]);

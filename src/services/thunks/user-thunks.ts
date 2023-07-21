@@ -9,8 +9,6 @@ import {
   isAuthChecked,
 } from '../slices/user-slice';
 
-//пожалуйста, обратите внимание на функцию sendRequestWithRefreshToken, такое ощущение, что refreshTokenApi 
-// срабатывает через раз, при том, что ни одной ошибки в консоли. Срасибо!
 
 const sendRequestWithRefreshToken = async<T>(
   endpoint: string,

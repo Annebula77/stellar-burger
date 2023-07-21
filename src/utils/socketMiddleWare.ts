@@ -64,7 +64,7 @@ export const socketMiddleware = (wsUrl: string, wsUserUrl: string, wsSliceAction
       const { data } = event;
       const parsedData = JSON.parse(data);
 
-      if (parsedData.message === 'jwt expired') {
+      if (parsedData.message === 'Invalid or missing token') {
         try {
           const newTokenDataAction = await dispatch(refreshTokenApi());
           const newTokenData: TokenType = unwrapResult(newTokenDataAction);

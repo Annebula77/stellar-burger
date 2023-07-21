@@ -22,7 +22,7 @@ import { FeedPage } from '../../pages/feedPage/feed-page';
 import { UserOrdersPage } from '../../pages/userOrdersPage/user-orders-page';
 import { ExplicitOrderPage } from '../../pages/explicitOrderPage/explicit-order-page';
 
-// ПЕРЕПИСАЛА весь проект с Redux на Redux Toolkit - проверьте пожалуйста.
+
 function App() {
 
 
