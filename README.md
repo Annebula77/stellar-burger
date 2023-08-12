@@ -1,46 +1,42 @@
-# Getting Started with Create React App
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)  ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)  ![Redux](https://img.shields.io/badge/redux-%23593d88.svg?style=for-the-badge&logo=redux&logoColor=white) ![CSS](https://img.shields.io/badge/css-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white) 
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Учебный проект "Stellar Burger"
+Учебный проект курса Веб-разработчик Яндекс.Практикум
+## Описание
 
-## Available Scripts
+Приложение-конструктор бургера:
 
-In the project directory, you can run:
+у приложения исключительно одна десктопная версия, так как задачей было разработать функционал и корректно настроить взаимодействие с API при помощи FETCH запросов и WebSocket. Необходимо было получить с сервера список ингредиентов, рассортировать их, реализовать самостоятельную сборку бургера клиентом, отправку заказа, авторизацию, восстановление пароля, личный кабинет с историей заказов, а так же табло всех заказов бургерной. В проекте присутствовала особая система отображения модальных окон и страниц сайта.
 
-### `npm start`
+## Используемые технологии
+- React
+- React Router 6
+- TypeScript 
+- Redux Toolkit
+- WebSocket
+- CSS
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Как запустить проект:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Клонировать репозиторий и перейти в него:
 
-### `npm test`
+```
+git clone https://github.com/Annebula77/stellar-burger.git
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+cd mesto-project
+```
 
-### `npm run build`
+Установить зависимости
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+npm i
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Запустить проект
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+npm start
+```
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Автор
+👤 **Гоар Варданян** => -GitHub: [@Annebula77](https://github.com/Annebula77)
